@@ -1,2 +1,6 @@
+# macOS
+.DS_Store
+
 # Swift / Xcode
 packages/button-ios/.build/
+packages/button-ios/.swiftpm/
