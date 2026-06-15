@@ -1,0 +1,2123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design System SuperApp — Tokens</title>
+  <style>
+    :root {
+      --ps-blue: #003087;
+      --ps-blue-mid: #0047CC;
+      --ps-blue-light: #E8EFFF;
+      --ps-orange: #FF6B00;
+      --ps-orange-light: #FFF0E6;
+      --ps-gray-900: #1A1A2E;
+      --ps-gray-700: #3D3D5C;
+      --ps-gray-400: #8888AA;
+      --ps-gray-100: #F4F5F9;
+      --ps-white: #FFFFFF;
+      --radius: 16px;
+      --slide-w: 1280px;
+      --slide-h: 720px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0D0D1A;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      gap: 24px;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 40px;
+      padding: 10px 20px;
+      z-index: 100;
+    }
+    .nav button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: background .2s;
+    }
+    .nav button:hover { background: rgba(255,255,255,0.15); }
+    .nav span {
+      color: rgba(255,255,255,0.6);
+      font-size: 13px;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    /* ── Slide wrapper ── */
+    .slide {
+      width: var(--slide-w);
+      min-height: var(--slide-h);
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+    }
+    .slide.active { display: flex; }
+
+    /* ── Slide label ── */
+    .slide-number {
+      position: absolute;
+      top: 28px;
+      right: 36px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+    }
+
+    /* ════════════════════════════════
+       SLIDE 1 — CAPA
+    ════════════════════════════════ */
+    .s1 {
+      background: linear-gradient(135deg, #001A5C 0%, #003087 50%, #0047CC 100%);
+      justify-content: center;
+      align-items: flex-start;
+      padding: 80px 100px;
+    }
+    .s1 .tag {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.8);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 36px;
+      display: inline-block;
+    }
+    .s1 h1 {
+      font-size: 64px;
+      font-weight: 800;
+      color: white;
+      line-height: 1.05;
+      margin-bottom: 24px;
+      max-width: 700px;
+    }
+    .s1 h1 span { color: #FF6B00; }
+    .s1 p {
+      font-size: 20px;
+      color: rgba(255,255,255,0.65);
+      max-width: 560px;
+      line-height: 1.6;
+      margin-bottom: 56px;
+    }
+    .s1 .meta {
+      display: flex;
+      gap: 40px;
+    }
+    .s1 .meta-item { display: flex; flex-direction: column; gap: 4px; }
+    .s1 .meta-label { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,0.4); }
+    .s1 .meta-val { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.85); }
+    .s1 .deco {
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      border: 120px solid rgba(255,255,255,0.04);
+    }
+    .s1 .deco2 {
+      position: absolute;
+      right: 200px;
+      bottom: -120px;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      border: 80px solid rgba(255,107,0,0.08);
+    }
+
+    /* ════════════════════════════════
+       SLIDE 2 — PROBLEMA
+    ════════════════════════════════ */
+    .s2 {
+      background: var(--ps-gray-100);
+      padding: 72px 100px;
+      justify-content: center;
+    }
+    .slide-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--ps-blue-mid);
+      margin-bottom: 16px;
+    }
+    .s2 h2 {
+      font-size: 44px;
+      font-weight: 800;
+      color: var(--ps-gray-900);
+      margin-bottom: 48px;
+      line-height: 1.15;
+    }
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .pain-card {
+      background: white;
+      border-radius: 14px;
+      padding: 28px 28px 32px;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .pain-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+    .pain-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--ps-gray-900);
+      margin-bottom: 10px;
+    }
+    .pain-card p {
+      font-size: 14px;
+      color: var(--ps-gray-400);
+      line-height: 1.6;
+    }
+
+    /* ════════════════════════════════
+       SLIDE 3 — O QUE SÃO TOKENS
+    ════════════════════════════════ */
+    .s3 {
+      background: var(--ps-blue);
+      padding: 72px 100px;
+      justify-content: center;
+    }
+    .s3 .slide-label { color: rgba(255,255,255,0.5); }
+    .s3 h2 {
+      font-size: 44px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 12px;
+    }
+    .s3 .subtitle {
+      font-size: 18px;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 48px;
+      max-width: 600px;
+      line-height: 1.5;
+    }
+    .token-flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 48px;
+    }
+    .token-box {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px;
+      padding: 24px 28px;
+      flex: 1;
+    }
+    .token-box .tbox-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 10px;
+    }
+    .token-box .tbox-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 8px;
+    }
+    .token-box .tbox-example {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #7EB8FF;
+      background: rgba(0,0,0,0.2);
+      padding: 8px 12px;
+      border-radius: 8px;
+      line-height: 1.6;
+    }
+    .token-box.active-box {
+      background: rgba(255,107,0,0.15);
+      border-color: rgba(255,107,0,0.4);
+    }
+    .token-box.active-box .tbox-example { color: #FFB37E; }
+    .arrow-flow {
+      font-size: 24px;
+      color: rgba(255,255,255,0.25);
+      padding: 0 16px;
+      flex-shrink: 0;
+    }
+    .token-benefit {
+      display: flex;
+      gap: 16px;
+    }
+    .benefit-pill {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.75);
+    }
+
+    /* ════════════════════════════════
+       SLIDE 4 — ARQUITETURA 3 CAMADAS
+    ════════════════════════════════ */
+    .s4 {
+      background: white;
+      padding: 64px 100px;
+      justify-content: center;
+    }
+    .s4 h2 {
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--ps-gray-900);
+      margin-bottom: 8px;
+    }
+    .s4 .subtitle {
+      font-size: 16px;
+      color: var(--ps-gray-400);
+      margin-bottom: 44px;
+    }
+    .layers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .layer-card {
+      border-radius: 16px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .layer-1 { background: var(--ps-gray-100); border: 2px solid #E0E0EE; }
+    .layer-2 { background: var(--ps-blue-light); border: 2px solid #C0D4FF; }
+    .layer-3 { background: var(--ps-orange-light); border: 2px solid #FFD0B0; }
+    .layer-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .layer-1 .layer-num { color: var(--ps-gray-400); }
+    .layer-2 .layer-num { color: var(--ps-blue-mid); }
+    .layer-3 .layer-num { color: var(--ps-orange); }
+    .layer-card h3 { font-size: 20px; font-weight: 800; color: var(--ps-gray-900); margin-bottom: 8px; }
+    .layer-card p { font-size: 13px; color: var(--ps-gray-700); margin-bottom: 16px; line-height: 1.5; }
+    .layer-code {
+      font-family: 'Courier New', monospace;
+      font-size: 11.5px;
+      line-height: 1.8;
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+    .layer-1 .layer-code { background: white; color: #555577; }
+    .layer-2 .layer-code { background: rgba(0,71,204,0.08); color: #0047CC; }
+    .layer-3 .layer-code { background: rgba(255,107,0,0.08); color: #CC5500; }
+    .layer-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--ps-gray-400);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .layer-arrow span { font-size: 20px; }
+
+    /* ════════════════════════════════
+       SLIDE 5 — PADRÃO DE NOMENCLATURA
+    ════════════════════════════════ */
+    .s5 {
+      background: linear-gradient(160deg, #001A5C 0%, #002570 100%);
+      padding: 64px 100px;
+      justify-content: center;
+    }
+    .s5 .slide-label { color: rgba(255,255,255,0.4); }
+    .s5 h2 { font-size: 40px; font-weight: 800; color: white; margin-bottom: 8px; }
+    .s5 .subtitle { font-size: 16px; color: rgba(255,255,255,0.5); margin-bottom: 40px; }
+
+    .naming-formula {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 36px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 24px 32px;
+    }
+    .formula-part {
+      text-align: center;
+      flex: 1;
+    }
+    .formula-part .fp-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 6px;
+    }
+    .formula-part .fp-val {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+    }
+    .formula-dot {
+      font-size: 28px;
+      color: var(--ps-orange);
+      padding: 0 8px;
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+    .formula-part.optional .fp-val { color: rgba(255,255,255,0.45); }
+    .formula-part.optional .fp-label::after { content: ' (opcional)'; }
+
+    .naming-examples {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .naming-ex-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .naming-ex-card .nec-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .naming-ex-card code {
+      display: block;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #7EB8FF;
+      line-height: 2;
+    }
+    .cat-color .nec-label { color: #7EB8FF; }
+    .cat-spacing .nec-label { color: #7EFFC0; }
+    .cat-comp .nec-label { color: #FFB37E; }
+    .cat-color code { color: #7EB8FF; }
+    .cat-spacing code { color: #7EFFC0; }
+    .cat-comp code { color: #FFB37E; }
+
+    /* ════════════════════════════════
+       SLIDE 6 — COMPONENTES MAPEADOS
+    ════════════════════════════════ */
+    .s6 {
+      background: var(--ps-gray-100);
+      padding: 64px 100px;
+      justify-content: center;
+    }
+    .s6 h2 { font-size: 40px; font-weight: 800; color: var(--ps-gray-900); margin-bottom: 8px; }
+    .s6 .subtitle { font-size: 16px; color: var(--ps-gray-400); margin-bottom: 40px; }
+
+    .comp-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .comp-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .comp-icon { font-size: 24px; margin-bottom: 10px; }
+    .comp-card h4 { font-size: 14px; font-weight: 700; color: var(--ps-gray-900); margin-bottom: 6px; }
+    .comp-card p { font-size: 11.5px; color: var(--ps-gray-400); line-height: 1.5; }
+    .comp-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+    .status-done { background: #E6F9F0; color: #0A7A40; }
+    .status-token { background: #FFF0E6; color: #CC5500; }
+
+    .comp-summary {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      background: white;
+      border-radius: 12px;
+      padding: 18px 28px;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .comp-summary-item { text-align: center; }
+    .comp-summary-item .csn { font-size: 28px; font-weight: 800; color: var(--ps-blue); }
+    .comp-summary-item .csl { font-size: 12px; color: var(--ps-gray-400); margin-top: 2px; }
+    .comp-divider { width: 1px; height: 40px; background: rgba(0,0,0,0.08); }
+
+    /* ════════════════════════════════
+       SLIDE 7 — FLUXO DE TRABALHO
+    ════════════════════════════════ */
+    .s7 {
+      background: white;
+      padding: 64px 100px;
+      justify-content: center;
+    }
+    .s7 h2 { font-size: 40px; font-weight: 800; color: var(--ps-gray-900); margin-bottom: 8px; }
+    .s7 .subtitle { font-size: 16px; color: var(--ps-gray-400); margin-bottom: 40px; }
+
+    .steps {
+      display: flex;
+      gap: 0;
+      position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: 32px;
+      right: 32px;
+      height: 2px;
+      background: linear-gradient(to right, var(--ps-blue), var(--ps-orange));
+    }
+    .step {
+      flex: 1;
+      padding-top: 64px;
+      padding-right: 16px;
+      position: relative;
+    }
+    .step-dot {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 0 0 2px var(--ps-blue);
+      background: white;
+      z-index: 1;
+    }
+    .step:nth-child(2) .step-dot { box-shadow: 0 0 0 2px #1A5CCC; }
+    .step:nth-child(3) .step-dot { box-shadow: 0 0 0 2px #3370CC; background: #3370CC; }
+    .step:nth-child(4) .step-dot { box-shadow: 0 0 0 2px var(--ps-orange); background: var(--ps-orange); }
+    .step:nth-child(5) .step-dot { box-shadow: 0 0 0 2px var(--ps-orange); background: var(--ps-orange); }
+    .step-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ps-blue-mid);
+      margin-bottom: 8px;
+    }
+    .step h4 { font-size: 15px; font-weight: 700; color: var(--ps-gray-900); margin-bottom: 8px; }
+    .step p { font-size: 12.5px; color: var(--ps-gray-400); line-height: 1.55; }
+    .step-deliverable {
+      margin-top: 12px;
+      background: var(--ps-gray-100);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--ps-gray-700);
+    }
+
+    /* ════════════════════════════════
+       SLIDE 8 — ENTREGA PARA DEV
+    ════════════════════════════════ */
+    .s8 {
+      background: linear-gradient(160deg, #0A1A3D 0%, #001A5C 100%);
+      padding: 64px 100px;
+      justify-content: center;
+    }
+    .s8 .slide-label { color: rgba(255,255,255,0.4); }
+    .s8 h2 { font-size: 40px; font-weight: 800; color: white; margin-bottom: 8px; }
+    .s8 .subtitle { font-size: 16px; color: rgba(255,255,255,0.5); margin-bottom: 40px; }
+
+    .dev-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .dev-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .dev-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dev-card code, .dev-card pre {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      color: #7EB8FF;
+      background: rgba(0,0,0,0.25);
+      padding: 14px 16px;
+      border-radius: 8px;
+      display: block;
+      overflow: hidden;
+    }
+    .dev-card pre .cm { color: rgba(255,255,255,0.3); }
+    .dev-card pre .kw { color: #FF9FFF; }
+    .dev-card pre .str { color: #FFE083; }
+    .dev-card pre .val { color: #7EFFC0; }
+    .dev-card pre .prop { color: #7EB8FF; }
+
+    /* ════════════════════════════════
+       SLIDE 9 — O QUE PRECISAMOS
+    ════════════════════════════════ */
+    .s9 {
+      background: var(--ps-gray-100);
+      padding: 64px 100px;
+      justify-content: center;
+    }
+    .s9 h2 { font-size: 40px; font-weight: 800; color: var(--ps-gray-900); margin-bottom: 8px; }
+    .s9 .subtitle { font-size: 16px; color: var(--ps-gray-400); margin-bottom: 40px; }
+
+    .needs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .need-card {
+      background: white;
+      border-radius: 14px;
+      padding: 24px;
+      border: 2px solid transparent;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+    }
+    .need-card:nth-child(1) { border-color: #C0D4FF; }
+    .need-card:nth-child(2) { border-color: #FFD0B0; }
+    .need-card:nth-child(3) { border-color: #C0EED8; }
+    .need-card:nth-child(4) { border-color: #DDD0FF; }
+    .need-num {
+      font-size: 36px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .need-card:nth-child(1) .need-num { color: var(--ps-blue-mid); }
+    .need-card:nth-child(2) .need-num { color: var(--ps-orange); }
+    .need-card:nth-child(3) .need-num { color: #0A7A40; }
+    .need-card:nth-child(4) .need-num { color: #6644CC; }
+    .need-card h4 { font-size: 16px; font-weight: 700; color: var(--ps-gray-900); margin-bottom: 8px; }
+    .need-card p { font-size: 13px; color: var(--ps-gray-400); line-height: 1.55; flex: 1; }
+    .need-card ul { padding-left: 16px; margin-top: 12px; }
+    .need-card ul li { font-size: 12.5px; color: var(--ps-gray-700); margin-bottom: 4px; line-height: 1.4; }
+
+    /* ════════════════════════════════
+       SLIDE 10 — PRÓXIMOS PASSOS
+    ════════════════════════════════ */
+    .s10 {
+      background: linear-gradient(135deg, var(--ps-blue) 0%, #0047CC 60%, #FF6B00 150%);
+      padding: 64px 100px;
+      justify-content: center;
+    }
+    .s10 .slide-label { color: rgba(255,255,255,0.5); }
+    .s10 h2 { font-size: 44px; font-weight: 800; color: white; margin-bottom: 8px; }
+    .s10 .subtitle { font-size: 18px; color: rgba(255,255,255,0.6); margin-bottom: 44px; }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .tl-item {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px;
+      padding: 24px 20px;
+    }
+    .tl-week {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 8px;
+    }
+    .tl-item h4 { font-size: 16px; font-weight: 700; color: white; margin-bottom: 10px; }
+    .tl-item ul { padding-left: 16px; }
+    .tl-item ul li { font-size: 12.5px; color: rgba(255,255,255,0.6); margin-bottom: 4px; line-height: 1.4; }
+
+    .cta-box {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 14px;
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cta-box p { font-size: 17px; color: rgba(255,255,255,0.85); font-weight: 500; }
+    .cta-box strong { color: white; }
+    .cta-btn {
+      background: var(--ps-orange);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 28px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-left: 24px;
+    }
+
+    /* ════════════════════════════════
+       SLIDE 4 — 5 COLEÇÕES (novo)
+    ════════════════════════════════ */
+    .collection-flow {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      margin-bottom: 20px;
+    }
+    .col-card {
+      flex: 1;
+      border-radius: 14px;
+      padding: 20px 16px 18px;
+    }
+    .col-c1 { background: #F0F0FA; border: 2px solid #DCDCF0; }
+    .col-c2 { background: #E8EFFF; border: 2px solid #C0D4FF; }
+    .col-c3 { background: #EDF8F0; border: 2px solid #B0E4C8; }
+    .col-c4 { background: #FFF5E6; border: 2px solid #FFD8A0; }
+    .col-c5 { background: #F5EDFF; border: 2px solid #D4AAFF; }
+    .col-seq {
+      font-size: 10px; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+    .col-c1 .col-seq { color: #8888AA; }
+    .col-c2 .col-seq { color: #0047CC; }
+    .col-c3 .col-seq { color: #0A7A40; }
+    .col-c4 .col-seq { color: #CC7700; }
+    .col-c5 .col-seq { color: #6644CC; }
+    .col-name {
+      font-size: 17px; font-weight: 800;
+      color: var(--ps-gray-900); margin-bottom: 6px;
+    }
+    .col-desc {
+      font-size: 11.5px; color: var(--ps-gray-700);
+      line-height: 1.5; margin-bottom: 12px;
+    }
+    .col-groups { display: flex; flex-direction: column; gap: 4px; }
+    .cg {
+      font-family: 'Courier New', monospace;
+      font-size: 10.5px; font-weight: 600;
+      padding: 3px 8px; border-radius: 6px;
+      display: inline-block; width: fit-content;
+    }
+    .col-c1 .cg { background: white; color: #555577; }
+    .col-c2 .cg { background: rgba(0,71,204,0.1); color: #0047CC; }
+    .col-c3 .cg { background: rgba(10,122,64,0.1); color: #0A7A40; }
+    .col-c4 .cg { background: rgba(255,107,0,0.1); color: #CC5500; }
+    .col-c5 .cg { background: rgba(102,68,204,0.1); color: #6644CC; }
+    .cg-dim { opacity: .35; }
+    .col-arrow-flow {
+      display: flex; align-items: center;
+      color: var(--ps-gray-400); font-size: 16px;
+      padding: 0 6px; flex-shrink: 0;
+    }
+
+    .groups-legend {
+      display: flex; gap: 10px; align-items: center;
+      background: var(--ps-gray-100);
+      border-radius: 10px; padding: 12px 20px;
+    }
+    .gl-label {
+      font-size: 11px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--ps-gray-400);
+      margin-right: 4px; flex-shrink: 0;
+    }
+    .gl-pill {
+      font-size: 12px; font-weight: 600;
+      padding: 4px 12px; border-radius: 20px;
+    }
+    .gl-1 { background: #E8EFFF; color: #0047CC; }
+    .gl-2 { background: #EDF8F0; color: #0A7A40; }
+    .gl-3 { background: #FFF0E6; color: #CC5500; }
+    .gl-4 { background: #F5EDFF; color: #6644CC; }
+    .gl-5 { background: #F0F0FA; color: #555577; }
+
+    /* ─── Keyboard hint ─── */
+    .kb-hint {
+      color: rgba(255,255,255,0.25);
+      font-size: 12px;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* ════════════════════════════════
+       SLIDES 11-16 — PLATAFORMAS
+    ════════════════════════════════ */
+    .plat-slide {
+      padding: 52px 80px;
+      justify-content: flex-start;
+    }
+    /* header row */
+    .plat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .plat-header-left { display: flex; flex-direction: column; gap: 4px; }
+    .plat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+    }
+    .plat-title { font-size: 36px; font-weight: 800; margin-bottom: 4px; }
+    .plat-sub { font-size: 14px; opacity: .55; }
+    .plat-logo {
+      font-size: 64px;
+      line-height: 1;
+      opacity: .18;
+    }
+
+    /* two-column layout */
+    .plat-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      flex: 1;
+    }
+    .plat-body.three-col { grid-template-columns: 1fr 1fr 1fr; }
+
+    /* code panels */
+    .code-panel {
+      border-radius: 14px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .code-panel-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      opacity: .55;
+      margin-bottom: 2px;
+    }
+    .code-panel pre {
+      font-family: 'Courier New', monospace;
+      font-size: 11.5px;
+      line-height: 1.85;
+      border-radius: 8px;
+      padding: 14px 16px;
+      flex: 1;
+      overflow: hidden;
+      margin: 0;
+    }
+    /* syntax colours shared */
+    .cm  { color: rgba(255,255,255,0.28); }
+    .kw  { color: #FF9FFF; }
+    .str { color: #FFE083; }
+    .val { color: #7EFFC0; }
+    .prop{ color: #7EB8FF; }
+    .tag-c{ color: #FF9FFF; }
+    .attr { color: #7EB8FF; }
+    .attrv{ color: #FFE083; }
+
+    /* info pills row */
+    .plat-pills {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .plat-pill {
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+
+    /* ─── WEB (s11) ─── */
+    .s11 { background: #F8FAFF; }
+    .s11 .plat-badge { background: #E8EFFF; color: #0047CC; }
+    .s11 .plat-title { color: #1A1A2E; }
+    .s11 .code-panel { background: #1E2235; }
+    .s11 .code-panel-title { color: #7EB8FF; }
+    .s11 .code-panel pre { background: #13162A; color: #CDD6F4; }
+    .s11 .plat-pill { background: #E8EFFF; color: #0047CC; }
+    .s11 .slide-number { color: rgba(0,0,0,0.25); }
+
+    /* ─── REACT (s12) ─── */
+    .s12 { background: #0D1117; }
+    .s12 .plat-badge { background: rgba(97,218,251,0.12); color: #61DAFB; }
+    .s12 .plat-title { color: white; }
+    .s12 .plat-sub { color: rgba(255,255,255,.5); }
+    .s12 .code-panel { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+    .s12 .code-panel-title { color: #61DAFB; }
+    .s12 .code-panel pre { background: #0A0D14; color: #CDD6F4; }
+    .s12 .plat-pill { background: rgba(97,218,251,0.1); color: #61DAFB; }
+
+    /* ─── iOS (s13) ─── */
+    .s13 { background: #1C1C1E; }
+    .s13 .plat-badge { background: rgba(255,255,255,0.08); color: #F2F2F7; }
+    .s13 .plat-title { color: white; }
+    .s13 .plat-sub { color: rgba(255,255,255,.45); }
+    .s13 .code-panel { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.07); }
+    .s13 .code-panel-title { color: #FF9F0A; }
+    .s13 .code-panel pre { background: rgba(0,0,0,0.4); color: #CDD6F4; }
+    .s13 .plat-pill { background: rgba(255,159,10,0.12); color: #FF9F0A; }
+
+    /* ─── Android (s14) ─── */
+    .s14 { background: #0F1923; }
+    .s14 .plat-badge { background: rgba(61,220,132,0.12); color: #3DDC84; }
+    .s14 .plat-title { color: white; }
+    .s14 .plat-sub { color: rgba(255,255,255,.45); }
+    .s14 .code-panel { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); }
+    .s14 .code-panel-title { color: #3DDC84; }
+    .s14 .code-panel pre { background: rgba(0,0,0,0.35); color: #CDD6F4; }
+    .s14 .plat-pill { background: rgba(61,220,132,0.1); color: #3DDC84; }
+
+    /* ─── Angular (s15) ─── */
+    .s15 { background: #1A0005; }
+    .s15 .plat-badge { background: rgba(221,0,49,0.15); color: #FF3355; }
+    .s15 .plat-title { color: white; }
+    .s15 .plat-sub { color: rgba(255,255,255,.45); }
+    .s15 .code-panel { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+    .s15 .code-panel-title { color: #FF3355; }
+    .s15 .code-panel pre { background: rgba(0,0,0,0.4); color: #CDD6F4; }
+    .s15 .plat-pill { background: rgba(221,0,49,0.12); color: #FF3355; }
+
+    /* ─── Overview (s16) ─── */
+    .s16 {
+      background: linear-gradient(135deg, #0D0D1A 0%, #001A5C 60%, #0D0D1A 100%);
+      padding: 64px 100px;
+      justify-content: center;
+    }
+    .s16 .slide-label { color: rgba(255,255,255,.4); }
+    .s16 h2 { font-size: 40px; font-weight: 800; color: white; margin-bottom: 8px; }
+    .s16 .subtitle { font-size: 15px; color: rgba(255,255,255,.5); margin-bottom: 36px; }
+    .plat-matrix {
+      display: grid;
+      grid-template-columns: repeat(5,1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .plat-matrix-card {
+      border-radius: 14px;
+      padding: 22px 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .pmc-icon { font-size: 28px; margin-bottom: 10px; }
+    .pmc-name { font-size: 15px; font-weight: 800; color: white; margin-bottom: 6px; }
+    .pmc-format {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      opacity: .6;
+    }
+    .pmc-tokens {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      line-height: 1.8;
+      opacity: .55;
+    }
+    .pmc-web { background: rgba(0,71,204,0.2); }
+    .pmc-react { background: rgba(97,218,251,0.08); }
+    .pmc-ios { background: rgba(255,159,10,0.08); }
+    .pmc-android { background: rgba(61,220,132,0.08); }
+    .pmc-angular { background: rgba(221,0,49,0.1); }
+    .pmc-web .pmc-format { color: #7EB8FF; }
+    .pmc-react .pmc-format { color: #61DAFB; }
+    .pmc-ios .pmc-format { color: #FF9F0A; }
+    .pmc-android .pmc-format { color: #3DDC84; }
+    .pmc-angular .pmc-format { color: #FF3355; }
+
+    .pipeline-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 16px 24px;
+    }
+    .pipe-step {
+      flex: 1;
+      text-align: center;
+    }
+    .pipe-step .ps-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.35);
+      margin-bottom: 4px;
+    }
+    .pipe-step .ps-val {
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,.8);
+    }
+    .pipe-arrow { color: rgba(255,255,255,.2); font-size: 18px; padding: 0 8px; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ SLIDE 1 — CAPA ══════════════ -->
+<div class="slide s1 active" data-index="0">
+  <div class="deco"></div>
+  <div class="deco2"></div>
+  <span class="tag">Porto Seguro · DS SuperApp · 2025</span>
+  <h1>Design System<br>com <span>Tokens</span><br>Bem Estruturados</h1>
+  <p>Como criar, nomear e conectar os tokens de design para que o time de produto e desenvolvimento trabalhe de forma consistente e escalável.</p>
+  <div class="meta">
+    <div class="meta-item">
+      <span class="meta-label">Produto</span>
+      <span class="meta-val">SuperApp PS</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Entregável</span>
+      <span class="meta-val">Design Tokens + Storybook</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Fase</span>
+      <span class="meta-val">Planejamento</span>
+    </div>
+  </div>
+  <span class="slide-number">01 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 2 — PROBLEMA ══════════════ -->
+<div class="slide s2" data-index="1">
+  <span class="slide-label">O Problema</span>
+  <h2>Por que precisamos de tokens?</h2>
+  <div class="pain-grid">
+    <div class="pain-card">
+      <div class="pain-icon">🔀</div>
+      <h3>Inconsistência visual</h3>
+      <p>Sem tokens, cada componente usa valores hard-coded diferentes. Uma mesma "cor primária" pode ter 5 variações no app.</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">⏳</div>
+      <h3>Retrabalho constante</h3>
+      <p>Mudar uma cor ou espaçamento exige atualizar dezenas de arquivos manualmente. Uma alteração vira dias de trabalho.</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">🗣️</div>
+      <h3>Falha de comunicação</h3>
+      <p>Design fala "azul primário", dev implementa "#0047CC" e depois "#003087". Não há linguagem comum entre as áreas.</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">🌙</div>
+      <h3>Temas impossíveis</h3>
+      <p>Dark mode, alto contraste, white-label? Sem tokens semânticos, cada novo tema exige uma refatoração completa.</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">📏</div>
+      <h3>Escala não padronizada</h3>
+      <p>Espaçamentos e tamanhos arbitrários comprometem o ritmo visual e dificultam a criação de novos componentes alinhados.</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">🔧</div>
+      <h3>Dev sem especificação</h3>
+      <p>Componentes do Figma não estão prontos para desenvolvimento. Os valores precisam ser extraídos manualmente a cada entrega.</p>
+    </div>
+  </div>
+  <span class="slide-number">02 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 3 — O QUE SÃO TOKENS ══════════════ -->
+<div class="slide s3" data-index="2">
+  <span class="slide-label">Conceito</span>
+  <h2>O que são Design Tokens?</h2>
+  <p class="subtitle">Tokens são as menores unidades de decisão de design — valores nomeados que conectam Figma, código e documentação numa linguagem única.</p>
+
+  <div class="token-flow">
+    <div class="token-box">
+      <div class="tbox-label">Figma Variables</div>
+      <div class="tbox-title">Design</div>
+      <div class="tbox-example">
+        color/brand/primary<br>
+        spacing/md<br>
+        radius/button
+      </div>
+    </div>
+    <div class="arrow-flow">→</div>
+    <div class="token-box active-box">
+      <div class="tbox-label">Token (nome único)</div>
+      <div class="tbox-title">Fonte da Verdade</div>
+      <div class="tbox-example">
+        --color-brand-primary<br>
+        --spacing-md<br>
+        --radius-button
+      </div>
+    </div>
+    <div class="arrow-flow">→</div>
+    <div class="token-box">
+      <div class="tbox-label">CSS / JS / React Native</div>
+      <div class="tbox-title">Código</div>
+      <div class="tbox-example">
+        var(--color-brand-primary)<br>
+        theme.spacing.md<br>
+        tokens.radius.button
+      </div>
+    </div>
+    <div class="arrow-flow">→</div>
+    <div class="token-box">
+      <div class="tbox-label">Storybook Docs</div>
+      <div class="tbox-title">Documentação</div>
+      <div class="tbox-example">
+        color.brand.primary<br>
+        Exibido em tabela<br>
+        com valor real
+      </div>
+    </div>
+  </div>
+
+  <div class="token-benefit">
+    <div class="benefit-pill">✦ Uma mudança, impacto em todo o produto</div>
+    <div class="benefit-pill">✦ Design e Dev falam a mesma língua</div>
+    <div class="benefit-pill">✦ Temas e variações sem retrabalho</div>
+    <div class="benefit-pill">✦ Documentação sempre atualizada</div>
+  </div>
+  <span class="slide-number">03 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 4 — ARQUITETURA 5 COLEÇÕES ══════════════ -->
+<div class="slide s4" data-index="3">
+  <span class="slide-label">Arquitetura</span>
+  <h2>5 Coleções · Do Valor Bruto ao Produto Final</h2>
+  <p class="subtitle">Cada coleção tem uma responsabilidade única. Um token nunca pula camadas — sempre referencia a coleção imediatamente anterior.</p>
+
+  <div class="collection-flow">
+    <div class="col-card col-c1">
+      <div class="col-seq">Coleção 01</div>
+      <div class="col-name">Primitive</div>
+      <div class="col-desc">Todos os valores brutos e absolutos do sistema. Nenhuma semântica — apenas a paleta de possibilidades.</div>
+      <div class="col-groups">
+        <span class="cg">color.blue.500</span>
+        <span class="cg">typography.size.16</span>
+        <span class="cg">numeric-values.8</span>
+        <span class="cg">breakpoint.md</span>
+        <span class="cg">aspect-ratio.16-9</span>
+      </div>
+    </div>
+    <div class="col-arrow-flow">→</div>
+    <div class="col-card col-c2">
+      <div class="col-seq">Coleção 02</div>
+      <div class="col-name">Brand</div>
+      <div class="col-desc">Identidade da marca Porto Seguro. Mapeia primitivos para intenções de marca — cor, tipo e forma.</div>
+      <div class="col-groups">
+        <span class="cg">color.brand.primary</span>
+        <span class="cg">typography.heading.lg</span>
+        <span class="cg">numeric-values.radius.sm</span>
+        <span class="cg cg-dim">breakpoint.sm</span>
+        <span class="cg cg-dim">aspect-ratio.card</span>
+      </div>
+    </div>
+    <div class="col-arrow-flow">→</div>
+    <div class="col-card col-c3">
+      <div class="col-seq">Coleção 03</div>
+      <div class="col-name">Theme</div>
+      <div class="col-desc">Variações de contexto visual: light, dark, alto contraste. Altera a aparência sem mudar os componentes.</div>
+      <div class="col-groups">
+        <span class="cg">color.surface.default</span>
+        <span class="cg">color.text.primary</span>
+        <span class="cg">typography.body.md</span>
+        <span class="cg cg-dim">breakpoint.lg</span>
+        <span class="cg cg-dim">aspect-ratio.hero</span>
+      </div>
+    </div>
+    <div class="col-arrow-flow">→</div>
+    <div class="col-card col-c4">
+      <div class="col-seq">Coleção 04</div>
+      <div class="col-name">Channel</div>
+      <div class="col-desc">Customizações por produto ou canal — SuperApp, Portal Web, Parceiros. Sobrescreve apenas o necessário.</div>
+      <div class="col-groups">
+        <span class="cg">color.surface.default</span>
+        <span class="cg">color.accent.primary</span>
+        <span class="cg">typography.brand.heading</span>
+        <span class="cg">breakpoint.channel</span>
+        <span class="cg cg-dim">aspect-ratio.banner</span>
+      </div>
+    </div>
+    <div class="col-arrow-flow">→</div>
+    <div class="col-card col-c5">
+      <div class="col-seq">Coleção 05</div>
+      <div class="col-name">Platform</div>
+      <div class="col-desc">Saída técnica para cada plataforma. Transforma tokens em CSS vars, Swift enums, Kotlin objects, SCSS vars.</div>
+      <div class="col-groups">
+        <span class="cg">--color-surface-default</span>
+        <span class="cg">DSTokens.Color.surface</span>
+        <span class="cg">$color-surface-default</span>
+        <span class="cg">@color/surface_default</span>
+        <span class="cg cg-dim">tokens.color.surface</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="groups-legend">
+    <span class="gl-label">Grupos em todas as coleções →</span>
+    <span class="gl-pill gl-1">color</span>
+    <span class="gl-pill gl-2">typography</span>
+    <span class="gl-pill gl-3">numeric-values</span>
+    <span class="gl-pill gl-4">breakpoint</span>
+    <span class="gl-pill gl-5">aspect-ratio</span>
+  </div>
+  <span class="slide-number">04 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 5 — NOMENCLATURA ══════════════ -->
+<div class="slide s5" data-index="4">
+  <span class="slide-label">Nomenclatura</span>
+  <h2>Padrão de Nome dos Tokens</h2>
+  <p class="subtitle">A fórmula segue sempre a mesma lógica: <strong style="color:white">coleção → grupo → elemento → variante</strong>. Qualquer dev consegue localizar o token sem documentação.</p>
+
+  <div class="naming-formula">
+    <div class="formula-part">
+      <div class="fp-label">Coleção</div>
+      <div class="fp-val">brand</div>
+    </div>
+    <div class="formula-dot">.</div>
+    <div class="formula-part">
+      <div class="fp-label">Grupo</div>
+      <div class="fp-val">color</div>
+    </div>
+    <div class="formula-dot">.</div>
+    <div class="formula-part">
+      <div class="fp-label">Elemento</div>
+      <div class="fp-val">primary</div>
+    </div>
+    <div class="formula-dot" style="color: rgba(255,255,255,0.25);">.</div>
+    <div class="formula-part optional">
+      <div class="fp-label">Variante</div>
+      <div class="fp-val">hover</div>
+    </div>
+  </div>
+
+  <div class="naming-examples">
+    <div class="naming-ex-card cat-color">
+      <div class="nec-label">color</div>
+      <code>
+primitive.color.blue.500<br>
+brand.color.primary<br>
+brand.color.secondary<br>
+theme.color.surface.default<br>
+channel.color.accent<br>
+      </code>
+    </div>
+    <div class="naming-ex-card cat-spacing">
+      <div class="nec-label">typography · numeric-values</div>
+      <code>
+primitive.typography.size.16<br>
+brand.typography.heading.lg<br>
+primitive.numeric-values.8<br>
+brand.numeric-values.radius.sm<br>
+channel.numeric-values.gap.md
+      </code>
+    </div>
+    <div class="naming-ex-card cat-comp">
+      <div class="nec-label">breakpoint · aspect-ratio</div>
+      <code>
+primitive.breakpoint.md<br>
+channel.breakpoint.mobile<br>
+primitive.aspect-ratio.16-9<br>
+brand.aspect-ratio.card<br>
+channel.aspect-ratio.hero
+      </code>
+    </div>
+  </div>
+  <span class="slide-number">05 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 6 — COMPONENTES ══════════════ -->
+<div class="slide s6" data-index="5">
+  <span class="slide-label">Escopo</span>
+  <h2>Componentes do SuperApp</h2>
+  <p class="subtitle">Todos os componentes já existem no Figma. A próxima etapa é mapear e criar os tokens de cada um.</p>
+
+  <div class="comp-grid">
+    <div class="comp-card">
+      <div class="comp-icon">🔘</div>
+      <h4>Button</h4>
+      <p>Primary, secondary, ghost, destructive — 4 variantes × 3 tamanhos × 4 estados</p>
+      <span class="comp-status status-token">⚠ tokens pendentes</span>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">📝</div>
+      <h4>Input / Form</h4>
+      <p>Text input, select, checkbox, radio, switch, textarea</p>
+      <span class="comp-status status-token">⚠ tokens pendentes</span>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">🃏</div>
+      <h4>Card</h4>
+      <p>Cards de produto, seguro, ação rápida e informativos</p>
+      <span class="comp-status status-token">⚠ tokens pendentes</span>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">🔤</div>
+      <h4>Typography</h4>
+      <p>Heading, body, label, caption — escala tipográfica completa</p>
+      <span class="comp-status status-token">⚠ tokens pendentes</span>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">🧭</div>
+      <h4>Navigation</h4>
+      <p>Bottom bar, tab bar, header, breadcrumb</p>
+      <span class="comp-status status-token">⚠ tokens pendentes</span>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">🔔</div>
+      <h4>Feedback</h4>
+      <p>Toast, alert, modal, banner, loading state</p>
+      <span class="comp-status status-token">⚠ tokens pendentes</span>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">🏷️</div>
+      <h4>Tag / Badge</h4>
+      <p>Status, categoria, contador, labels informativos</p>
+      <span class="comp-status status-token">⚠ tokens pendentes</span>
+    </div>
+    <div class="comp-card">
+      <div class="comp-icon">🖼️</div>
+      <h4>Avatar / Icon</h4>
+      <p>Foto de perfil, ícones do sistema, placeholders</p>
+      <span class="comp-status status-token">⚠ tokens pendentes</span>
+    </div>
+  </div>
+
+  <div class="comp-summary">
+    <div class="comp-summary-item">
+      <div class="csn">8</div>
+      <div class="csl">Componentes no Figma</div>
+    </div>
+    <div class="comp-divider"></div>
+    <div class="comp-summary-item">
+      <div class="csn" style="color: var(--ps-orange)">0</div>
+      <div class="csl">Com tokens criados</div>
+    </div>
+    <div class="comp-divider"></div>
+    <div class="comp-summary-item">
+      <div class="csn" style="color: #0A7A40">~120</div>
+      <div class="csl">Tokens estimados</div>
+    </div>
+    <div class="comp-divider"></div>
+    <div class="comp-summary-item">
+      <div class="csn" style="color: #6644CC">3</div>
+      <div class="csl">Camadas de tokens</div>
+    </div>
+  </div>
+  <span class="slide-number">06 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 7 — FLUXO ══════════════ -->
+<div class="slide s7" data-index="6">
+  <span class="slide-label">Processo</span>
+  <h2>Fluxo de Trabalho</h2>
+  <p class="subtitle">Uma etapa por coleção. O trabalho avança do mais bruto ao mais específico — cada entregável alimenta a próxima etapa.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-dot"></div>
+      <div class="step-num">Etapa 01</div>
+      <h4>Coleção Primitive</h4>
+      <p>Auditar o Figma e criar a escala base: paleta de cores, tipografia, numeric-values, breakpoints e aspect-ratios.</p>
+      <div class="step-deliverable">↳ primitive.json</div>
+    </div>
+    <div class="step">
+      <div class="step-dot"></div>
+      <div class="step-num">Etapa 02</div>
+      <h4>Coleção Brand</h4>
+      <p>Mapear primitivos para a identidade Porto Seguro: cor de marca, tipografia e forma. Referencia apenas Primitive.</p>
+      <div class="step-deliverable">↳ brand.json</div>
+    </div>
+    <div class="step">
+      <div class="step-dot"></div>
+      <div class="step-num">Etapa 03</div>
+      <h4>Coleção Theme</h4>
+      <p>Definir variações visuais: light, dark, alto contraste. Tokens de surface, text e border referenciando Brand.</p>
+      <div class="step-deliverable">↳ theme.light.json · theme.dark.json</div>
+    </div>
+    <div class="step">
+      <div class="step-dot"></div>
+      <div class="step-num">Etapa 04</div>
+      <h4>Coleção Channel</h4>
+      <p>Customizações por produto: SuperApp, Portal, Parceiros. Sobrescreve somente o que difere do Theme base.</p>
+      <div class="step-deliverable">↳ channel.superapp.json</div>
+    </div>
+    <div class="step">
+      <div class="step-dot"></div>
+      <div class="step-num">Etapa 05</div>
+      <h4>Coleção Platform</h4>
+      <p>Style Dictionary transforma o JSON em artefatos: CSS vars, TS object, Swift enum, Kotlin object, SCSS vars.</p>
+      <div class="step-deliverable">↳ platform.css · .ts · .swift · .kt</div>
+    </div>
+  </div>
+  <span class="slide-number">07 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 8 — ENTREGA DEV ══════════════ -->
+<div class="slide s8" data-index="7">
+  <span class="slide-label">Saída técnica</span>
+  <h2>Entrega Pronta para Desenvolvimento</h2>
+  <p class="subtitle">O JSON das 5 coleções alimenta o Style Dictionary, que gera artefatos de plataforma automaticamente. Zero trabalho manual para os devs.</p>
+
+  <div class="dev-grid">
+    <div class="dev-card">
+      <h3>🗂️ JSON · Estrutura das Coleções</h3>
+      <pre>
+<span class="cm">// brand.json</span>
+{
+  <span class="prop">"color"</span>: {
+    <span class="prop">"primary"</span>: { <span class="prop">"value"</span>: <span class="str">"{primitive.color.blue.500}"</span> },
+    <span class="prop">"secondary"</span>: { <span class="prop">"value"</span>: <span class="str">"{primitive.color.orange.500}"</span> }
+  },
+  <span class="prop">"typography"</span>: {
+    <span class="prop">"heading"</span>: { <span class="prop">"lg"</span>: { <span class="prop">"value"</span>: <span class="str">"{primitive.typography.size.32}"</span> } }
+  },
+  <span class="prop">"numeric-values"</span>: {
+    <span class="prop">"radius"</span>: { <span class="prop">"sm"</span>: { <span class="prop">"value"</span>: <span class="str">"{primitive.numeric-values.8}"</span> } }
+  }
+}
+<span class="cm">// theme.dark.json sobrescreve apenas:</span>
+{ <span class="prop">"color"</span>: { <span class="prop">"surface"</span>: { <span class="prop">"default"</span>: {
+    <span class="prop">"value"</span>: <span class="str">"{primitive.color.gray.900}"</span> } } } }</pre>
+    </div>
+    <div class="dev-card">
+      <h3>📄 CSS Variables · Platform output</h3>
+      <pre>
+<span class="cm">/* platform.css — gerado automaticamente */</span>
+<span class="kw">:root</span> {
+  <span class="cm">/* brand */</span>
+  <span class="prop">--brand-color-primary</span>:     <span class="val">#0047CC</span>;
+  <span class="prop">--brand-color-secondary</span>:   <span class="val">#FF6B00</span>;
+  <span class="prop">--brand-typography-heading-lg</span>: <span class="val">32px</span>;
+  <span class="prop">--brand-numeric-radius-sm</span>: <span class="val">8px</span>;
+  <span class="cm">/* theme (light default) */</span>
+  <span class="prop">--theme-color-surface-default</span>: <span class="val">#FFFFFF</span>;
+  <span class="prop">--theme-color-text-primary</span>: <span class="val">#1A1A2E</span>;
+  <span class="cm">/* channel (superapp) */</span>
+  <span class="prop">--channel-color-accent</span>:    <span class="val">#0047CC</span>;
+  <span class="prop">--channel-breakpoint-mobile</span>: <span class="val">375px</span>;
+}
+[data-theme="dark"] {
+  <span class="prop">--theme-color-surface-default</span>: <span class="val">#1A1A2E</span>;
+}</pre>
+    </div>
+    <div class="dev-card">
+      <h3>🟨 TypeScript · tokens object</h3>
+      <pre>
+<span class="kw">export const</span> tokens = {
+  primitive: {
+    color: { blue: { <span class="str">"500"</span>: <span class="str">"#0047CC"</span> } },
+    typography: { size: { <span class="str">"32"</span>: <span class="str">"32px"</span> } },
+    numericValues: { <span class="str">"8"</span>: <span class="str">"8px"</span> },
+    breakpoint: { md: <span class="str">"768px"</span> },
+    aspectRatio: { <span class="str">"16-9"</span>: <span class="str">"16/9"</span> },
+  },
+  brand: {
+    color: { primary: <span class="str">"#0047CC"</span> },
+    typography: { heading: { lg: <span class="str">"32px"</span> } },
+  },
+  theme: { color: { surface: { default: <span class="str">"#FFF"</span> } } },
+  channel: { color: { accent: <span class="str">"#0047CC"</span> } },
+} <span class="kw">as const</span></pre>
+    </div>
+    <div class="dev-card">
+      <h3>🎨 Figma Variables · 5 Coleções</h3>
+      <pre>
+<span class="cm">/* Figma Variables Panel */</span>
+
+Coleção: Primitive
+  color/blue/500    = #0047CC
+  numeric-values/8  = 8
+  breakpoint/md     = 768
+  aspect-ratio/16-9 = 16/9
+
+Coleção: Brand
+  color/primary
+    = {primitive/color/blue/500}
+
+Coleção: Theme
+  color/surface/default
+    = {primitive/color/white}
+
+Coleção: Channel
+  color/accent = {brand/color/primary}
+
+Coleção: Platform  → Style Dictionary</pre>
+    </div>
+  </div>
+  <span class="slide-number">08 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 9 — O QUE PRECISAMOS ══════════════ -->
+<div class="slide s9" data-index="8">
+  <span class="slide-label">Insumos necessários</span>
+  <h2>O que precisamos para começar</h2>
+  <p class="subtitle">Para criar os tokens, precisamos dos valores que já existem no produto. Quatro insumos desbloqueiam todo o trabalho.</p>
+
+  <div class="needs-grid">
+    <div class="need-card">
+      <div class="need-num">01</div>
+      <h4>Paleta de Cores</h4>
+      <p>Os valores hexadecimais das cores usadas no SuperApp.</p>
+      <ul>
+        <li>Cores da marca PS</li>
+        <li>Cores de feedback (erro, sucesso, alerta)</li>
+        <li>Escala de neutros</li>
+        <li>Gradientes (se houver)</li>
+      </ul>
+    </div>
+    <div class="need-card">
+      <div class="need-num">02</div>
+      <h4>Escala Tipográfica</h4>
+      <p>Fontes, tamanhos, pesos e alturas de linha em uso.</p>
+      <ul>
+        <li>Fonte principal (nome)</li>
+        <li>Tamanhos (xs, sm, md, lg…)</li>
+        <li>Pesos usados</li>
+        <li>Line-height por nível</li>
+      </ul>
+    </div>
+    <div class="need-card">
+      <div class="need-num">03</div>
+      <h4>Espaçamento</h4>
+      <p>A base da grade de espaçamento usada nos layouts.</p>
+      <ul>
+        <li>Base unit (4px? 8px?)</li>
+        <li>Escala de tamanhos</li>
+        <li>Padding interno dos componentes</li>
+        <li>Gaps entre elementos</li>
+      </ul>
+    </div>
+    <div class="need-card">
+      <div class="need-num">04</div>
+      <h4>Acesso ao Figma</h4>
+      <p>Acesso ao arquivo do UI Kit para auditoria completa.</p>
+      <ul>
+        <li>Link do arquivo Figma</li>
+        <li>Permissão de visualização</li>
+        <li>Lista de componentes existentes</li>
+        <li>Responsável pelo arquivo</li>
+      </ul>
+    </div>
+  </div>
+  <span class="slide-number">09 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 10 — PRÓXIMOS PASSOS ══════════════ -->
+<div class="slide s10" data-index="9">
+  <span class="slide-label">Cronograma</span>
+  <h2>Próximos Passos</h2>
+  <p class="subtitle">Com os insumos em mãos, o trabalho completo pode ser feito em 4 semanas.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-week">Semana 1</div>
+      <h4>Auditoria & Primitivos</h4>
+      <ul>
+        <li>Levantar valores do Figma</li>
+        <li>Criar escala de primitivos</li>
+        <li>Validar com design</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">Semana 2</div>
+      <h4>Tokens Semânticos</h4>
+      <ul>
+        <li>Mapear intenções de uso</li>
+        <li>Criar semantic.json</li>
+        <li>Aplicar no Figma Variables</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">Semana 3</div>
+      <h4>Tokens de Componente</h4>
+      <ul>
+        <li>Um arquivo por componente</li>
+        <li>Ligar ao Figma</li>
+        <li>Review com dev lead</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">Semana 4</div>
+      <h4>Storybook & Entrega</h4>
+      <ul>
+        <li>Exportar CSS + JS tokens</li>
+        <li>Documentar no Storybook</li>
+        <li>Handoff para desenvolvimento</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cta-box">
+    <p>Próximo passo imediato: <strong>compartilhar acesso ao Figma e paleta de cores</strong> para iniciar a auditoria.</p>
+  </div>
+  <span class="slide-number">10 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 11 — WEB (CSS Variables) ══════════════ -->
+<div class="slide s11 plat-slide" data-index="10">
+  <div class="plat-header">
+    <div class="plat-header-left">
+      <span class="plat-badge">Plataforma · Web</span>
+      <div class="plat-title">Web — CSS Custom Properties</div>
+      <div class="plat-sub">Tokens entregues como variáveis CSS nativas. Zero dependência de framework.</div>
+    </div>
+    <div class="plat-logo">🌐</div>
+  </div>
+  <div class="plat-body">
+    <div class="code-panel s11">
+      <div class="code-panel-title">tokens.css — variáveis geradas</div>
+      <pre><span class="cm">/* ── Primitivos ── */</span>
+<span class="kw">:root</span> {
+  <span class="prop">--primitive-blue-500</span>: <span class="val">#0047CC</span>;
+  <span class="prop">--primitive-blue-900</span>: <span class="val">#001A5C</span>;
+  <span class="prop">--primitive-orange-500</span>: <span class="val">#FF6B00</span>;
+  <span class="prop">--primitive-space-4</span>: <span class="val">4px</span>;
+  <span class="prop">--primitive-space-8</span>: <span class="val">8px</span>;
+  <span class="prop">--primitive-space-16</span>: <span class="val">16px</span>;
+
+  <span class="cm">/* ── Semânticos ── */</span>
+  <span class="prop">--color-brand-primary</span>: <span class="val">var(--primitive-blue-500)</span>;
+  <span class="prop">--color-brand-dark</span>: <span class="val">var(--primitive-blue-900)</span>;
+  <span class="prop">--color-feedback-error</span>: <span class="val">#CC2200</span>;
+  <span class="prop">--color-feedback-success</span>: <span class="val">#0A7A40</span>;
+  <span class="prop">--color-neutral-100</span>: <span class="val">#F4F5F9</span>;
+  <span class="prop">--spacing-inset-sm</span>: <span class="val">var(--primitive-space-8)</span>;
+  <span class="prop">--spacing-inset-md</span>: <span class="val">var(--primitive-space-16)</span>;
+  <span class="prop">--radius-button</span>: <span class="val">8px</span>;
+  <span class="prop">--radius-card</span>: <span class="val">16px</span>;
+
+  <span class="cm">/* ── Componentes ── */</span>
+  <span class="prop">--button-bg-primary</span>: <span class="val">var(--color-brand-primary)</span>;
+  <span class="prop">--button-bg-primary-hover</span>: <span class="val">var(--color-brand-dark)</span>;
+  <span class="prop">--button-text-primary</span>: <span class="val">#FFFFFF</span>;
+  <span class="prop">--button-radius</span>: <span class="val">var(--radius-button)</span>;
+  <span class="prop">--input-border-default</span>: <span class="val">#C0C0D8</span>;
+  <span class="prop">--input-border-focus</span>: <span class="val">var(--color-brand-primary)</span>;
+}</pre>
+    </div>
+    <div class="code-panel s11">
+      <div class="code-panel-title">uso no componente</div>
+      <pre><span class="cm">/* Button.css */</span>
+.<span class="prop">btn-primary</span> {
+  background: <span class="val">var(--button-bg-primary)</span>;
+  color: <span class="val">var(--button-text-primary)</span>;
+  border-radius: <span class="val">var(--button-radius)</span>;
+  padding: <span class="val">var(--spacing-inset-sm)</span>
+           <span class="val">var(--spacing-inset-md)</span>;
+}
+.<span class="prop">btn-primary</span>:<span class="kw">hover</span> {
+  background: <span class="val">var(--button-bg-primary-hover)</span>;
+}
+
+<span class="cm">/* Dark mode automático */</span>
+@<span class="kw">media</span> (prefers-color-scheme: dark) {
+  <span class="kw">:root</span> {
+    <span class="prop">--color-brand-primary</span>: <span class="val">#5B9BFF</span>;
+    <span class="prop">--color-neutral-100</span>: <span class="val">#1A1A2E</span>;
+  }
+}
+
+<span class="cm">/* Tema white-label via classe */</span>
+.<span class="prop">theme-porto</span> {
+  <span class="prop">--color-brand-primary</span>: <span class="val">#003087</span>;
+}</pre>
+      <div class="plat-pills">
+        <span class="plat-pill s11">CSS nativo</span>
+        <span class="plat-pill s11">Dark mode</span>
+        <span class="plat-pill s11">Cascata</span>
+        <span class="plat-pill s11">Zero bundle</span>
+      </div>
+    </div>
+  </div>
+  <span class="slide-number">11 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 12 — REACT ══════════════ -->
+<div class="slide s12 plat-slide" data-index="11">
+  <div class="plat-header">
+    <div class="plat-header-left">
+      <span class="plat-badge">Plataforma · React</span>
+      <div class="plat-title">React — JS/TS Tokens + Styled</div>
+      <div class="plat-sub">Objeto TypeScript tipado. Compatível com Styled Components, Emotion e CSS Modules.</div>
+    </div>
+    <div class="plat-logo">⚛️</div>
+  </div>
+  <div class="plat-body">
+    <div class="code-panel s12">
+      <div class="code-panel-title">tokens.ts — objeto tipado</div>
+      <pre><span class="cm">// gerado pelo Style Dictionary</span>
+<span class="kw">export const</span> <span class="prop">tokens</span> = {
+  color: {
+    brand: {
+      primary: <span class="str">"#0047CC"</span>,
+      dark:    <span class="str">"#001A5C"</span>,
+      light:   <span class="str">"#E8EFFF"</span>,
+    },
+    feedback: {
+      error:   <span class="str">"#CC2200"</span>,
+      success: <span class="str">"#0A7A40"</span>,
+      warning: <span class="str">"#CC7700"</span>,
+    },
+    neutral: {
+      <span class="str">"100"</span>: <span class="str">"#F4F5F9"</span>,
+      <span class="str">"400"</span>: <span class="str">"#8888AA"</span>,
+      <span class="str">"900"</span>: <span class="str">"#1A1A2E"</span>,
+    },
+  },
+  spacing: {
+    inset: { sm: <span class="str">"8px"</span>, md: <span class="str">"16px"</span>, lg: <span class="str">"24px"</span> },
+    stack: { sm: <span class="str">"8px"</span>, md: <span class="str">"16px"</span>, lg: <span class="str">"32px"</span> },
+  },
+  radius: { button: <span class="str">"8px"</span>, card: <span class="str">"16px"</span>, pill: <span class="str">"999px"</span> },
+  component: {
+    button: {
+      bgPrimary:      <span class="str">"#0047CC"</span>,
+      bgPrimaryHover: <span class="str">"#001A5C"</span>,
+      textPrimary:    <span class="str">"#FFFFFF"</span>,
+      radius:         <span class="str">"8px"</span>,
+      paddingX:       <span class="str">"16px"</span>,
+      paddingY:       <span class="str">"8px"</span>,
+    },
+  },
+} <span class="kw">as const</span>
+
+<span class="kw">export type</span> Tokens = <span class="kw">typeof</span> tokens</pre>
+    </div>
+    <div class="code-panel s12">
+      <div class="code-panel-title">uso com Styled Components</div>
+      <pre><span class="cm">// ThemeProvider na raiz</span>
+<span class="kw">import</span> { tokens } <span class="kw">from</span> <span class="str">"@ps/design-tokens"</span>
+
+<span class="kw">export const</span> theme = tokens
+
+<span class="cm">// Button.styled.ts</span>
+<span class="kw">const</span> StyledButton = styled.button<span class="str">`
+  background: ${({ theme }) =>
+    theme.component.button.bgPrimary};
+  border-radius: ${({ theme }) =>
+    theme.component.button.radius};
+  padding:
+    ${({ theme }) => theme.component.button.paddingY}
+    ${({ theme }) => theme.component.button.paddingX};
+
+  &:hover {
+    background: ${({ theme }) =>
+      theme.component.button.bgPrimaryHover};
+  }
+`</span>
+
+<span class="cm">// Hook de token direto</span>
+<span class="kw">import</span> { useToken } <span class="kw">from</span> <span class="str">"@ps/design-tokens/react"</span>
+
+<span class="kw">const</span> MyComp = () => {
+  <span class="kw">const</span> primary = useToken(<span class="str">"color.brand.primary"</span>)
+  <span class="kw">return</span> &lt;<span class="prop">div</span> style={{ color: primary }} /&gt;
+}</pre>
+      <div class="plat-pills">
+        <span class="plat-pill s12">TypeScript</span>
+        <span class="plat-pill s12">Styled Components</span>
+        <span class="plat-pill s12">Emotion</span>
+        <span class="plat-pill s12">CSS Modules</span>
+      </div>
+    </div>
+  </div>
+  <span class="slide-number">12 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 13 — iOS ══════════════ -->
+<div class="slide s13 plat-slide" data-index="12">
+  <div class="plat-header">
+    <div class="plat-header-left">
+      <span class="plat-badge">Plataforma · iOS / Swift</span>
+      <div class="plat-title">iOS — Swift + SwiftUI Tokens</div>
+      <div class="plat-sub">Tokens gerados como extensões de Color e CGFloat. Uso nativo em UIKit e SwiftUI.</div>
+    </div>
+    <div class="plat-logo">🍎</div>
+  </div>
+  <div class="plat-body">
+    <div class="code-panel s13">
+      <div class="code-panel-title">Tokens.swift — gerado automaticamente</div>
+      <pre><span class="cm">// gerado pelo Style Dictionary · não editar</span>
+<span class="kw">import</span> UIKit
+<span class="kw">import</span> SwiftUI
+
+<span class="kw">public enum</span> <span class="prop">DSTokens</span> {
+
+  <span class="kw">public enum</span> <span class="prop">Color</span> {
+    <span class="kw">public enum</span> <span class="prop">Brand</span> {
+      <span class="kw">public static let</span> primary = UIColor(
+        red: <span class="val">0</span>, green: <span class="val">0.278</span>, blue: <span class="val">0.8</span>, alpha: <span class="val">1</span>)
+      <span class="kw">public static let</span> dark = UIColor(
+        red: <span class="val">0</span>, green: <span class="val">0.102</span>, blue: <span class="val">0.361</span>, alpha: <span class="val">1</span>)
+    }
+    <span class="kw">public enum</span> <span class="prop">Feedback</span> {
+      <span class="kw">public static let</span> error   = UIColor(hex: <span class="str">"#CC2200"</span>)
+      <span class="kw">public static let</span> success = UIColor(hex: <span class="str">"#0A7A40"</span>)
+    }
+  }
+
+  <span class="kw">public enum</span> <span class="prop">Spacing</span> {
+    <span class="kw">public static let</span> insetSm: CGFloat = <span class="val">8</span>
+    <span class="kw">public static let</span> insetMd: CGFloat = <span class="val">16</span>
+    <span class="kw">public static let</span> insetLg: CGFloat = <span class="val">24</span>
+    <span class="kw">public static let</span> stackMd: CGFloat = <span class="val">16</span>
+  }
+
+  <span class="kw">public enum</span> <span class="prop">Radius</span> {
+    <span class="kw">public static let</span> button: CGFloat = <span class="val">8</span>
+    <span class="kw">public static let</span> card:   CGFloat = <span class="val">16</span>
+  }
+}</pre>
+    </div>
+    <div class="code-panel s13">
+      <div class="code-panel-title">uso em SwiftUI</div>
+      <pre><span class="cm">// ButtonView.swift</span>
+<span class="kw">struct</span> <span class="prop">PSButton</span>: View {
+  <span class="kw">let</span> label: String
+
+  <span class="kw">var</span> body: some View {
+    Text(label)
+      .padding(.horizontal,
+        DSTokens.Spacing.insetMd)
+      .padding(.vertical,
+        DSTokens.Spacing.insetSm)
+      .background(
+        Color(DSTokens.Color.Brand.primary))
+      .foregroundColor(.white)
+      .cornerRadius(
+        DSTokens.Radius.button)
+  }
+}
+
+<span class="cm">// UIKit</span>
+<span class="kw">let</span> btn = UIButton()
+btn.backgroundColor = DSTokens.Color.Brand.primary
+btn.layer.cornerRadius = DSTokens.Radius.button</pre>
+      <div class="plat-pills">
+        <span class="plat-pill s13">SwiftUI</span>
+        <span class="plat-pill s13">UIKit</span>
+        <span class="plat-pill s13">Dark Mode</span>
+        <span class="plat-pill s13">Xcode Preview</span>
+      </div>
+    </div>
+  </div>
+  <span class="slide-number">13 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 14 — ANDROID ══════════════ -->
+<div class="slide s14 plat-slide" data-index="13">
+  <div class="plat-header">
+    <div class="plat-header-left">
+      <span class="plat-badge">Plataforma · Android</span>
+      <div class="plat-title">Android — XML Resources + Compose</div>
+      <div class="plat-sub">Tokens exportados como colors.xml e dimens.xml para View system, e objeto MaterialTheme para Compose.</div>
+    </div>
+    <div class="plat-logo">🤖</div>
+  </div>
+  <div class="plat-body">
+    <div class="code-panel s14">
+      <div class="code-panel-title">res/values/tokens.xml — gerado</div>
+      <pre><span class="cm">&lt;!-- gerado pelo Style Dictionary --&gt;</span>
+<span class="tag-c">&lt;resources&gt;</span>
+
+  <span class="cm">&lt;!-- Primitivos --&gt;</span>
+  <span class="tag-c">&lt;color</span> <span class="attr">name=</span><span class="attrv">"primitive_blue_500"</span><span class="tag-c">&gt;</span>
+    <span class="val">#FF0047CC</span>
+  <span class="tag-c">&lt;/color&gt;</span>
+
+  <span class="cm">&lt;!-- Semânticos --&gt;</span>
+  <span class="tag-c">&lt;color</span> <span class="attr">name=</span><span class="attrv">"color_brand_primary"</span><span class="tag-c">&gt;</span>
+    <span class="val">@color/primitive_blue_500</span>
+  <span class="tag-c">&lt;/color&gt;</span>
+  <span class="tag-c">&lt;color</span> <span class="attr">name=</span><span class="attrv">"color_feedback_error"</span><span class="tag-c">&gt;</span>
+    <span class="val">#FFCC2200</span>
+  <span class="tag-c">&lt;/color&gt;</span>
+  <span class="tag-c">&lt;color</span> <span class="attr">name=</span><span class="attrv">"color_feedback_success"</span><span class="tag-c">&gt;</span>
+    <span class="val">#FF0A7A40</span>
+  <span class="tag-c">&lt;/color&gt;</span>
+
+  <span class="cm">&lt;!-- Dimensões --&gt;</span>
+  <span class="tag-c">&lt;dimen</span> <span class="attr">name=</span><span class="attrv">"spacing_inset_sm"</span><span class="tag-c">&gt;</span><span class="val">8dp</span><span class="tag-c">&lt;/dimen&gt;</span>
+  <span class="tag-c">&lt;dimen</span> <span class="attr">name=</span><span class="attrv">"spacing_inset_md"</span><span class="tag-c">&gt;</span><span class="val">16dp</span><span class="tag-c">&lt;/dimen&gt;</span>
+  <span class="tag-c">&lt;dimen</span> <span class="attr">name=</span><span class="attrv">"radius_button"</span><span class="tag-c">&gt;</span><span class="val">8dp</span><span class="tag-c">&lt;/dimen&gt;</span>
+  <span class="tag-c">&lt;dimen</span> <span class="attr">name=</span><span class="attrv">"radius_card"</span><span class="tag-c">&gt;</span><span class="val">16dp</span><span class="tag-c">&lt;/dimen&gt;</span>
+
+<span class="tag-c">&lt;/resources&gt;</span></pre>
+    </div>
+    <div class="code-panel s14">
+      <div class="code-panel-title">Jetpack Compose — MaterialTheme</div>
+      <pre><span class="cm">// DSTokens.kt</span>
+<span class="kw">object</span> <span class="prop">DSTokens</span> {
+  <span class="kw">val</span> ColorBrandPrimary = Color(<span class="val">0xFF0047CC</span>)
+  <span class="kw">val</span> ColorBrandDark    = Color(<span class="val">0xFF001A5C</span>)
+  <span class="kw">val</span> ColorFeedbackError = Color(<span class="val">0xFFCC2200</span>)
+  <span class="kw">val</span> SpacingInsetSm = <span class="val">8</span>.dp
+  <span class="kw">val</span> SpacingInsetMd = <span class="val">16</span>.dp
+  <span class="kw">val</span> RadiusButton = <span class="val">8</span>.dp
+}
+
+<span class="cm">// PSButton.kt</span>
+@<span class="attr">Composable</span>
+<span class="kw">fun</span> <span class="prop">PSButton</span>(label: String, onClick: () -> Unit) {
+  Button(
+    onClick = onClick,
+    colors = ButtonDefaults.buttonColors(
+      containerColor = DSTokens.ColorBrandPrimary),
+    shape = RoundedCornerShape(DSTokens.RadiusButton),
+    contentPadding = PaddingValues(
+      horizontal = DSTokens.SpacingInsetMd,
+      vertical   = DSTokens.SpacingInsetSm)
+  ) { Text(label) }
+}</pre>
+      <div class="plat-pills">
+        <span class="plat-pill s14">Compose</span>
+        <span class="plat-pill s14">View XML</span>
+        <span class="plat-pill s14">Material 3</span>
+        <span class="plat-pill s14">Dark Mode</span>
+      </div>
+    </div>
+  </div>
+  <span class="slide-number">14 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 15 — ANGULAR ══════════════ -->
+<div class="slide s15 plat-slide" data-index="14">
+  <div class="plat-header">
+    <div class="plat-header-left">
+      <span class="plat-badge">Plataforma · Angular</span>
+      <div class="plat-title">Angular — SCSS Tokens + Service</div>
+      <div class="plat-sub">Tokens via SCSS variables e injeção de serviço TypeScript. Temas trocáveis em runtime.</div>
+    </div>
+    <div class="plat-logo">🅰️</div>
+  </div>
+  <div class="plat-body">
+    <div class="code-panel s15">
+      <div class="code-panel-title">_tokens.scss — parcial gerado</div>
+      <pre><span class="cm">// _tokens.scss — gerado pelo Style Dictionary</span>
+
+<span class="cm">// Semânticos</span>
+<span class="prop">$color-brand-primary</span>:      <span class="val">#0047CC</span>;
+<span class="prop">$color-brand-dark</span>:         <span class="val">#001A5C</span>;
+<span class="prop">$color-brand-light</span>:        <span class="val">#E8EFFF</span>;
+<span class="prop">$color-feedback-error</span>:     <span class="val">#CC2200</span>;
+<span class="prop">$color-feedback-success</span>:   <span class="val">#0A7A40</span>;
+<span class="prop">$color-neutral-100</span>:        <span class="val">#F4F5F9</span>;
+<span class="prop">$color-neutral-900</span>:        <span class="val">#1A1A2E</span>;
+
+<span class="prop">$spacing-inset-sm</span>: <span class="val">8px</span>;
+<span class="prop">$spacing-inset-md</span>: <span class="val">16px</span>;
+<span class="prop">$spacing-inset-lg</span>: <span class="val">24px</span>;
+<span class="prop">$spacing-stack-md</span>: <span class="val">16px</span>;
+<span class="prop">$spacing-stack-lg</span>: <span class="val">32px</span>;
+
+<span class="prop">$radius-button</span>: <span class="val">8px</span>;
+<span class="prop">$radius-card</span>:   <span class="val">16px</span>;
+<span class="prop">$radius-pill</span>:   <span class="val">999px</span>;
+
+<span class="cm">// Componente</span>
+<span class="prop">$btn-bg-primary</span>:       <span class="val">$color-brand-primary</span>;
+<span class="prop">$btn-bg-primary-hover</span>: <span class="val">$color-brand-dark</span>;
+<span class="prop">$btn-text-primary</span>:     <span class="val">#FFFFFF</span>;</pre>
+    </div>
+    <div class="code-panel s15">
+      <div class="code-panel-title">uso no componente + TokenService</div>
+      <pre><span class="cm">// button.component.scss</span>
+<span class="kw">@use</span> <span class="str">'@ps/design-tokens/scss'</span> <span class="kw">as</span> t;
+
+.ps-button--primary {
+  background:    t.<span class="prop">$btn-bg-primary</span>;
+  color:         t.<span class="prop">$btn-text-primary</span>;
+  border-radius: t.<span class="prop">$radius-button</span>;
+  padding: t.<span class="prop">$spacing-inset-sm</span>
+           t.<span class="prop">$spacing-inset-md</span>;
+
+  &:hover { background: t.<span class="prop">$btn-bg-primary-hover</span>; }
+}
+
+<span class="cm">// token.service.ts — tema em runtime</span>
+<span class="kw">@Injectable</span>({ providedIn: <span class="str">'root'</span> })
+<span class="kw">export class</span> <span class="prop">TokenService</span> {
+  setTheme(theme: <span class="str">'porto'</span> | <span class="str">'dark'</span>) {
+    <span class="kw">const</span> root = document.documentElement
+    <span class="kw">const</span> map = THEMES[theme]
+    Object.entries(map).forEach(([k, v]) =>
+      root.style.setProperty(k, v as string))
+  }
+}</pre>
+      <div class="plat-pills">
+        <span class="plat-pill s15">SCSS</span>
+        <span class="plat-pill s15">CSS Vars</span>
+        <span class="plat-pill s15">Angular CDK</span>
+        <span class="plat-pill s15">Runtime theme</span>
+      </div>
+    </div>
+  </div>
+  <span class="slide-number">15 / 16</span>
+</div>
+
+<!-- ══════════════ SLIDE 16 — OVERVIEW PLATAFORMAS ══════════════ -->
+<div class="slide s16" data-index="15">
+  <span class="slide-label">Visão Geral</span>
+  <h2>Tokens em Todas as Plataformas</h2>
+  <p class="subtitle">5 coleções no Figma → Style Dictionary → artefatos nativos por plataforma. Uma mudança na <strong style="color:#7EB8FF">Brand</strong> propaga para todos os canais e plataformas automaticamente.</p>
+
+  <div class="pipeline-row" style="margin-bottom:16px;">
+    <div class="pipe-step">
+      <div class="ps-label">Coleção 1</div>
+      <div class="ps-val" style="color:#AAAACC">Primitive</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="ps-label">Coleção 2</div>
+      <div class="ps-val" style="color:#7EB8FF">Brand</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="ps-label">Coleção 3</div>
+      <div class="ps-val" style="color:#7EFFC0">Theme</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="ps-label">Coleção 4</div>
+      <div class="ps-val" style="color:#FFB37E">Channel</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="ps-label">Coleção 5</div>
+      <div class="ps-val" style="color:#D4AAFF">Platform</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="ps-label">Build</div>
+      <div class="ps-val">Style Dictionary</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="ps-label">Artefatos</div>
+      <div class="ps-val">5 plataformas</div>
+    </div>
+  </div>
+
+  <div class="plat-matrix">
+    <div class="plat-matrix-card pmc-web">
+      <div class="pmc-icon">🌐</div>
+      <div class="pmc-name">Web</div>
+      <div class="pmc-format">CSS Custom Properties</div>
+      <div class="pmc-tokens">platform.css<br>--brand-color-primary<br>--theme-color-surface<br>--channel-numeric-gap-md<br>--brand-typography-heading-lg</div>
+    </div>
+    <div class="plat-matrix-card pmc-react">
+      <div class="pmc-icon">⚛️</div>
+      <div class="pmc-name">React</div>
+      <div class="pmc-format">JS / TypeScript Object</div>
+      <div class="pmc-tokens">tokens.ts<br>tokens.brand.color.primary<br>tokens.theme.color.surface<br>tokens.channel.breakpoint.mobile<br>tokens.brand.typography.heading.lg</div>
+    </div>
+    <div class="plat-matrix-card pmc-ios">
+      <div class="pmc-icon">🍎</div>
+      <div class="pmc-name">iOS / Swift</div>
+      <div class="pmc-format">Swift Enum / CGFloat</div>
+      <div class="pmc-tokens">Tokens.swift<br>Brand.Color.primary<br>Theme.Color.surface<br>Brand.Typography.headingLg<br>Channel.Breakpoint.mobile</div>
+    </div>
+    <div class="plat-matrix-card pmc-android">
+      <div class="pmc-icon">🤖</div>
+      <div class="pmc-name">Android</div>
+      <div class="pmc-format">XML + Kotlin object</div>
+      <div class="pmc-tokens">tokens.xml / Tokens.kt<br>@color/brand_color_primary<br>@color/theme_color_surface<br>Brand.Typography.headingLg<br>Channel.Breakpoint.mobile</div>
+    </div>
+    <div class="plat-matrix-card pmc-angular">
+      <div class="pmc-icon">🅰️</div>
+      <div class="pmc-name">Angular</div>
+      <div class="pmc-format">SCSS Variables</div>
+      <div class="pmc-tokens">_tokens.scss<br>$brand-color-primary<br>$theme-color-surface<br>$brand-typography-heading-lg<br>$channel-breakpoint-mobile</div>
+    </div>
+  </div>
+  <span class="slide-number">16 / 16</span>
+</div>
+
+<p class="kb-hint">← → para navegar · clique nos botões abaixo</p>
+
+<!-- Nav -->
+<div class="nav">
+  <button id="prev" onclick="go(-1)">←</button>
+  <span id="counter">1 / 10</span>
+  <button id="next" onclick="go(1)">→</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let cur = 0;
+
+  function go(dir) {
+    slides[cur].classList.remove('active');
+    cur = Math.max(0, Math.min(slides.length - 1, cur + dir));
+    slides[cur].classList.add('active');
+    document.getElementById('counter').textContent = (cur + 1) + ' / ' + slides.length;
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(-1);
+  });
+</script>
+</body>
+</html>

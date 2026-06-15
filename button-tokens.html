@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Button — Tokens de Componente · DS Essential 2.0</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-900: #001A5C; --blue-800: #003087; --blue-700: #0047CC;
+      --blue-600: #1A6EFF; --blue-400: #5B9BFF; --blue-100: #E8EFFF;
+      --orange-500: #FF6B00; --orange-100: #FFF0E6;
+      --red-600: #CC2200; --red-400: #FF4422; --red-100: #FFEBE6;
+      --green-600: #0A7A40; --green-100: #E6F9F0;
+      --neutral-900: #1A1A2E; --neutral-700: #3D3D5C; --neutral-500: #6666AA;
+      --neutral-400: #8888AA; --neutral-300: #B0B0CC; --neutral-200: #D8D8EE;
+      --neutral-100: #F4F5F9; --neutral-0: #FFFFFF;
+      --sidebar-w: 272px; --header-h: 60px;
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --mono: 'Courier New', 'Consolas', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: #FAFAFA;
+      color: var(--neutral-900);
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      grid-template-rows: var(--header-h) 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      grid-column: 1 / -1;
+      background: var(--blue-900);
+      display: flex; align-items: center;
+      padding: 0 32px; gap: 16px;
+      position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .h-logo {
+      width: 32px; height: 32px; background: var(--orange-500);
+      border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; font-size: 15px; flex-shrink: 0;
+    }
+    .h-title { font-size: 15px; font-weight: 700; color: white; letter-spacing: -.01em; }
+    .h-sub { font-size: 12px; color: rgba(255,255,255,.4); margin-left: 2px; }
+    .h-spacer { flex: 1; }
+    .h-crumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: rgba(255,255,255,.4);
+    }
+    .h-crumb span { color: rgba(255,255,255,.2); }
+    .h-crumb strong { color: rgba(255,255,255,.75); font-weight: 600; }
+    .h-version {
+      font-size: 11px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: rgba(255,255,255,.35);
+      background: rgba(255,255,255,.06);
+      padding: 4px 12px; border-radius: 20px;
+    }
+
+    /* ── Sidebar ── */
+    nav {
+      background: white; border-right: 1px solid #E8E8F0;
+      position: sticky; top: var(--header-h);
+      height: calc(100vh - var(--header-h));
+      overflow-y: auto; padding: 24px 0;
+    }
+    .nav-section { padding: 0 16px; margin-bottom: 24px; }
+    .nav-label {
+      font-size: 9.5px; font-weight: 800; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--neutral-300);
+      padding: 0 8px; margin-bottom: 6px; display: block;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 8px; border-radius: 8px;
+      text-decoration: none; font-size: 13px; font-weight: 500;
+      color: var(--neutral-700);
+      transition: background .15s, color .15s;
+    }
+    .nav-link:hover { background: var(--neutral-100); color: var(--blue-700); }
+    .nav-link.active { background: var(--blue-100); color: var(--blue-700); font-weight: 700; }
+    .nav-sub {
+      display: block; padding: 5px 8px 5px 24px;
+      font-size: 12px; color: var(--neutral-500);
+      text-decoration: none; border-radius: 6px;
+    }
+    .nav-sub:hover { background: var(--neutral-100); color: var(--blue-700); }
+    .nav-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+      background: var(--blue-700);
+    }
+
+    /* ── Main ── */
+    main { padding: 48px 56px 96px; max-width: 1100px; overflow-x: hidden; }
+    .section { margin-bottom: 64px; }
+    hr.divider { border: none; border-top: 1px solid #E8E8F0; margin: 48px 0; }
+
+    /* Tags */
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; font-weight: 800; letter-spacing: .18em;
+      text-transform: uppercase; padding: 4px 12px; border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .tag-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .tag-channel { background: var(--orange-100); color: var(--orange-500); }
+    .tag-channel .tag-dot { background: var(--orange-500); }
+    .tag-platform { background: #F3EEFF; color: #6644CC; }
+    .tag-platform .tag-dot { background: #6644CC; }
+    .tag-comp { background: var(--blue-100); color: var(--blue-700); }
+    .tag-comp .tag-dot { background: var(--blue-700); }
+
+    h1 { font-size: 32px; font-weight: 800; color: var(--neutral-900); line-height: 1.1; margin-bottom: 8px; }
+    h2 { font-size: 22px; font-weight: 800; color: var(--neutral-900); margin-bottom: 6px; }
+    h3 { font-size: 15px; font-weight: 700; color: var(--neutral-900); margin-bottom: 12px; margin-top: 28px; }
+    .lead { font-size: 15px; color: var(--neutral-500); line-height: 1.7; margin-bottom: 32px; max-width: 680px; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-800) 60%, var(--blue-700) 100%);
+      border-radius: 16px; padding: 40px 48px;
+      margin-bottom: 40px; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; right: -60px; top: -60px;
+      width: 280px; height: 280px; border-radius: 50%;
+      border: 56px solid rgba(255,255,255,.04);
+    }
+    .hero h1 { color: white; font-size: 30px; margin-bottom: 10px; }
+    .hero h1 span { color: var(--orange-500); }
+    .hero p { color: rgba(255,255,255,.6); font-size: 14px; line-height: 1.7; max-width: 540px; margin-bottom: 28px; }
+    .hero-stats { display: flex; gap: 36px; }
+    .hero-stat { display: flex; flex-direction: column; gap: 2px; }
+    .hero-stat-num { font-size: 26px; font-weight: 900; color: white; }
+    .hero-stat-lbl { font-size: 10.5px; color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .1em; }
+
+    /* ── Anatomia ── */
+    .anatomy-box {
+      background: white; border: 1px solid #E8E8F0;
+      border-radius: 14px; padding: 32px 40px;
+      display: flex; flex-direction: column; align-items: center; gap: 32px;
+      margin-bottom: 32px;
+    }
+    .anatomy-row { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; justify-content: center; }
+    /* Button previews */
+    .btn-preview {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font); cursor: default;
+      white-space: nowrap;
+    }
+    .btn-primary-lg   { background: var(--blue-700); color: white; border: none; border-radius: 8px; padding: 12px 20px; font-size: 16px; font-weight: 600; }
+    .btn-primary-md   { background: var(--blue-700); color: white; border: none; border-radius: 8px; padding: 9px 16px; font-size: 14px; font-weight: 600; }
+    .btn-primary-sm   { background: var(--blue-700); color: white; border: none; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 600; }
+    .btn-secondary-md { background: transparent; color: var(--blue-700); border: 1px solid var(--blue-700); border-radius: 8px; padding: 9px 16px; font-size: 14px; font-weight: 600; }
+    .btn-ghost-md     { background: transparent; color: var(--blue-700); border: none; border-radius: 8px; padding: 9px 16px; font-size: 14px; font-weight: 600; }
+    .btn-destruct-md  { background: var(--red-600); color: white; border: none; border-radius: 8px; padding: 9px 16px; font-size: 14px; font-weight: 600; }
+    .btn-disabled-md  { background: var(--neutral-200); color: var(--neutral-400); border: none; border-radius: 8px; padding: 9px 16px; font-size: 14px; font-weight: 600; cursor: not-allowed; }
+
+    .anatomy-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--neutral-400); text-align: center; margin-top: 4px; }
+    .anatomy-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+    /* Slots annotation */
+    .slots-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+      margin-bottom: 28px;
+    }
+    .slot-card {
+      background: white; border: 1px solid #E8E8F0;
+      border-radius: 10px; padding: 14px 16px;
+    }
+    .slot-name { font-family: var(--mono); font-size: 11.5px; font-weight: 700; color: var(--blue-700); margin-bottom: 4px; }
+    .slot-desc { font-size: 12px; color: var(--neutral-500); line-height: 1.5; }
+
+    /* ── Formula ── */
+    .formula-box {
+      background: var(--neutral-900); border-radius: 12px;
+      padding: 22px 28px; display: flex;
+      align-items: center; margin-bottom: 20px;
+    }
+    .formula-part { text-align: center; flex: 1; }
+    .fp-lbl { font-size: 9.5px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 4px; }
+    .fp-val { font-family: var(--mono); font-size: 14px; font-weight: 700; color: white; }
+    .fp-opt .fp-val { color: rgba(255,255,255,.35); }
+    .fp-opt .fp-lbl::after { content: ' (opt)'; }
+    .fp-dot { font-size: 22px; color: var(--orange-500); padding: 0 4px; flex-shrink: 0; padding-top: 10px; }
+
+    /* ── Token tables ── */
+    .token-table-wrap { overflow-x: auto; margin-bottom: 28px; border-radius: 12px; border: 1px solid #E8E8F0; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: var(--neutral-100); }
+    th {
+      text-align: left; padding: 10px 16px;
+      font-size: 10.5px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--neutral-500);
+      border-bottom: 1px solid #E8E8F0;
+    }
+    td { padding: 10px 16px; border-bottom: 1px solid #F0F0F8; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #FAFAFA; }
+    .token-name { font-family: var(--mono); font-size: 11.5px; color: var(--blue-700); font-weight: 600; }
+    .token-ref  { font-family: var(--mono); font-size: 11px; color: var(--neutral-500); background: var(--neutral-100); padding: 2px 8px; border-radius: 4px; }
+    .token-val  { font-family: var(--mono); font-size: 12px; color: var(--neutral-700); }
+    .swatch { width: 22px; height: 22px; border-radius: 5px; border: 1px solid rgba(0,0,0,.1); display: inline-block; vertical-align: middle; margin-right: 8px; }
+    .gbadge { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; }
+    .gb-color { background: var(--blue-100); color: var(--blue-700); }
+    .gb-num   { background: #FFF4E8; color: var(--orange-500); }
+    .gb-typo  { background: #EDFAF3; color: var(--green-600); }
+
+    /* variant sections */
+    .variant-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; border-radius: 10px;
+      margin-bottom: 12px; margin-top: 24px;
+    }
+    .vh-primary  { background: var(--blue-100); }
+    .vh-secondary{ background: #F0F0FA; }
+    .vh-ghost    { background: #F8F8FE; }
+    .vh-destruct { background: var(--red-100); }
+    .vh-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .vhd-primary  { background: var(--blue-700); }
+    .vhd-secondary{ background: var(--neutral-700); }
+    .vhd-ghost    { background: var(--neutral-400); }
+    .vhd-destruct { background: var(--red-600); }
+    .vh-name { font-size: 14px; font-weight: 800; color: var(--neutral-900); }
+    .vh-desc { font-size: 12px; color: var(--neutral-500); }
+
+    /* states row highlight */
+    tr.row-hover  td { background: #F4F6FF; }
+    tr.row-focus  td { background: #EEF9F0; }
+    tr.row-active td { background: #FFF8F0; }
+    tr.row-disab  td { background: #F8F8FB; }
+    tr.row-loading td { background: #F8F8FB; }
+
+    /* ── Callout ── */
+    .callout {
+      border-radius: 10px; padding: 14px 18px;
+      margin-bottom: 20px; display: flex; gap: 12px;
+      font-size: 13px; line-height: 1.6;
+    }
+    .callout-info { background: var(--blue-100); border-left: 3px solid var(--blue-700); }
+    .callout-tip  { background: var(--green-100); border-left: 3px solid var(--green-600); }
+    .callout-warn { background: #FFF8E6; border-left: 3px solid #CC7700; }
+    .callout strong { color: var(--neutral-900); }
+
+    /* ── Code blocks ── */
+    .code-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 0; }
+    .code-tab {
+      padding: 6px 14px; border-radius: 8px 8px 0 0;
+      font-size: 12px; font-weight: 600;
+      cursor: pointer; border: 1px solid #E8E8F0; border-bottom: none;
+      background: var(--neutral-100); color: var(--neutral-500);
+      transition: background .15s;
+    }
+    .code-tab.active { background: #1E2235; color: white; border-color: #1E2235; }
+    .code-block {
+      background: #1E2235; border-radius: 0 12px 12px 12px;
+      padding: 20px 24px; overflow-x: auto;
+      margin-bottom: 24px; display: none;
+    }
+    .code-block.active { display: block; }
+    .code-block pre { font-family: var(--mono); font-size: 12px; line-height: 1.9; color: #CDD6F4; }
+    .ck { color: #FF9FFF; } .cs { color: #FFE083; } .cv { color: #7EFFC0; }
+    .cp { color: #7EB8FF; } .cc { color: rgba(255,255,255,.3); }
+    .ct { color: #FF9F0A; } .cg { color: #3DDC84; }
+
+    /* ── Size matrix ── */
+    .size-matrix {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+      margin-bottom: 28px;
+    }
+    .size-card {
+      background: white; border: 1px solid #E8E8F0;
+      border-radius: 12px; padding: 20px;
+    }
+    .size-label { font-size: 10.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--neutral-400); margin-bottom: 12px; }
+    .size-demo { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="h-logo">🔷</div>
+  <div>
+    <div class="h-title">DS Essential 2.0</div>
+    <div class="h-sub">Tokens de Componente</div>
+  </div>
+  <div class="h-spacer"></div>
+  <div class="h-crumb">
+    Componentes <span>/</span> <strong>Button</strong>
+  </div>
+  <span class="h-version">v2.0 · Jun 2026</span>
+</header>
+
+<!-- ── SIDEBAR ── -->
+<nav>
+  <div class="nav-section">
+    <span class="nav-label">Visão Geral</span>
+    <a href="#intro"      class="nav-link active"><span class="nav-dot"></span>Introdução</a>
+    <a href="#anatomia"   class="nav-link">Anatomia</a>
+    <a href="#nomenclatura" class="nav-link">Nomenclatura</a>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-label">Variantes</span>
+    <a href="#primary"     class="nav-link">Primary</a>
+    <a href="#secondary"   class="nav-link">Secondary</a>
+    <a href="#ghost"       class="nav-link">Ghost</a>
+    <a href="#destructive" class="nav-link">Destructive</a>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-label">Dimensões</span>
+    <a href="#sizes"       class="nav-link">Tamanhos (sm / md / lg)</a>
+    <a href="#typography"  class="nav-link">Tipografia</a>
+    <a href="#shape"       class="nav-link">Forma & Borda</a>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-label">Plataformas</span>
+    <a href="#platform"    class="nav-link">Saída técnica</a>
+    <a href="#plat-css"    class="nav-sub">↳ CSS Variables</a>
+    <a href="#plat-react"  class="nav-sub">↳ React / TS</a>
+    <a href="#plat-ios"    class="nav-sub">↳ iOS / Swift</a>
+    <a href="#plat-android" class="nav-sub">↳ Android / Kotlin</a>
+    <a href="#plat-angular" class="nav-sub">↳ Angular / SCSS</a>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main>
+
+  <!-- INTRO -->
+  <section class="section" id="intro">
+    <div class="hero">
+      <h1>Button — <span>Tokens de Componente</span></h1>
+      <p>Documentação completa dos design tokens do componente Button do DS Essential 2.0. Cada slot visual tem um token semântico rastreável até o primitivo correspondente.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="hero-stat-num">4</span><span class="hero-stat-lbl">Variantes</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">3</span><span class="hero-stat-lbl">Tamanhos</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">6</span><span class="hero-stat-lbl">Estados</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">~48</span><span class="hero-stat-lbl">Tokens totais</span></div>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <div><strong>Coleção de consumo:</strong> Os tokens de componente vivem na coleção <strong>Channel</strong>, grupo <code style="background:rgba(0,71,204,.1);padding:1px 6px;border-radius:4px;font-family:var(--mono)">component</code>. Nunca referenciam Primitive diretamente — sempre via Theme ou Brand.</div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ANATOMIA -->
+  <section class="section" id="anatomia">
+    <span class="section-tag tag-comp"><span class="tag-dot"></span>Anatomia</span>
+    <h2>Anatomia do Componente</h2>
+    <p class="lead">O Button é composto por até 3 slots: ícone à esquerda (opcional), label e ícone à direita (opcional). Cada slot possui seus próprios tokens de cor e dimensão.</p>
+
+    <div class="anatomy-box">
+      <div class="anatomy-row">
+        <div class="anatomy-item">
+          <button class="btn-preview btn-primary-lg">Publicar bundle</button>
+          <div class="anatomy-label">Primary · LG</div>
+        </div>
+        <div class="anatomy-item">
+          <button class="btn-preview btn-primary-md">Publicar bundle</button>
+          <div class="anatomy-label">Primary · MD</div>
+        </div>
+        <div class="anatomy-item">
+          <button class="btn-preview btn-primary-sm">Publicar</button>
+          <div class="anatomy-label">Primary · SM</div>
+        </div>
+      </div>
+      <div class="anatomy-row">
+        <div class="anatomy-item">
+          <button class="btn-preview btn-secondary-md">Salvar rascunho</button>
+          <div class="anatomy-label">Secondary · MD</div>
+        </div>
+        <div class="anatomy-item">
+          <button class="btn-preview btn-ghost-md">Cancelar</button>
+          <div class="anatomy-label">Ghost · MD</div>
+        </div>
+        <div class="anatomy-item">
+          <button class="btn-preview btn-destruct-md">Remover bundle</button>
+          <div class="anatomy-label">Destructive · MD</div>
+        </div>
+        <div class="anatomy-item">
+          <button class="btn-preview btn-disabled-md" disabled>Publicar bundle</button>
+          <div class="anatomy-label">Disabled · MD</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Slots do componente</h3>
+    <div class="slots-grid">
+      <div class="slot-card">
+        <div class="slot-name">icon-leading</div>
+        <div class="slot-desc">Ícone à esquerda do label. Opcional. Herda a cor do <code>foreground</code> da variante atual.</div>
+      </div>
+      <div class="slot-card">
+        <div class="slot-name">label</div>
+        <div class="slot-desc">Texto do botão. Sempre obrigatório. Verbo no infinitivo + substantivo específico.</div>
+      </div>
+      <div class="slot-card">
+        <div class="slot-name">icon-trailing</div>
+        <div class="slot-desc">Ícone à direita do label. Opcional. Usado para indicar ação de expansão ou link externo.</div>
+      </div>
+      <div class="slot-card">
+        <div class="slot-name">background</div>
+        <div class="slot-desc">Superfície do botão. Pode ser opaco, transparente ou com borda (secondary).</div>
+      </div>
+      <div class="slot-card">
+        <div class="slot-name">border</div>
+        <div class="slot-desc">Contorno do botão. Presente apenas em Secondary (1px) e no anel de foco (2px, todos).</div>
+      </div>
+      <div class="slot-card">
+        <div class="slot-name">focus-ring</div>
+        <div class="slot-desc">Anel de foco externo. 2px, offset de 2px. Obrigatório para WCAG 2.4.7 (contraste mínimo 3:1).</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- NOMENCLATURA -->
+  <section class="section" id="nomenclatura">
+    <span class="section-tag tag-comp"><span class="tag-dot"></span>Nomenclatura</span>
+    <h2>Padrão de Nomenclatura</h2>
+    <p class="lead">Tokens de componente seguem a fórmula padrão do DS, com <code style="background:var(--neutral-100);padding:2px 8px;border-radius:4px;font-family:var(--mono)">channel.component</code> como prefixo fixo, seguido de <strong>slot → variante → estado</strong>.</p>
+
+    <div class="formula-box">
+      <div class="formula-part"><div class="fp-lbl">Coleção</div><div class="fp-val">channel</div></div>
+      <div class="fp-dot">.</div>
+      <div class="formula-part"><div class="fp-lbl">Grupo</div><div class="fp-val">component</div></div>
+      <div class="fp-dot">.</div>
+      <div class="formula-part"><div class="fp-lbl">Componente</div><div class="fp-val">button</div></div>
+      <div class="fp-dot">.</div>
+      <div class="formula-part"><div class="fp-lbl">Slot</div><div class="fp-val">color.bg</div></div>
+      <div class="fp-dot">.</div>
+      <div class="formula-part"><div class="fp-lbl">Variante</div><div class="fp-val">primary</div></div>
+      <div class="fp-dot" style="color:rgba(255,255,255,.2)">.</div>
+      <div class="formula-part fp-opt"><div class="fp-lbl">Estado</div><div class="fp-val">hover</div></div>
+    </div>
+
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Exemplo de token</th><th>Slot</th><th>Resolve para</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">channel.component.button.color.bg.primary</td><td><span class="gbadge gb-color">color</span></td><td class="token-val">#0047CC</td></tr>
+          <tr><td class="token-name">channel.component.button.color.bg.primary.hover</td><td><span class="gbadge gb-color">color</span></td><td class="token-val">#003087</td></tr>
+          <tr><td class="token-name">channel.component.button.color.fg.primary</td><td><span class="gbadge gb-color">color</span></td><td class="token-val">#FFFFFF</td></tr>
+          <tr><td class="token-name">channel.component.button.color.border.secondary</td><td><span class="gbadge gb-color">color</span></td><td class="token-val">#0047CC</td></tr>
+          <tr><td class="token-name">channel.component.button.color.focus-ring</td><td><span class="gbadge gb-color">color</span></td><td class="token-val">#5B9BFF</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.height.md</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">40px</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.padding-x.md</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">16px</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.radius</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">8px</td></tr>
+          <tr><td class="token-name">channel.component.button.typography.label.md</td><td><span class="gbadge gb-typo">typography</span></td><td class="token-val">14px / 600</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- PRIMARY -->
+  <section class="section" id="primary">
+    <span class="section-tag tag-channel"><span class="tag-dot"></span>Variante</span>
+    <h2>Primary</h2>
+    <p class="lead">Ação principal da tela. Máximo 1 botão Primary por contexto imediato. Fundo azul sólido com texto branco.</p>
+
+    <div class="variant-header vh-primary">
+      <span class="vh-dot vhd-primary"></span>
+      <div><div class="vh-name">Primary</div><div class="vh-desc">Hierarquia máxima · background sólido · texto inverso</div></div>
+    </div>
+
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Token</th><th>Grupo</th><th>Swatch</th><th>Valor</th><th>Referência</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">channel.component.button.color.bg.primary</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#0047CC"></span></td><td class="token-val">#0047CC</td><td class="token-ref">{theme.color.interactive.default}</td></tr>
+          <tr class="row-hover"><td class="token-name">channel.component.button.color.bg.primary.hover</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#003087"></span></td><td class="token-val">#003087</td><td class="token-ref">{theme.color.interactive.hover}</td></tr>
+          <tr class="row-focus"><td class="token-name">channel.component.button.color.bg.primary.focus</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#0047CC"></span></td><td class="token-val">#0047CC</td><td class="token-ref">{theme.color.interactive.default}</td></tr>
+          <tr class="row-active"><td class="token-name">channel.component.button.color.bg.primary.active</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#001A5C"></span></td><td class="token-val">#001A5C</td><td class="token-ref">{brand.color.primary.xdark}</td></tr>
+          <tr class="row-disab"><td class="token-name">channel.component.button.color.bg.primary.disabled</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#D8D8EE"></span></td><td class="token-val">#D8D8EE</td><td class="token-ref">{theme.color.interactive.disabled}</td></tr>
+          <tr><td class="token-name">channel.component.button.color.fg.primary</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#FFFFFF;border:1px solid #ddd"></span></td><td class="token-val">#FFFFFF</td><td class="token-ref">{theme.color.text.inverse}</td></tr>
+          <tr class="row-disab"><td class="token-name">channel.component.button.color.fg.primary.disabled</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#8888AA"></span></td><td class="token-val">#8888AA</td><td class="token-ref">{brand.color.neutral.400}</td></tr>
+          <tr class="row-focus"><td class="token-name">channel.component.button.color.focus-ring</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#5B9BFF"></span></td><td class="token-val">#5B9BFF</td><td class="token-ref">{theme.color.interactive.focus}</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-tip">
+      <span>Estados <strong>hover</strong> e <strong>active</strong> são marcados com fundo levemente mais escuro na tabela — use as cores das linhas como referência visual ao revisar.</span>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- SECONDARY -->
+  <section class="section" id="secondary">
+    <span class="section-tag tag-channel"><span class="tag-dot"></span>Variante</span>
+    <h2>Secondary</h2>
+    <p class="lead">Ação alternativa relevante, sempre ao lado de um Primary. Fundo transparente com borda e texto na cor de marca.</p>
+
+    <div class="variant-header vh-secondary">
+      <span class="vh-dot vhd-secondary"></span>
+      <div><div class="vh-name">Secondary</div><div class="vh-desc">Hierarquia secundária · outlined · borda 1px</div></div>
+    </div>
+
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Token</th><th>Grupo</th><th>Swatch</th><th>Valor</th><th>Referência</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">channel.component.button.color.bg.secondary</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:transparent;border:1px dashed #ccc"></span></td><td class="token-val">transparent</td><td class="token-ref">—</td></tr>
+          <tr class="row-hover"><td class="token-name">channel.component.button.color.bg.secondary.hover</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#E8EFFF"></span></td><td class="token-val">#E8EFFF</td><td class="token-ref">{brand.color.primary.xlight}</td></tr>
+          <tr class="row-active"><td class="token-name">channel.component.button.color.bg.secondary.active</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#B8D4FF"></span></td><td class="token-val">#B8D4FF</td><td class="token-ref">{brand.color.primary.light}</td></tr>
+          <tr class="row-disab"><td class="token-name">channel.component.button.color.bg.secondary.disabled</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:transparent;border:1px dashed #ccc"></span></td><td class="token-val">transparent</td><td class="token-ref">—</td></tr>
+          <tr><td class="token-name">channel.component.button.color.fg.secondary</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#0047CC"></span></td><td class="token-val">#0047CC</td><td class="token-ref">{theme.color.text.brand}</td></tr>
+          <tr class="row-disab"><td class="token-name">channel.component.button.color.fg.secondary.disabled</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#8888AA"></span></td><td class="token-val">#8888AA</td><td class="token-ref">{brand.color.neutral.400}</td></tr>
+          <tr><td class="token-name">channel.component.button.color.border.secondary</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#0047CC"></span></td><td class="token-val">#0047CC</td><td class="token-ref">{theme.color.border.brand}</td></tr>
+          <tr class="row-disab"><td class="token-name">channel.component.button.color.border.secondary.disabled</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#D8D8EE"></span></td><td class="token-val">#D8D8EE</td><td class="token-ref">{theme.color.border.default}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- GHOST -->
+  <section class="section" id="ghost">
+    <span class="section-tag tag-channel"><span class="tag-dot"></span>Variante</span>
+    <h2>Ghost</h2>
+    <p class="lead">Ação de suporte com menor ênfase visual. Sem fundo, sem borda — apenas texto na cor de marca. Usado para ações como Cancelar ou Voltar.</p>
+
+    <div class="variant-header vh-ghost">
+      <span class="vh-dot vhd-ghost"></span>
+      <div><div class="vh-name">Ghost</div><div class="vh-desc">Hierarquia mínima · sem borda · sem background</div></div>
+    </div>
+
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Token</th><th>Grupo</th><th>Swatch</th><th>Valor</th><th>Referência</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">channel.component.button.color.bg.ghost</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:transparent;border:1px dashed #ccc"></span></td><td class="token-val">transparent</td><td class="token-ref">—</td></tr>
+          <tr class="row-hover"><td class="token-name">channel.component.button.color.bg.ghost.hover</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#E8EFFF"></span></td><td class="token-val">#E8EFFF</td><td class="token-ref">{brand.color.primary.xlight}</td></tr>
+          <tr class="row-active"><td class="token-name">channel.component.button.color.bg.ghost.active</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#B8D4FF"></span></td><td class="token-val">#B8D4FF</td><td class="token-ref">{brand.color.primary.light}</td></tr>
+          <tr><td class="token-name">channel.component.button.color.fg.ghost</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#0047CC"></span></td><td class="token-val">#0047CC</td><td class="token-ref">{theme.color.text.brand}</td></tr>
+          <tr class="row-disab"><td class="token-name">channel.component.button.color.fg.ghost.disabled</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#8888AA"></span></td><td class="token-val">#8888AA</td><td class="token-ref">{brand.color.neutral.400}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- DESTRUCTIVE -->
+  <section class="section" id="destructive">
+    <span class="section-tag tag-channel"><span class="tag-dot"></span>Variante</span>
+    <h2>Destructive</h2>
+    <p class="lead">Ação irreversível com alto impacto. Sempre acompanhada de Dialog de confirmação antes da execução. Posicionada visualmente separada dos demais botões.</p>
+
+    <div class="variant-header vh-destruct">
+      <span class="vh-dot vhd-destruct"></span>
+      <div><div class="vh-name">Destructive</div><div class="vh-desc">Ações irreversíveis · sempre com confirmação · isolado visualmente</div></div>
+    </div>
+
+    <div class="callout callout-warn">
+      <span><strong>Regra:</strong> nunca exibir Destructive ao lado de Primary sem separação visual explícita (espaçamento mínimo de <code>brand.numeric-values.spacing.lg</code> ou separador).</span>
+    </div>
+
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Token</th><th>Grupo</th><th>Swatch</th><th>Valor</th><th>Referência</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">channel.component.button.color.bg.destructive</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#CC2200"></span></td><td class="token-val">#CC2200</td><td class="token-ref">{brand.color.feedback.error}</td></tr>
+          <tr class="row-hover"><td class="token-name">channel.component.button.color.bg.destructive.hover</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#7A1300"></span></td><td class="token-val">#7A1300</td><td class="token-ref">{primitive.color.red.900}</td></tr>
+          <tr class="row-active"><td class="token-name">channel.component.button.color.bg.destructive.active</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#7A1300"></span></td><td class="token-val">#7A1300</td><td class="token-ref">{primitive.color.red.900}</td></tr>
+          <tr class="row-disab"><td class="token-name">channel.component.button.color.bg.destructive.disabled</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#D8D8EE"></span></td><td class="token-val">#D8D8EE</td><td class="token-ref">{theme.color.interactive.disabled}</td></tr>
+          <tr><td class="token-name">channel.component.button.color.fg.destructive</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#FFFFFF;border:1px solid #ddd"></span></td><td class="token-val">#FFFFFF</td><td class="token-ref">{theme.color.text.inverse}</td></tr>
+          <tr class="row-disab"><td class="token-name">channel.component.button.color.fg.destructive.disabled</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#8888AA"></span></td><td class="token-val">#8888AA</td><td class="token-ref">{brand.color.neutral.400}</td></tr>
+          <tr><td class="token-name">channel.component.button.color.bg.destructive.xlight</td><td><span class="gbadge gb-color">color</span></td><td><span class="swatch" style="background:#FFEBE6"></span></td><td class="token-val">#FFEBE6</td><td class="token-ref">{brand.color.feedback.error.xlight}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- TAMANHOS -->
+  <section class="section" id="sizes">
+    <span class="section-tag tag-comp"><span class="tag-dot"></span>Dimensões</span>
+    <h2>Tamanhos</h2>
+    <p class="lead">Três tamanhos com escala de padding, altura e gap proporcional. O tamanho MD é o padrão para a maioria dos contextos.</p>
+
+    <div class="size-matrix">
+      <div class="size-card">
+        <div class="size-label">SM — Small</div>
+        <div class="size-demo">
+          <button class="btn-preview btn-primary-sm">Publicar</button>
+        </div>
+        <div class="token-table-wrap" style="margin-bottom:0">
+          <table>
+            <thead><tr><th>Token</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td class="token-name">…height.sm</td><td class="token-val">32px</td></tr>
+              <tr><td class="token-name">…padding-x.sm</td><td class="token-val">12px</td></tr>
+              <tr><td class="token-name">…padding-y.sm</td><td class="token-val">6px</td></tr>
+              <tr><td class="token-name">…icon-size.sm</td><td class="token-val">16px</td></tr>
+              <tr><td class="token-name">…gap.sm</td><td class="token-val">4px</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="size-card">
+        <div class="size-label">MD — Medium (padrão)</div>
+        <div class="size-demo">
+          <button class="btn-preview btn-primary-md">Publicar bundle</button>
+        </div>
+        <div class="token-table-wrap" style="margin-bottom:0">
+          <table>
+            <thead><tr><th>Token</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td class="token-name">…height.md</td><td class="token-val">40px</td></tr>
+              <tr><td class="token-name">…padding-x.md</td><td class="token-val">16px</td></tr>
+              <tr><td class="token-name">…padding-y.md</td><td class="token-val">9px</td></tr>
+              <tr><td class="token-name">…icon-size.md</td><td class="token-val">20px</td></tr>
+              <tr><td class="token-name">…gap.md</td><td class="token-val">4px</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="size-card">
+        <div class="size-label">LG — Large</div>
+        <div class="size-demo">
+          <button class="btn-preview btn-primary-lg">Publicar bundle</button>
+        </div>
+        <div class="token-table-wrap" style="margin-bottom:0">
+          <table>
+            <thead><tr><th>Token</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td class="token-name">…height.lg</td><td class="token-val">48px</td></tr>
+              <tr><td class="token-name">…padding-x.lg</td><td class="token-val">20px</td></tr>
+              <tr><td class="token-name">…padding-y.lg</td><td class="token-val">12px</td></tr>
+              <tr><td class="token-name">…icon-size.lg</td><td class="token-val">24px</td></tr>
+              <tr><td class="token-name">…gap.lg</td><td class="token-val">8px</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <h3>Referências de dimensão</h3>
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Token completo</th><th>Grupo</th><th>Valor</th><th>Referência</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">channel.component.button.numeric-values.height.sm</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">32px</td><td class="token-ref">{primitive.numeric-values.32}</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.height.md</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">40px</td><td class="token-ref">{primitive.numeric-values.40}</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.height.lg</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">48px</td><td class="token-ref">{primitive.numeric-values.48}</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.padding-x.sm</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">12px</td><td class="token-ref">{primitive.numeric-values.12}</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.padding-x.md</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">16px</td><td class="token-ref">{brand.numeric-values.spacing.md}</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.padding-x.lg</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">20px</td><td class="token-ref">{primitive.numeric-values.20}</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.icon-size.sm</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">16px</td><td class="token-ref">{brand.numeric-values.icon.sm}</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.icon-size.md</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">20px</td><td class="token-ref">{brand.numeric-values.icon.md}</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.icon-size.lg</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">24px</td><td class="token-ref">{brand.numeric-values.icon.lg}</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.gap.sm</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">4px</td><td class="token-ref">{brand.numeric-values.spacing.xs}</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.gap.md</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">4px</td><td class="token-ref">{brand.numeric-values.spacing.xs}</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.gap.lg</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">8px</td><td class="token-ref">{brand.numeric-values.spacing.sm}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- TIPOGRAFIA -->
+  <section class="section" id="typography">
+    <span class="section-tag tag-comp"><span class="tag-dot"></span>Tipografia</span>
+    <h2>Tipografia</h2>
+    <p class="lead">Cada tamanho de botão usa o role de tipografia correspondente da coleção Brand. Todos usam peso 600 (SemiBold) — o label de botão nunca usa Regular.</p>
+
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Token</th><th>Grupo</th><th>Valor</th><th>Peso</th><th>Referência</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">channel.component.button.typography.label.sm</td><td><span class="gbadge gb-typo">typography</span></td><td class="token-val">12px</td><td class="token-val">600</td><td class="token-ref">{brand.typography.label.sm}</td></tr>
+          <tr><td class="token-name">channel.component.button.typography.label.md</td><td><span class="gbadge gb-typo">typography</span></td><td class="token-val">14px</td><td class="token-val">600</td><td class="token-ref">{brand.typography.label.md}</td></tr>
+          <tr><td class="token-name">channel.component.button.typography.label.lg</td><td><span class="gbadge gb-typo">typography</span></td><td class="token-val">16px</td><td class="token-val">600</td><td class="token-ref">{brand.typography.label.lg}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- FORMA -->
+  <section class="section" id="shape">
+    <span class="section-tag tag-comp"><span class="tag-dot"></span>Forma &amp; Borda</span>
+    <h2>Forma e Borda</h2>
+    <p class="lead">O Button usa um único valor de raio para todos os tamanhos e variantes. O anel de foco é sempre 2px de espessura com offset de 2px do elemento.</p>
+
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Token</th><th>Grupo</th><th>Valor</th><th>Referência</th><th>Uso</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">channel.component.button.numeric-values.radius</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">8px</td><td class="token-ref">{brand.numeric-values.radius.sm}</td><td>Border-radius (todos os tamanhos)</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.border-width.secondary</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">1px</td><td class="token-ref">{brand.numeric-values.border.sm}</td><td>Borda do Secondary (default)</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.focus-ring-width</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">2px</td><td class="token-ref">{brand.numeric-values.border.md}</td><td>Espessura do anel de foco</td></tr>
+          <tr><td class="token-name">channel.component.button.numeric-values.focus-ring-offset</td><td><span class="gbadge gb-num">numeric</span></td><td class="token-val">2px</td><td class="token-ref">{primitive.numeric-values.2}</td><td>Offset entre botão e anel de foco</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- PLATFORM -->
+  <section class="section" id="platform">
+    <span class="section-tag tag-platform"><span class="tag-dot"></span>Plataformas</span>
+    <h2>Saída Técnica por Plataforma</h2>
+    <p class="lead">O Style Dictionary transforma os tokens JSON em artefatos nativos. Abaixo, o output gerado automaticamente para cada plataforma — baseado nos valores definidos nas seções anteriores.</p>
+
+    <!-- CSS -->
+    <h3 id="plat-css">CSS Custom Properties</h3>
+    <div class="code-tabs">
+      <span class="code-tab active" onclick="sw('css','vars')">tokens.css</span>
+      <span class="code-tab" onclick="sw('css','use')">uso no componente</span>
+    </div>
+    <div class="code-block active" id="css-vars">
+<pre><span class="cc">/* channel/component/button — gerado pelo Style Dictionary */</span>
+<span class="ck">:root</span> {
+  <span class="cc">/* ── color · primary ── */</span>
+  <span class="cp">--btn-color-bg-primary</span>:               <span class="cv">#0047CC</span>;
+  <span class="cp">--btn-color-bg-primary-hover</span>:         <span class="cv">#003087</span>;
+  <span class="cp">--btn-color-bg-primary-active</span>:        <span class="cv">#001A5C</span>;
+  <span class="cp">--btn-color-bg-primary-disabled</span>:      <span class="cv">#D8D8EE</span>;
+  <span class="cp">--btn-color-fg-primary</span>:               <span class="cv">#FFFFFF</span>;
+  <span class="cp">--btn-color-fg-primary-disabled</span>:      <span class="cv">#8888AA</span>;
+
+  <span class="cc">/* ── color · secondary ── */</span>
+  <span class="cp">--btn-color-bg-secondary</span>:             <span class="cv">transparent</span>;
+  <span class="cp">--btn-color-bg-secondary-hover</span>:       <span class="cv">#E8EFFF</span>;
+  <span class="cp">--btn-color-bg-secondary-active</span>:      <span class="cv">#B8D4FF</span>;
+  <span class="cp">--btn-color-fg-secondary</span>:             <span class="cv">#0047CC</span>;
+  <span class="cp">--btn-color-fg-secondary-disabled</span>:    <span class="cv">#8888AA</span>;
+  <span class="cp">--btn-color-border-secondary</span>:         <span class="cv">#0047CC</span>;
+  <span class="cp">--btn-color-border-secondary-disabled</span>:<span class="cv">#D8D8EE</span>;
+
+  <span class="cc">/* ── color · ghost ── */</span>
+  <span class="cp">--btn-color-bg-ghost</span>:                 <span class="cv">transparent</span>;
+  <span class="cp">--btn-color-bg-ghost-hover</span>:           <span class="cv">#E8EFFF</span>;
+  <span class="cp">--btn-color-bg-ghost-active</span>:          <span class="cv">#B8D4FF</span>;
+  <span class="cp">--btn-color-fg-ghost</span>:                 <span class="cv">#0047CC</span>;
+  <span class="cp">--btn-color-fg-ghost-disabled</span>:        <span class="cv">#8888AA</span>;
+
+  <span class="cc">/* ── color · destructive ── */</span>
+  <span class="cp">--btn-color-bg-destructive</span>:           <span class="cv">#CC2200</span>;
+  <span class="cp">--btn-color-bg-destructive-hover</span>:     <span class="cv">#7A1300</span>;
+  <span class="cp">--btn-color-bg-destructive-disabled</span>:  <span class="cv">#D8D8EE</span>;
+  <span class="cp">--btn-color-fg-destructive</span>:           <span class="cv">#FFFFFF</span>;
+  <span class="cp">--btn-color-fg-destructive-disabled</span>:  <span class="cv">#8888AA</span>;
+
+  <span class="cc">/* ── focus ring (todas as variantes) ── */</span>
+  <span class="cp">--btn-color-focus-ring</span>:               <span class="cv">#5B9BFF</span>;
+  <span class="cp">--btn-focus-ring-width</span>:               <span class="cv">2px</span>;
+  <span class="cp">--btn-focus-ring-offset</span>:              <span class="cv">2px</span>;
+
+  <span class="cc">/* ── shape (todos os tamanhos) ── */</span>
+  <span class="cp">--btn-radius</span>:                         <span class="cv">8px</span>;
+  <span class="cp">--btn-border-width-secondary</span>:         <span class="cv">1px</span>;
+
+  <span class="cc">/* ── numeric · sm ── */</span>
+  <span class="cp">--btn-height-sm</span>:      <span class="cv">32px</span>;
+  <span class="cp">--btn-padding-x-sm</span>:  <span class="cv">12px</span>;
+  <span class="cp">--btn-padding-y-sm</span>:  <span class="cv">6px</span>;
+  <span class="cp">--btn-icon-size-sm</span>:  <span class="cv">16px</span>;
+  <span class="cp">--btn-gap-sm</span>:        <span class="cv">4px</span>;
+  <span class="cp">--btn-font-size-sm</span>:  <span class="cv">12px</span>;
+
+  <span class="cc">/* ── numeric · md ── */</span>
+  <span class="cp">--btn-height-md</span>:      <span class="cv">40px</span>;
+  <span class="cp">--btn-padding-x-md</span>:  <span class="cv">16px</span>;
+  <span class="cp">--btn-padding-y-md</span>:  <span class="cv">9px</span>;
+  <span class="cp">--btn-icon-size-md</span>:  <span class="cv">20px</span>;
+  <span class="cp">--btn-gap-md</span>:        <span class="cv">4px</span>;
+  <span class="cp">--btn-font-size-md</span>:  <span class="cv">14px</span>;
+
+  <span class="cc">/* ── numeric · lg ── */</span>
+  <span class="cp">--btn-height-lg</span>:      <span class="cv">48px</span>;
+  <span class="cp">--btn-padding-x-lg</span>:  <span class="cv">20px</span>;
+  <span class="cp">--btn-padding-y-lg</span>:  <span class="cv">12px</span>;
+  <span class="cp">--btn-icon-size-lg</span>:  <span class="cv">24px</span>;
+  <span class="cp">--btn-gap-lg</span>:        <span class="cv">8px</span>;
+  <span class="cp">--btn-font-size-lg</span>:  <span class="cv">16px</span>;
+  <span class="cp">--btn-font-weight</span>:   <span class="cv">600</span>;
+}</pre>
+    </div>
+    <div class="code-block" id="css-use">
+<pre><span class="cc">/* Button.css — consumindo os tokens */</span>
+.<span class="cp">btn</span> {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: <span class="ck">var</span>(<span class="cp">--btn-radius</span>);
+  font-weight: <span class="ck">var</span>(<span class="cp">--btn-font-weight</span>);
+  cursor: pointer; border: none; transition: background .15s, color .15s;
+}
+.<span class="cp">btn</span>:<span class="ck">focus-visible</span> {
+  outline: <span class="ck">var</span>(<span class="cp">--btn-focus-ring-width</span>) solid <span class="ck">var</span>(<span class="cp">--btn-color-focus-ring</span>);
+  outline-offset: <span class="ck">var</span>(<span class="cp">--btn-focus-ring-offset</span>);
+}
+
+<span class="cc">/* variante · primary */</span>
+.<span class="cp">btn--primary</span> {
+  background: <span class="ck">var</span>(<span class="cp">--btn-color-bg-primary</span>);
+  color: <span class="ck">var</span>(<span class="cp">--btn-color-fg-primary</span>);
+}
+.<span class="cp">btn--primary</span>:<span class="ck">hover</span>  { background: <span class="ck">var</span>(<span class="cp">--btn-color-bg-primary-hover</span>); }
+.<span class="cp">btn--primary</span>:<span class="ck">active</span> { background: <span class="ck">var</span>(<span class="cp">--btn-color-bg-primary-active</span>); }
+.<span class="cp">btn--primary</span>:<span class="ck">disabled</span> {
+  background: <span class="ck">var</span>(<span class="cp">--btn-color-bg-primary-disabled</span>);
+  color: <span class="ck">var</span>(<span class="cp">--btn-color-fg-primary-disabled</span>);
+  cursor: not-allowed;
+}
+
+<span class="cc">/* variante · secondary */</span>
+.<span class="cp">btn--secondary</span> {
+  background: <span class="ck">var</span>(<span class="cp">--btn-color-bg-secondary</span>);
+  color: <span class="ck">var</span>(<span class="cp">--btn-color-fg-secondary</span>);
+  border: <span class="ck">var</span>(<span class="cp">--btn-border-width-secondary</span>) solid <span class="ck">var</span>(<span class="cp">--btn-color-border-secondary</span>);
+}
+.<span class="cp">btn--secondary</span>:<span class="ck">hover</span>  { background: <span class="ck">var</span>(<span class="cp">--btn-color-bg-secondary-hover</span>); }
+.<span class="cp">btn--secondary</span>:<span class="ck">disabled</span> {
+  border-color: <span class="ck">var</span>(<span class="cp">--btn-color-border-secondary-disabled</span>);
+  color: <span class="ck">var</span>(<span class="cp">--btn-color-fg-secondary-disabled</span>);
+  cursor: not-allowed;
+}
+
+<span class="cc">/* tamanho · md */</span>
+.<span class="cp">btn--md</span> {
+  height: <span class="ck">var</span>(<span class="cp">--btn-height-md</span>);
+  padding: <span class="ck">var</span>(<span class="cp">--btn-padding-y-md</span>) <span class="ck">var</span>(<span class="cp">--btn-padding-x-md</span>);
+  gap: <span class="ck">var</span>(<span class="cp">--btn-gap-md</span>);
+  font-size: <span class="ck">var</span>(<span class="cp">--btn-font-size-md</span>);
+}</pre>
+    </div>
+
+    <!-- REACT -->
+    <h3 id="plat-react">React / TypeScript</h3>
+    <div class="code-tabs">
+      <span class="code-tab active" onclick="sw('react','ts')">tokens.ts</span>
+      <span class="code-tab" onclick="sw('react','use')">Button.tsx</span>
+    </div>
+    <div class="code-block active" id="react-ts">
+<pre><span class="cc">// channel/component/button — gerado pelo Style Dictionary</span>
+<span class="ck">export const</span> <span class="cp">buttonTokens</span> = {
+  color: {
+    bg: {
+      primary:              <span class="cs">"#0047CC"</span>,
+      primaryHover:         <span class="cs">"#003087"</span>,
+      primaryActive:        <span class="cs">"#001A5C"</span>,
+      primaryDisabled:      <span class="cs">"#D8D8EE"</span>,
+      secondary:            <span class="cs">"transparent"</span>,
+      secondaryHover:       <span class="cs">"#E8EFFF"</span>,
+      secondaryActive:      <span class="cs">"#B8D4FF"</span>,
+      ghost:                <span class="cs">"transparent"</span>,
+      ghostHover:           <span class="cs">"#E8EFFF"</span>,
+      ghostActive:          <span class="cs">"#B8D4FF"</span>,
+      destructive:          <span class="cs">"#CC2200"</span>,
+      destructiveHover:     <span class="cs">"#7A1300"</span>,
+      destructiveDisabled:  <span class="cs">"#D8D8EE"</span>,
+    },
+    fg: {
+      primary:              <span class="cs">"#FFFFFF"</span>,
+      primaryDisabled:      <span class="cs">"#8888AA"</span>,
+      secondary:            <span class="cs">"#0047CC"</span>,
+      secondaryDisabled:    <span class="cs">"#8888AA"</span>,
+      ghost:                <span class="cs">"#0047CC"</span>,
+      ghostDisabled:        <span class="cs">"#8888AA"</span>,
+      destructive:          <span class="cs">"#FFFFFF"</span>,
+      destructiveDisabled:  <span class="cs">"#8888AA"</span>,
+    },
+    border: {
+      secondary:            <span class="cs">"#0047CC"</span>,
+      secondaryDisabled:    <span class="cs">"#D8D8EE"</span>,
+    },
+    focusRing:              <span class="cs">"#5B9BFF"</span>,
+  },
+  numericValues: {
+    radius:                 <span class="cs">"8px"</span>,
+    borderWidthSecondary:   <span class="cs">"1px"</span>,
+    focusRingWidth:         <span class="cs">"2px"</span>,
+    focusRingOffset:        <span class="cs">"2px"</span>,
+    sm: { height: <span class="cs">"32px"</span>, paddingX: <span class="cs">"12px"</span>, paddingY: <span class="cs">"6px"</span>,  iconSize: <span class="cs">"16px"</span>, gap: <span class="cs">"4px"</span> },
+    md: { height: <span class="cs">"40px"</span>, paddingX: <span class="cs">"16px"</span>, paddingY: <span class="cs">"9px"</span>,  iconSize: <span class="cs">"20px"</span>, gap: <span class="cs">"4px"</span> },
+    lg: { height: <span class="cs">"48px"</span>, paddingX: <span class="cs">"20px"</span>, paddingY: <span class="cs">"12px"</span>, iconSize: <span class="cs">"24px"</span>, gap: <span class="cs">"8px"</span> },
+  },
+  typography: {
+    fontWeight: <span class="cs">"600"</span>,
+    sm: { fontSize: <span class="cs">"12px"</span> },
+    md: { fontSize: <span class="cs">"14px"</span> },
+    lg: { fontSize: <span class="cs">"16px"</span> },
+  },
+} <span class="ck">as const</span></pre>
+    </div>
+    <div class="code-block" id="react-use">
+<pre><span class="cc">// Button.tsx — consumindo os tokens</span>
+<span class="ck">import</span> { buttonTokens <span class="ck">as</span> t } <span class="ck">from</span> <span class="cs">"@ps/design-tokens/button"</span>
+
+<span class="ck">type</span> Variant = <span class="cs">"primary"</span> | <span class="cs">"secondary"</span> | <span class="cs">"ghost"</span> | <span class="cs">"destructive"</span>
+<span class="ck">type</span> Size    = <span class="cs">"sm"</span> | <span class="cs">"md"</span> | <span class="cs">"lg"</span>
+
+<span class="ck">const</span> variantStyles: Record&lt;Variant, React.CSSProperties&gt; = {
+  primary: {
+    background:  t.color.bg.primary,
+    color:       t.color.fg.primary,
+  },
+  secondary: {
+    background:  t.color.bg.secondary,
+    color:       t.color.fg.secondary,
+    border:      <span class="cs">`${t.numericValues.borderWidthSecondary} solid ${t.color.border.secondary}`</span>,
+  },
+  ghost: {
+    background:  t.color.bg.ghost,
+    color:       t.color.fg.ghost,
+    border:      <span class="cs">"none"</span>,
+  },
+  destructive: {
+    background:  t.color.bg.destructive,
+    color:       t.color.fg.destructive,
+  },
+}
+
+<span class="ck">export function</span> <span class="cv">Button</span>({
+  variant = <span class="cs">"primary"</span>,
+  size    = <span class="cs">"md"</span>,
+  disabled,
+  children,
+  ...props
+}: ButtonProps) {
+  <span class="ck">const</span> sz = t.numericValues[size]
+  <span class="ck">return</span> (
+    &lt;<span class="cp">button</span>
+      style={{
+        ...variantStyles[variant],
+        borderRadius:  t.numericValues.radius,
+        height:        sz.height,
+        padding:       <span class="cs">`${sz.paddingY} ${sz.paddingX}`</span>,
+        gap:           sz.gap,
+        fontSize:      t.typography[size].fontSize,
+        fontWeight:    t.typography.fontWeight,
+        display:       <span class="cs">"inline-flex"</span>,
+        alignItems:    <span class="cs">"center"</span>,
+        opacity:       disabled ? <span class="cv">0.5</span> : <span class="cv">1</span>,
+        cursor:        disabled ? <span class="cs">"not-allowed"</span> : <span class="cs">"pointer"</span>,
+      }}
+      disabled={disabled}
+      {...props}
+    &gt;
+      {children}
+    &lt;/<span class="cp">button</span>&gt;
+  )
+}</pre>
+    </div>
+
+    <!-- iOS -->
+    <h3 id="plat-ios">iOS / Swift</h3>
+    <div class="code-block active" id="ios-swift" style="display:block;border-radius:12px">
+<pre><span class="cc">// ButtonTokens.swift — gerado pelo Style Dictionary</span>
+<span class="ck">import</span> UIKit
+
+<span class="ck">public enum</span> <span class="cp">ButtonTokens</span> {
+
+  <span class="ck">public enum</span> <span class="cp">Color</span> {
+    <span class="ck">public enum</span> <span class="cp">Background</span> {
+      <span class="ck">public static let</span> primary         = UIColor(hex: <span class="cs">"#0047CC"</span>)
+      <span class="ck">public static let</span> primaryHover     = UIColor(hex: <span class="cs">"#003087"</span>)
+      <span class="ck">public static let</span> primaryActive    = UIColor(hex: <span class="cs">"#001A5C"</span>)
+      <span class="ck">public static let</span> primaryDisabled  = UIColor(hex: <span class="cs">"#D8D8EE"</span>)
+      <span class="ck">public static let</span> destructive      = UIColor(hex: <span class="cs">"#CC2200"</span>)
+      <span class="ck">public static let</span> destructiveHover = UIColor(hex: <span class="cs">"#7A1300"</span>)
+    }
+    <span class="ck">public enum</span> <span class="cp">Foreground</span> {
+      <span class="ck">public static let</span> primary     = UIColor.white
+      <span class="ck">public static let</span> secondary   = UIColor(hex: <span class="cs">"#0047CC"</span>)
+      <span class="ck">public static let</span> ghost       = UIColor(hex: <span class="cs">"#0047CC"</span>)
+      <span class="ck">public static let</span> disabled    = UIColor(hex: <span class="cs">"#8888AA"</span>)
+      <span class="ck">public static let</span> destructive = UIColor.white
+    }
+    <span class="ck">public enum</span> <span class="cp">Border</span> {
+      <span class="ck">public static let</span> secondary         = UIColor(hex: <span class="cs">"#0047CC"</span>)
+      <span class="ck">public static let</span> secondaryDisabled  = UIColor(hex: <span class="cs">"#D8D8EE"</span>)
+      <span class="ck">public static let</span> focusRing         = UIColor(hex: <span class="cs">"#5B9BFF"</span>)
+    }
+  }
+
+  <span class="ck">public enum</span> <span class="cp">Size</span> {
+    <span class="ck">public enum</span> <span class="cp">SM</span> {
+      <span class="ck">public static let</span> height:   CGFloat = <span class="cv">32</span>
+      <span class="ck">public static let</span> paddingX: CGFloat = <span class="cv">12</span>
+      <span class="ck">public static let</span> paddingY: CGFloat = <span class="cv">6</span>
+      <span class="ck">public static let</span> iconSize: CGFloat = <span class="cv">16</span>
+      <span class="ck">public static let</span> gap:      CGFloat = <span class="cv">4</span>
+    }
+    <span class="ck">public enum</span> <span class="cp">MD</span> {
+      <span class="ck">public static let</span> height:   CGFloat = <span class="cv">40</span>
+      <span class="ck">public static let</span> paddingX: CGFloat = <span class="cv">16</span>
+      <span class="ck">public static let</span> paddingY: CGFloat = <span class="cv">9</span>
+      <span class="ck">public static let</span> iconSize: CGFloat = <span class="cv">20</span>
+      <span class="ck">public static let</span> gap:      CGFloat = <span class="cv">4</span>
+    }
+    <span class="ck">public enum</span> <span class="cp">LG</span> {
+      <span class="ck">public static let</span> height:   CGFloat = <span class="cv">48</span>
+      <span class="ck">public static let</span> paddingX: CGFloat = <span class="cv">20</span>
+      <span class="ck">public static let</span> paddingY: CGFloat = <span class="cv">12</span>
+      <span class="ck">public static let</span> iconSize: CGFloat = <span class="cv">24</span>
+      <span class="ck">public static let</span> gap:      CGFloat = <span class="cv">8</span>
+    }
+  }
+
+  <span class="ck">public static let</span> radius:         CGFloat = <span class="cv">8</span>
+  <span class="ck">public static let</span> borderWidth:    CGFloat = <span class="cv">1</span>
+  <span class="ck">public static let</span> focusRingWidth: CGFloat = <span class="cv">2</span>
+  <span class="ck">public static let</span> fontSizeSm:     CGFloat = <span class="cv">12</span>
+  <span class="ck">public static let</span> fontSizeMd:     CGFloat = <span class="cv">14</span>
+  <span class="ck">public static let</span> fontSizeLg:     CGFloat = <span class="cv">16</span>
+  <span class="ck">public static let</span> fontWeight             = UIFont.Weight.semibold
+}</pre>
+    </div>
+
+    <!-- Android -->
+    <h3 id="plat-android">Android / Kotlin</h3>
+    <div class="code-block active" id="and-kt" style="display:block;border-radius:12px">
+<pre><span class="cc">// ButtonTokens.kt — gerado pelo Style Dictionary</span>
+<span class="ck">object</span> <span class="cg">ButtonTokens</span> {
+
+  <span class="ck">object</span> Color {
+    <span class="ck">object</span> Background {
+      <span class="ck">val</span> Primary         = Color(<span class="cv">0xFF0047CC</span>)
+      <span class="ck">val</span> PrimaryHover    = Color(<span class="cv">0xFF003087</span>)
+      <span class="ck">val</span> PrimaryActive   = Color(<span class="cv">0xFF001A5C</span>)
+      <span class="ck">val</span> PrimaryDisabled = Color(<span class="cv">0xFFD8D8EE</span>)
+      <span class="ck">val</span> Destructive     = Color(<span class="cv">0xFFCC2200</span>)
+      <span class="ck">val</span> DestructiveHover= Color(<span class="cv">0xFF7A1300</span>)
+    }
+    <span class="ck">object</span> Foreground {
+      <span class="ck">val</span> Primary     = Color(<span class="cv">0xFFFFFFFF</span>)
+      <span class="ck">val</span> Secondary   = Color(<span class="cv">0xFF0047CC</span>)
+      <span class="ck">val</span> Ghost       = Color(<span class="cv">0xFF0047CC</span>)
+      <span class="ck">val</span> Disabled    = Color(<span class="cv">0xFF8888AA</span>)
+      <span class="ck">val</span> Destructive = Color(<span class="cv">0xFFFFFFFF</span>)
+    }
+    <span class="ck">object</span> Border {
+      <span class="ck">val</span> Secondary         = Color(<span class="cv">0xFF0047CC</span>)
+      <span class="ck">val</span> SecondaryDisabled = Color(<span class="cv">0xFFD8D8EE</span>)
+      <span class="ck">val</span> FocusRing         = Color(<span class="cv">0xFF5B9BFF</span>)
+    }
+  }
+
+  <span class="cc">/* dimensões */</span>
+  <span class="ck">val</span> Radius          = <span class="cv">8</span>.dp
+  <span class="ck">val</span> BorderWidth     = <span class="cv">1</span>.dp
+  <span class="ck">val</span> FocusRingWidth  = <span class="cv">2</span>.dp
+
+  <span class="ck">val</span> HeightSm = <span class="cv">32</span>.dp;  <span class="ck">val</span> PaddingXSm = <span class="cv">12</span>.dp; <span class="ck">val</span> PaddingYSm = <span class="cv">6</span>.dp;  <span class="ck">val</span> IconSizeSm = <span class="cv">16</span>.dp; <span class="ck">val</span> GapSm = <span class="cv">4</span>.dp
+  <span class="ck">val</span> HeightMd = <span class="cv">40</span>.dp;  <span class="ck">val</span> PaddingXMd = <span class="cv">16</span>.dp; <span class="ck">val</span> PaddingYMd = <span class="cv">9</span>.dp;  <span class="ck">val</span> IconSizeMd = <span class="cv">20</span>.dp; <span class="ck">val</span> GapMd = <span class="cv">4</span>.dp
+  <span class="ck">val</span> HeightLg = <span class="cv">48</span>.dp;  <span class="ck">val</span> PaddingXLg = <span class="cv">20</span>.dp; <span class="ck">val</span> PaddingYLg = <span class="cv">12</span>.dp; <span class="ck">val</span> IconSizeLg = <span class="cv">24</span>.dp; <span class="ck">val</span> GapLg = <span class="cv">8</span>.dp
+
+  <span class="ck">val</span> FontSizeSm = <span class="cv">12</span>.sp; <span class="ck">val</span> FontSizeMd = <span class="cv">14</span>.sp; <span class="ck">val</span> FontSizeLg = <span class="cv">16</span>.sp
+  <span class="ck">val</span> FontWeight = FontWeight.SemiBold
+}</pre>
+    </div>
+
+    <!-- Angular -->
+    <h3 id="plat-angular">Angular / SCSS</h3>
+    <div class="code-block active" id="ang-scss" style="display:block;border-radius:12px">
+<pre><span class="cc">// _button-tokens.scss — gerado pelo Style Dictionary</span>
+
+<span class="cc">// ── color · primary</span>
+<span class="cp">$btn-color-bg-primary</span>:               <span class="cv">#0047CC</span>;
+<span class="cp">$btn-color-bg-primary-hover</span>:         <span class="cv">#003087</span>;
+<span class="cp">$btn-color-bg-primary-active</span>:        <span class="cv">#001A5C</span>;
+<span class="cp">$btn-color-bg-primary-disabled</span>:      <span class="cv">#D8D8EE</span>;
+<span class="cp">$btn-color-fg-primary</span>:               <span class="cv">#FFFFFF</span>;
+<span class="cp">$btn-color-fg-primary-disabled</span>:      <span class="cv">#8888AA</span>;
+
+<span class="cc">// ── color · secondary</span>
+<span class="cp">$btn-color-bg-secondary-hover</span>:       <span class="cv">#E8EFFF</span>;
+<span class="cp">$btn-color-bg-secondary-active</span>:      <span class="cv">#B8D4FF</span>;
+<span class="cp">$btn-color-fg-secondary</span>:             <span class="cv">#0047CC</span>;
+<span class="cp">$btn-color-border-secondary</span>:         <span class="cv">#0047CC</span>;
+<span class="cp">$btn-color-border-secondary-disabled</span>:<span class="cv">#D8D8EE</span>;
+
+<span class="cc">// ── color · ghost</span>
+<span class="cp">$btn-color-bg-ghost-hover</span>:           <span class="cv">#E8EFFF</span>;
+<span class="cp">$btn-color-fg-ghost</span>:                 <span class="cv">#0047CC</span>;
+
+<span class="cc">// ── color · destructive</span>
+<span class="cp">$btn-color-bg-destructive</span>:           <span class="cv">#CC2200</span>;
+<span class="cp">$btn-color-bg-destructive-hover</span>:     <span class="cv">#7A1300</span>;
+<span class="cp">$btn-color-fg-destructive</span>:           <span class="cv">#FFFFFF</span>;
+
+<span class="cc">// ── focus ring</span>
+<span class="cp">$btn-color-focus-ring</span>:               <span class="cv">#5B9BFF</span>;
+<span class="cp">$btn-focus-ring-width</span>:               <span class="cv">2px</span>;
+<span class="cp">$btn-focus-ring-offset</span>:              <span class="cv">2px</span>;
+
+<span class="cc">// ── shape</span>
+<span class="cp">$btn-radius</span>:              <span class="cv">8px</span>;
+<span class="cp">$btn-border-width</span>:        <span class="cv">1px</span>;
+
+<span class="cc">// ── sm</span>
+<span class="cp">$btn-height-sm</span>:    <span class="cv">32px</span>;  <span class="cp">$btn-padding-x-sm</span>: <span class="cv">12px</span>; <span class="cp">$btn-padding-y-sm</span>: <span class="cv">6px</span>;
+<span class="cp">$btn-icon-size-sm</span>: <span class="cv">16px</span>;  <span class="cp">$btn-gap-sm</span>:       <span class="cv">4px</span>;  <span class="cp">$btn-font-size-sm</span>: <span class="cv">12px</span>;
+
+<span class="cc">// ── md</span>
+<span class="cp">$btn-height-md</span>:    <span class="cv">40px</span>;  <span class="cp">$btn-padding-x-md</span>: <span class="cv">16px</span>; <span class="cp">$btn-padding-y-md</span>: <span class="cv">9px</span>;
+<span class="cp">$btn-icon-size-md</span>: <span class="cv">20px</span>;  <span class="cp">$btn-gap-md</span>:       <span class="cv">4px</span>;  <span class="cp">$btn-font-size-md</span>: <span class="cv">14px</span>;
+
+<span class="cc">// ── lg</span>
+<span class="cp">$btn-height-lg</span>:    <span class="cv">48px</span>;  <span class="cp">$btn-padding-x-lg</span>: <span class="cv">20px</span>; <span class="cp">$btn-padding-y-lg</span>: <span class="cv">12px</span>;
+<span class="cp">$btn-icon-size-lg</span>: <span class="cv">24px</span>;  <span class="cp">$btn-gap-lg</span>:       <span class="cv">8px</span>;  <span class="cp">$btn-font-size-lg</span>: <span class="cv">16px</span>;
+<span class="cp">$btn-font-weight</span>:  <span class="cv">600</span>;</pre>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+function sw(platform, tab) {
+  const map = { css: ['vars','use'], react: ['ts','use'] }
+  if (map[platform]) {
+    map[platform].forEach(t => {
+      const el = document.getElementById(`${platform}-${t}`)
+      if (el) el.classList.remove('active')
+    })
+    const target = document.getElementById(`${platform}-${tab}`)
+    if (target) target.classList.add('active')
+  }
+  const card = event.target.closest('.section') || document.body
+  card.querySelectorAll('.code-tab').forEach(t2 => t2.classList.remove('active'))
+  event.target.classList.add('active')
+}
+
+const sections = document.querySelectorAll('section[id], h3[id]')
+const links    = document.querySelectorAll('.nav-link, .nav-sub')
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'))
+      const lnk = document.querySelector(`.nav-link[href="#${e.target.id}"], .nav-sub[href="#${e.target.id}"]`)
+      if (lnk) lnk.classList.add('active')
+    }
+  })
+}, { rootMargin: '-20% 0px -70% 0px' })
+sections.forEach(s => obs.observe(s))
+</script>
+</body>
+</html>

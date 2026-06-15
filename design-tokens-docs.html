@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Tokens — DS Essential 2.0</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-900: #001A5C;
+      --blue-700: #003087;
+      --blue-500: #0047CC;
+      --blue-300: #5B9BFF;
+      --blue-100: #E8EFFF;
+      --orange-500: #FF6B00;
+      --orange-100: #FFF0E6;
+      --green-600: #0A7A40;
+      --green-100: #E6F9F0;
+      --red-600: #CC2200;
+      --red-100: #FFEBE6;
+      --yellow-500: #CC7700;
+      --yellow-100: #FFF8E6;
+      --purple-600: #6644CC;
+      --purple-100: #F0EBFF;
+      --gray-900: #1A1A2E;
+      --gray-700: #3D3D5C;
+      --gray-500: #6666AA;
+      --gray-300: #B0B0CC;
+      --gray-100: #F4F5F9;
+      --gray-50:  #FAFAFA;
+      --white: #FFFFFF;
+
+      --sidebar-w: 260px;
+      --header-h: 60px;
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --mono: 'Courier New', 'Consolas', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--gray-50);
+      color: var(--gray-900);
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      grid-template-rows: var(--header-h) 1fr;
+      min-height: 100vh;
+    }
+
+    /* ══════════════════════════════════
+       HEADER
+    ══════════════════════════════════ */
+    header {
+      grid-column: 1 / -1;
+      background: var(--blue-900);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .header-logo {
+      width: 32px; height: 32px;
+      background: var(--orange-500);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .header-title {
+      font-size: 15px; font-weight: 700;
+      color: white; letter-spacing: -.01em;
+    }
+    .header-sub {
+      font-size: 12px; color: rgba(255,255,255,.45);
+      margin-left: 2px;
+    }
+    .header-spacer { flex: 1; }
+    .header-version {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: rgba(255,255,255,.35);
+      background: rgba(255,255,255,.06);
+      padding: 4px 12px; border-radius: 20px;
+    }
+    .header-badges { display: flex; gap: 8px; }
+    .hbadge {
+      font-size: 10.5px; font-weight: 600;
+      padding: 3px 10px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: .08em;
+    }
+    .hbadge-blue   { background: rgba(91,155,255,.18); color: #7EB8FF; }
+    .hbadge-green  { background: rgba(10,122,64,.2);   color: #4DCEA0; }
+    .hbadge-orange { background: rgba(255,107,0,.18);  color: #FFB37E; }
+
+    /* ══════════════════════════════════
+       SIDEBAR
+    ══════════════════════════════════ */
+    nav {
+      background: white;
+      border-right: 1px solid #E8E8F0;
+      position: sticky;
+      top: var(--header-h);
+      height: calc(100vh - var(--header-h));
+      overflow-y: auto;
+      padding: 24px 0;
+    }
+    .nav-section {
+      padding: 0 16px;
+      margin-bottom: 24px;
+    }
+    .nav-section-label {
+      font-size: 9.5px; font-weight: 800;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--gray-300); padding: 0 8px;
+      margin-bottom: 6px; display: block;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 8px; border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px; font-weight: 500;
+      color: var(--gray-700);
+      transition: background .15s, color .15s;
+    }
+    .nav-link:hover { background: var(--gray-100); color: var(--blue-500); }
+    .nav-link.active { background: var(--blue-100); color: var(--blue-500); font-weight: 700; }
+    .nav-link .nav-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-primitive { background: var(--gray-300); }
+    .dot-brand     { background: var(--blue-500); }
+    .dot-theme     { background: var(--green-600); }
+    .dot-channel   { background: var(--orange-500); }
+    .dot-platform  { background: var(--purple-600); }
+    .nav-sub-link {
+      display: block; padding: 5px 8px 5px 24px;
+      font-size: 12px; color: var(--gray-500);
+      text-decoration: none; border-radius: 6px;
+    }
+    .nav-sub-link:hover { background: var(--gray-100); color: var(--blue-500); }
+
+    /* ══════════════════════════════════
+       MAIN CONTENT
+    ══════════════════════════════════ */
+    main {
+      padding: 48px 56px 80px;
+      max-width: 1100px;
+      overflow-x: hidden;
+    }
+
+    /* ── Section headers ── */
+    .section { margin-bottom: 64px; }
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; font-weight: 800;
+      letter-spacing: .18em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .section-tag .tag-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+    }
+    .tag-primitive { background: var(--gray-100); color: var(--gray-500); }
+    .tag-primitive .tag-dot { background: var(--gray-300); }
+    .tag-brand  { background: var(--blue-100);   color: var(--blue-500); }
+    .tag-brand  .tag-dot  { background: var(--blue-500); }
+    .tag-theme  { background: var(--green-100);  color: var(--green-600); }
+    .tag-theme  .tag-dot  { background: var(--green-600); }
+    .tag-channel{ background: var(--orange-100); color: var(--orange-500); }
+    .tag-channel .tag-dot { background: var(--orange-500); }
+    .tag-platform{ background: var(--purple-100); color: var(--purple-600); }
+    .tag-platform .tag-dot{ background: var(--purple-600); }
+
+    h1 { font-size: 32px; font-weight: 800; color: var(--gray-900); line-height: 1.1; margin-bottom: 8px; }
+    h2 { font-size: 22px; font-weight: 800; color: var(--gray-900); margin-bottom: 6px; }
+    h3 { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 12px; }
+    .lead { font-size: 15px; color: var(--gray-500); line-height: 1.7; margin-bottom: 32px; max-width: 680px; }
+    .section-divider { border: none; border-top: 1px solid #E8E8F0; margin: 48px 0; }
+
+    /* ── Architecture diagram ── */
+    .arch-flow {
+      display: flex; align-items: stretch; gap: 0;
+      margin-bottom: 32px; overflow-x: auto;
+    }
+    .arch-card {
+      flex: 1; min-width: 160px;
+      border-radius: 12px; padding: 18px 16px;
+      border: 1.5px solid;
+    }
+    .arch-c1 { background: var(--gray-100); border-color: #DCDCF0; }
+    .arch-c2 { background: var(--blue-100); border-color: #C0D4FF; }
+    .arch-c3 { background: var(--green-100); border-color: #B0E4C8; }
+    .arch-c4 { background: var(--orange-100); border-color: #FFD8A0; }
+    .arch-c5 { background: var(--purple-100); border-color: #D4AAFF; }
+    .arch-num { font-size: 9.5px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 4px; }
+    .arch-c1 .arch-num { color: var(--gray-300); }
+    .arch-c2 .arch-num { color: var(--blue-500); }
+    .arch-c3 .arch-num { color: var(--green-600); }
+    .arch-c4 .arch-num { color: var(--orange-500); }
+    .arch-c5 .arch-num { color: var(--purple-600); }
+    .arch-name { font-size: 15px; font-weight: 800; color: var(--gray-900); margin-bottom: 6px; }
+    .arch-desc { font-size: 11.5px; color: var(--gray-700); line-height: 1.5; }
+    .arch-arrow {
+      display: flex; align-items: center;
+      padding: 0 8px; color: var(--gray-300);
+      font-size: 18px; flex-shrink: 0;
+    }
+
+    /* ── Token groups pills ── */
+    .groups-row {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 32px;
+    }
+    .group-pill {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 20px;
+      font-size: 12.5px; font-weight: 600; border: 1.5px solid;
+    }
+    .gp-color    { background: #EEF3FF; color: var(--blue-500); border-color: #C0D4FF; }
+    .gp-typo     { background: #EDFAF3; color: var(--green-600); border-color: #A8DDBE; }
+    .gp-numeric  { background: #FFF4E8; color: var(--orange-500); border-color: #FFD0A0; }
+    .gp-break    { background: #F3EEFF; color: var(--purple-600); border-color: #CCB0FF; }
+    .gp-aspect   { background: var(--gray-100); color: var(--gray-500); border-color: #D0D0E8; }
+
+    /* ── Token table ── */
+    .token-table-wrap { overflow-x: auto; margin-bottom: 32px; border-radius: 12px; border: 1px solid #E8E8F0; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: var(--gray-100); }
+    th {
+      text-align: left; padding: 10px 16px;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--gray-500); border-bottom: 1px solid #E8E8F0;
+    }
+    td { padding: 10px 16px; border-bottom: 1px solid #F0F0F8; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--gray-50); }
+    .token-name {
+      font-family: var(--mono); font-size: 12px;
+      color: var(--blue-500); font-weight: 600;
+    }
+    .token-ref {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--gray-500); background: var(--gray-100);
+      padding: 2px 8px; border-radius: 4px;
+    }
+    .token-value { font-family: var(--mono); font-size: 12px; color: var(--gray-700); }
+    .color-swatch {
+      width: 24px; height: 24px; border-radius: 6px;
+      border: 1px solid rgba(0,0,0,.1);
+      display: inline-block; vertical-align: middle;
+      margin-right: 8px;
+    }
+    .group-badge {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: 2px 8px; border-radius: 10px;
+    }
+    .gb-color   { background: #EEF3FF; color: var(--blue-500); }
+    .gb-typo    { background: #EDFAF3; color: var(--green-600); }
+    .gb-numeric { background: #FFF4E8; color: var(--orange-500); }
+    .gb-break   { background: #F3EEFF; color: var(--purple-600); }
+    .gb-aspect  { background: var(--gray-100); color: var(--gray-500); }
+
+    /* ── Code blocks ── */
+    .code-tabs { margin-bottom: 8px; display: flex; gap: 4px; flex-wrap: wrap; }
+    .code-tab {
+      padding: 6px 14px; border-radius: 8px 8px 0 0;
+      font-size: 12px; font-weight: 600;
+      cursor: pointer; border: 1px solid #E8E8F0; border-bottom: none;
+      background: var(--gray-100); color: var(--gray-500);
+      transition: background .15s;
+    }
+    .code-tab.active { background: #1E2235; color: white; border-color: #1E2235; }
+    .code-block {
+      background: #1E2235; border-radius: 0 12px 12px 12px;
+      padding: 20px 24px; overflow-x: auto;
+      margin-bottom: 24px; display: none;
+    }
+    .code-block.active { display: block; }
+    .code-block pre { font-family: var(--mono); font-size: 12px; line-height: 1.9; color: #CDD6F4; }
+    .ck { color: #FF9FFF; }
+    .cs { color: #FFE083; }
+    .cv { color: #7EFFC0; }
+    .cp { color: #7EB8FF; }
+    .cc { color: rgba(255,255,255,.3); }
+    .ct { color: #FF9F0A; }
+    .cg { color: #3DDC84; }
+    .cr { color: #FF3355; }
+
+    /* ── Color palette grid ── */
+    .color-family { margin-bottom: 28px; }
+    .color-family-label {
+      font-size: 10.5px; font-weight: 800;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--gray-400); margin-bottom: 10px;
+    }
+    .color-row {
+      display: flex; gap: 0; border-radius: 12px;
+      overflow: hidden; border: 1px solid rgba(0,0,0,.07);
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    }
+    .color-chip { flex: 1; }
+    .color-chip-swatch { height: 64px; }
+    .color-chip-info {
+      padding: 8px 10px; background: white;
+      border-top: 1px solid rgba(0,0,0,.05);
+    }
+    .color-chip-name  { font-size: 11px; font-weight: 700; color: var(--gray-900); }
+    .color-chip-hex   { font-family: var(--mono); font-size: 10.5px; color: var(--gray-500); }
+    .color-chip-token { font-family: var(--mono); font-size: 9.5px; color: var(--gray-300); margin-top: 1px; }
+    /* keep legacy single-card for white */
+    .color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 32px; }
+    .color-card { border-radius: 12px; overflow: hidden; border: 1px solid rgba(0,0,0,.06); box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+    .color-swatch-lg { height: 80px; }
+    .color-card-info { padding: 10px 12px; background: white; }
+    .color-card-name { font-size: 12px; font-weight: 700; color: var(--gray-900); margin-bottom: 2px; }
+    .color-card-value { font-family: var(--mono); font-size: 11px; color: var(--gray-500); }
+    .color-card-token { font-family: var(--mono); font-size: 10px; color: var(--gray-300); margin-top: 2px; }
+
+    /* ── Typography scale ── */
+    .type-scale { display: flex; flex-direction: column; gap: 0; margin-bottom: 32px; border-radius: 12px; border: 1px solid #E8E8F0; overflow: hidden; }
+    .type-row { display: grid; grid-template-columns: 200px 1fr 120px 100px; align-items: center; padding: 14px 20px; border-bottom: 1px solid #F0F0F8; background: white; }
+    .type-row:last-child { border-bottom: none; }
+    .type-row:hover { background: var(--gray-50); }
+    .type-row-header { background: var(--gray-100) !important; }
+    .type-label { font-family: var(--mono); font-size: 11.5px; font-weight: 600; color: var(--blue-500); }
+    .type-preview { color: var(--gray-900); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .type-size  { font-family: var(--mono); font-size: 11px; color: var(--gray-500); text-align: right; }
+    .type-weight{ font-family: var(--mono); font-size: 11px; color: var(--gray-500); text-align: right; }
+
+    /* ── Numeric values ── */
+    .numeric-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; align-items: flex-end; }
+    .num-card {
+      background: white; border: 1px solid #E8E8F0;
+      border-radius: 10px; padding: 12px 14px;
+      text-align: center; min-width: 72px;
+    }
+    .num-bar {
+      background: var(--blue-100); border-radius: 4px;
+      margin: 0 auto 8px; transition: height .2s;
+    }
+    .num-value { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--gray-700); margin-bottom: 2px; }
+    .num-token { font-family: var(--mono); font-size: 9.5px; color: var(--gray-300); }
+
+    /* ── Breakpoints ── */
+    .bp-track {
+      position: relative; height: 52px;
+      background: var(--gray-100); border-radius: 10px;
+      margin-bottom: 12px; overflow: hidden;
+    }
+    .bp-segment {
+      position: absolute; top: 0; bottom: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; border-right: 2px solid white;
+      text-align: center; line-height: 1.3;
+    }
+    /* base colours — positions are set inline per breakpoint set */
+    .bp-xs  { background: #E8EFFF; color: var(--blue-500); }
+    .bp-sm  { background: #D8E8FF; color: var(--blue-500); }
+    .bp-md  { background: #C0D8FF; color: var(--blue-700); }
+    .bp-lg  { background: #A8C4FF; color: var(--blue-700); }
+    .bp-xl  { background: #88AEFF; color: var(--blue-700); }
+    .bp-2xl { background: #5B9BFF; color: white; }
+
+    /* ── Aspect ratio ── */
+    .ratio-grid { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; }
+    .ratio-card {
+      background: white; border: 1px solid #E8E8F0;
+      border-radius: 10px; padding: 12px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .ratio-box {
+      background: var(--blue-100); border-radius: 6px;
+      border: 1.5px solid var(--blue-300);
+    }
+    .ratio-name { font-size: 11.5px; font-weight: 700; color: var(--gray-900); }
+    .ratio-val  { font-family: var(--mono); font-size: 10.5px; color: var(--gray-500); }
+
+    /* ── Platform cards ── */
+    .platform-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+    .platform-card {
+      border-radius: 14px; padding: 24px;
+      border: 1px solid #E8E8F0;
+      background: white;
+    }
+    .platform-card h3 {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 4px;
+    }
+    .platform-card .pc-sub { font-size: 12px; color: var(--gray-500); margin-bottom: 16px; }
+    .pc-icon { font-size: 20px; }
+    .pc-badge {
+      font-size: 9.5px; font-weight: 800;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 2px 8px; border-radius: 10px;
+      margin-left: auto;
+    }
+    .pc-web     .pc-badge { background: var(--blue-100); color: var(--blue-500); }
+    .pc-react   .pc-badge { background: #E0F9FF; color: #0099BB; }
+    .pc-ios     .pc-badge { background: #FFF3E0; color: #CC7700; }
+    .pc-android .pc-badge { background: #E6FFF2; color: var(--green-600); }
+    .pc-angular .pc-badge { background: #FFEAEE; color: var(--red-600); }
+
+    /* ── Callout boxes ── */
+    .callout {
+      border-radius: 10px; padding: 14px 18px;
+      margin-bottom: 20px; display: flex; gap: 12px;
+      font-size: 13px; line-height: 1.6;
+    }
+    .callout-info  { background: var(--blue-100);  border-left: 3px solid var(--blue-500); }
+    .callout-tip   { background: var(--green-100); border-left: 3px solid var(--green-600); }
+    .callout-warn  { background: var(--yellow-100); border-left: 3px solid var(--yellow-500); }
+    .callout strong { color: var(--gray-900); }
+
+    /* ── Formula box ── */
+    .formula-box {
+      background: var(--gray-900); border-radius: 12px;
+      padding: 24px 32px; display: flex;
+      align-items: center; gap: 0;
+      margin-bottom: 20px;
+    }
+    .formula-part { text-align: center; flex: 1; }
+    .fp-lbl { font-size: 9.5px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 4px; }
+    .fp-val { font-family: var(--mono); font-size: 16px; font-weight: 700; color: white; }
+    .fp-opt .fp-val { color: rgba(255,255,255,.35); }
+    .fp-opt .fp-lbl::after { content: ' (opt)'; }
+    .fp-dot { font-size: 24px; color: var(--orange-500); padding: 0 6px; flex-shrink: 0; padding-top: 10px; }
+
+    /* ── Intro hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-700) 60%, var(--blue-500) 100%);
+      border-radius: 16px; padding: 48px 48px 40px;
+      margin-bottom: 48px; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; right: -60px; top: -60px;
+      width: 300px; height: 300px; border-radius: 50%;
+      border: 60px solid rgba(255,255,255,.04);
+    }
+    .hero h1 { color: white; font-size: 36px; margin-bottom: 12px; }
+    .hero h1 span { color: var(--orange-500); }
+    .hero p { color: rgba(255,255,255,.6); font-size: 15px; line-height: 1.7; max-width: 580px; margin-bottom: 28px; }
+    .hero-stats { display: flex; gap: 32px; }
+    .hero-stat { display: flex; flex-direction: column; gap: 2px; }
+    .hero-stat-num { font-size: 28px; font-weight: 900; color: white; }
+    .hero-stat-lbl { font-size: 11px; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .1em; }
+
+    /* ── Collection summary cards ── */
+    .collection-cards {
+      display: grid; grid-template-columns: repeat(5,1fr);
+      gap: 10px; margin-bottom: 32px;
+    }
+    .coll-card {
+      border-radius: 12px; padding: 16px 14px;
+      border: 1.5px solid; cursor: pointer;
+      transition: transform .15s;
+    }
+    .coll-card:hover { transform: translateY(-2px); }
+    .coll-c1 { background: var(--gray-100); border-color: #DCDCF0; }
+    .coll-c2 { background: var(--blue-100); border-color: #C0D4FF; }
+    .coll-c3 { background: var(--green-100); border-color: #B0E4C8; }
+    .coll-c4 { background: var(--orange-100); border-color: #FFD8A0; }
+    .coll-c5 { background: var(--purple-100); border-color: #D4AAFF; }
+    .coll-num { font-size: 9.5px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 4px; }
+    .coll-c1 .coll-num { color: var(--gray-300); }
+    .coll-c2 .coll-num { color: var(--blue-500); }
+    .coll-c3 .coll-num { color: var(--green-600); }
+    .coll-c4 .coll-num { color: var(--orange-500); }
+    .coll-c5 .coll-num { color: var(--purple-600); }
+    .coll-name { font-size: 14px; font-weight: 800; color: var(--gray-900); margin-bottom: 4px; }
+    .coll-desc { font-size: 11px; color: var(--gray-700); line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+  <div class="header-logo">🔷</div>
+  <div>
+    <div class="header-title">DS Essential 2.0</div>
+    <div class="header-sub">Design Tokens — Documentação de Referência</div>
+  </div>
+  <div class="header-spacer"></div>
+  <div class="header-badges">
+    <span class="hbadge hbadge-blue">5 Coleções</span>
+    <span class="hbadge hbadge-green">5 Grupos</span>
+    <span class="hbadge hbadge-orange">5 Plataformas</span>
+  </div>
+  <span class="header-version">v2.0 · Jun 2026</span>
+</header>
+
+<!-- ══════════════ SIDEBAR ══════════════ -->
+<nav>
+  <div class="nav-section">
+    <span class="nav-section-label">Visão Geral</span>
+    <a href="#intro"         class="nav-link active">Introdução</a>
+    <a href="#arquitetura"   class="nav-link">Arquitetura</a>
+    <a href="#nomenclatura"  class="nav-link">Nomenclatura</a>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-section-label">Coleções</span>
+    <a href="#primitive" class="nav-link"><span class="nav-dot dot-primitive"></span>Primitive</a>
+    <a href="#prim-color"    class="nav-sub-link">↳ color</a>
+    <a href="#prim-typo"     class="nav-sub-link">↳ typography</a>
+    <a href="#prim-numeric"  class="nav-sub-link">↳ numeric-values</a>
+    <a href="#prim-break"    class="nav-sub-link">↳ breakpoint</a>
+    <a href="#prim-aspect"   class="nav-sub-link">↳ aspect-ratio</a>
+
+    <a href="#brand" class="nav-link" style="margin-top:8px"><span class="nav-dot dot-brand"></span>Brand</a>
+    <a href="#brand-color"   class="nav-sub-link">↳ color</a>
+    <a href="#brand-typo"    class="nav-sub-link">↳ typography</a>
+    <a href="#brand-numeric" class="nav-sub-link">↳ numeric-values</a>
+
+    <a href="#theme" class="nav-link" style="margin-top:8px"><span class="nav-dot dot-theme"></span>Theme</a>
+    <a href="#theme-light"   class="nav-sub-link">↳ light</a>
+    <a href="#theme-dark"    class="nav-sub-link">↳ dark</a>
+
+    <a href="#channel" class="nav-link" style="margin-top:8px"><span class="nav-dot dot-channel"></span>Channel</a>
+    <a href="#channel-superapp" class="nav-sub-link">↳ superapp</a>
+
+    <a href="#platform" class="nav-link" style="margin-top:8px"><span class="nav-dot dot-platform"></span>Platform</a>
+    <a href="#plat-web"     class="nav-sub-link">↳ Web (CSS)</a>
+    <a href="#plat-react"   class="nav-sub-link">↳ React (TS)</a>
+    <a href="#plat-ios"     class="nav-sub-link">↳ iOS (Swift)</a>
+    <a href="#plat-android" class="nav-sub-link">↳ Android (Kotlin/XML)</a>
+    <a href="#plat-angular" class="nav-sub-link">↳ Angular (SCSS)</a>
+  </div>
+</nav>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<main>
+
+  <!-- ── INTRO ── -->
+  <section class="section" id="intro">
+    <div class="hero">
+      <h1>Design <span>Tokens</span><br>DS Essential 2.0</h1>
+      <p>Os design tokens são a fonte única de verdade para todos os valores visuais do produto. Definem uma vez no Figma — distribuídos automaticamente para todas as plataformas.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="hero-stat-num">5</span><span class="hero-stat-lbl">Coleções</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">5</span><span class="hero-stat-lbl">Grupos</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">5</span><span class="hero-stat-lbl">Plataformas</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">~180</span><span class="hero-stat-lbl">Tokens estimados</span></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ── ARQUITETURA ── -->
+  <section class="section" id="arquitetura">
+    <h2>Arquitetura de Coleções</h2>
+    <p class="lead">A estrutura segue uma hierarquia estrita de 5 coleções. Um token nunca referencia uma coleção de nível não-imediatamente-anterior — isso garante rastreabilidade e controle total de mudanças.</p>
+
+    <div class="arch-flow">
+      <div class="arch-card arch-c1">
+        <div class="arch-num">01</div>
+        <div class="arch-name">Primitive</div>
+        <div class="arch-desc">Valores absolutos e brutos. Nenhuma semântica.</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-card arch-c2">
+        <div class="arch-num">02</div>
+        <div class="arch-name">Brand</div>
+        <div class="arch-desc">Identidade da marca. Referencia Primitive.</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-card arch-c3">
+        <div class="arch-num">03</div>
+        <div class="arch-name">Theme</div>
+        <div class="arch-desc">Variações de contexto (light / dark). Referencia Brand.</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-card arch-c4">
+        <div class="arch-num">04</div>
+        <div class="arch-name">Channel</div>
+        <div class="arch-desc">Customização por produto / canal. Referencia Theme.</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-card arch-c5">
+        <div class="arch-num">05</div>
+        <div class="arch-name">Platform</div>
+        <div class="arch-desc">Saída técnica por plataforma. Consome Channel.</div>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>Regra fundamental:</strong> nenhum componente ou coleção consome valores de Primitive diretamente em produção. O consumo direto de primitivos é exclusivo da coleção Brand.
+    </div>
+
+    <h3>Grupos presentes em todas as coleções</h3>
+    <div class="groups-row">
+      <span class="group-pill gp-color">● color</span>
+      <span class="group-pill gp-typo">● typography</span>
+      <span class="group-pill gp-numeric">● numeric-values</span>
+      <span class="group-pill gp-break">● breakpoint</span>
+      <span class="group-pill gp-aspect">● aspect-ratio</span>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ── NOMENCLATURA ── -->
+  <section class="section" id="nomenclatura">
+    <h2>Padrão de Nomenclatura</h2>
+    <p class="lead">Todo token segue a fórmula <code style="background:var(--gray-100);padding:2px 8px;border-radius:4px;font-family:var(--mono)">coleção.grupo.elemento.variante</code>. A presença da coleção no nome garante rastreabilidade imediata.</p>
+
+    <div class="formula-box">
+      <div class="formula-part">
+        <div class="fp-lbl">Coleção</div>
+        <div class="fp-val">brand</div>
+      </div>
+      <div class="fp-dot">.</div>
+      <div class="formula-part">
+        <div class="fp-lbl">Grupo</div>
+        <div class="fp-val">color</div>
+      </div>
+      <div class="fp-dot">.</div>
+      <div class="formula-part">
+        <div class="fp-lbl">Elemento</div>
+        <div class="fp-val">primary</div>
+      </div>
+      <div class="fp-dot" style="color:rgba(255,255,255,.2)">.</div>
+      <div class="formula-part fp-opt">
+        <div class="fp-lbl">Variante</div>
+        <div class="fp-val">hover</div>
+      </div>
+    </div>
+
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr>
+          <th>Exemplo de token</th>
+          <th>Coleção</th>
+          <th>Grupo</th>
+          <th>Descrição</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="token-name">primitive.color.blue.700</td><td>Primitive</td><td><span class="group-badge gb-color">color</span></td><td>Valor absoluto azul #0047CC</td></tr>
+          <tr><td class="token-name">brand.color.primary</td><td>Brand</td><td><span class="group-badge gb-color">color</span></td><td>Referencia primitive.color.blue.700</td></tr>
+          <tr><td class="token-name">theme.color.surface.default</td><td>Theme</td><td><span class="group-badge gb-color">color</span></td><td>Background padrão (muda com o tema)</td></tr>
+          <tr><td class="token-name">channel.color.accent</td><td>Channel</td><td><span class="group-badge gb-color">color</span></td><td>Cor de destaque do canal</td></tr>
+          <tr><td class="token-name">primitive.typography.size.16</td><td>Primitive</td><td><span class="group-badge gb-typo">typography</span></td><td>Tamanho de fonte absoluto 16px</td></tr>
+          <tr><td class="token-name">brand.typography.heading.lg</td><td>Brand</td><td><span class="group-badge gb-typo">typography</span></td><td>Heading grande da marca</td></tr>
+          <tr><td class="token-name">primitive.numeric-values.8</td><td>Primitive</td><td><span class="group-badge gb-numeric">numeric-values</span></td><td>Unidade de espaçamento 8px</td></tr>
+          <tr><td class="token-name">brand.numeric-values.radius.sm</td><td>Brand</td><td><span class="group-badge gb-numeric">numeric-values</span></td><td>Raio de borda pequeno</td></tr>
+          <tr><td class="token-name">primitive.breakpoint.md</td><td>Primitive</td><td><span class="group-badge gb-break">breakpoint</span></td><td>Breakpoint médio 768px</td></tr>
+          <tr><td class="token-name">channel.breakpoint.mobile</td><td>Channel</td><td><span class="group-badge gb-break">breakpoint</span></td><td>Breakpoint mobile do canal</td></tr>
+          <tr><td class="token-name">primitive.aspect-ratio.16-9</td><td>Primitive</td><td><span class="group-badge gb-aspect">aspect-ratio</span></td><td>Proporção 16:9</td></tr>
+          <tr><td class="token-name">brand.aspect-ratio.card</td><td>Brand</td><td><span class="group-badge gb-aspect">aspect-ratio</span></td><td>Proporção padrão de cards</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ══════════════════════════════════
+       COLEÇÃO: PRIMITIVE
+  ══════════════════════════════════ -->
+  <section class="section" id="primitive">
+    <span class="section-tag tag-primitive"><span class="tag-dot"></span>Coleção 01</span>
+    <h2>Primitive</h2>
+    <p class="lead">A camada mais baixa. Contém todos os valores brutos e absolutos do sistema. Estes tokens <strong>nunca são usados diretamente em componentes</strong> — apenas servem de base para a coleção Brand.</p>
+
+    <!-- COLOR -->
+    <h3 id="prim-color">color</h3>
+
+    <!-- Blue family -->
+    <div class="color-family">
+      <div class="color-family-label">Blue</div>
+      <div class="color-row">
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#001A5C"></div>
+          <div class="color-chip-info"><div class="color-chip-name">blue.900</div><div class="color-chip-hex">#001A5C</div><div class="color-chip-token">.blue.900</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#003087"></div>
+          <div class="color-chip-info"><div class="color-chip-name">blue.800</div><div class="color-chip-hex">#003087</div><div class="color-chip-token">.blue.800</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#0047CC"></div>
+          <div class="color-chip-info"><div class="color-chip-name">blue.700</div><div class="color-chip-hex">#0047CC</div><div class="color-chip-token">.blue.700</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#1A6EFF"></div>
+          <div class="color-chip-info"><div class="color-chip-name">blue.600</div><div class="color-chip-hex">#1A6EFF</div><div class="color-chip-token">.blue.600</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#5B9BFF"></div>
+          <div class="color-chip-info"><div class="color-chip-name">blue.400</div><div class="color-chip-hex">#5B9BFF</div><div class="color-chip-token">.blue.400</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#B8D4FF"></div>
+          <div class="color-chip-info"><div class="color-chip-name">blue.200</div><div class="color-chip-hex">#B8D4FF</div><div class="color-chip-token">.blue.200</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#E8EFFF"></div>
+          <div class="color-chip-info"><div class="color-chip-name">blue.100</div><div class="color-chip-hex">#E8EFFF</div><div class="color-chip-token">.blue.100</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orange family -->
+    <div class="color-family">
+      <div class="color-family-label">Orange</div>
+      <div class="color-row">
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#993F00"></div>
+          <div class="color-chip-info"><div class="color-chip-name">orange.900</div><div class="color-chip-hex">#993F00</div><div class="color-chip-token">.orange.900</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#CC5500"></div>
+          <div class="color-chip-info"><div class="color-chip-name">orange.700</div><div class="color-chip-hex">#CC5500</div><div class="color-chip-token">.orange.700</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#FF6B00"></div>
+          <div class="color-chip-info"><div class="color-chip-name">orange.500</div><div class="color-chip-hex">#FF6B00</div><div class="color-chip-token">.orange.500</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#FF9A4D"></div>
+          <div class="color-chip-info"><div class="color-chip-name">orange.300</div><div class="color-chip-hex">#FF9A4D</div><div class="color-chip-token">.orange.300</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#FFD4A8"></div>
+          <div class="color-chip-info"><div class="color-chip-name">orange.200</div><div class="color-chip-hex">#FFD4A8</div><div class="color-chip-token">.orange.200</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#FFF0E6"></div>
+          <div class="color-chip-info"><div class="color-chip-name">orange.100</div><div class="color-chip-hex">#FFF0E6</div><div class="color-chip-token">.orange.100</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Red family -->
+    <div class="color-family">
+      <div class="color-family-label">Red</div>
+      <div class="color-row">
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#7A1300"></div>
+          <div class="color-chip-info"><div class="color-chip-name">red.900</div><div class="color-chip-hex">#7A1300</div><div class="color-chip-token">.red.900</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#CC2200"></div>
+          <div class="color-chip-info"><div class="color-chip-name">red.600</div><div class="color-chip-hex">#CC2200</div><div class="color-chip-token">.red.600</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#FF4422"></div>
+          <div class="color-chip-info"><div class="color-chip-name">red.400</div><div class="color-chip-hex">#FF4422</div><div class="color-chip-token">.red.400</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#FFB5A8"></div>
+          <div class="color-chip-info"><div class="color-chip-name">red.200</div><div class="color-chip-hex">#FFB5A8</div><div class="color-chip-token">.red.200</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#FFEBE6"></div>
+          <div class="color-chip-info"><div class="color-chip-name">red.100</div><div class="color-chip-hex">#FFEBE6</div><div class="color-chip-token">.red.100</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Green family -->
+    <div class="color-family">
+      <div class="color-family-label">Green</div>
+      <div class="color-row">
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#054D27"></div>
+          <div class="color-chip-info"><div class="color-chip-name">green.900</div><div class="color-chip-hex">#054D27</div><div class="color-chip-token">.green.900</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#0A7A40"></div>
+          <div class="color-chip-info"><div class="color-chip-name">green.600</div><div class="color-chip-hex">#0A7A40</div><div class="color-chip-token">.green.600</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#22B05A"></div>
+          <div class="color-chip-info"><div class="color-chip-name">green.400</div><div class="color-chip-hex">#22B05A</div><div class="color-chip-token">.green.400</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#8ADBA8"></div>
+          <div class="color-chip-info"><div class="color-chip-name">green.200</div><div class="color-chip-hex">#8ADBA8</div><div class="color-chip-token">.green.200</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#E6F9F0"></div>
+          <div class="color-chip-info"><div class="color-chip-name">green.100</div><div class="color-chip-hex">#E6F9F0</div><div class="color-chip-token">.green.100</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Yellow family -->
+    <div class="color-family">
+      <div class="color-family-label">Yellow</div>
+      <div class="color-row">
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#7A4600"></div>
+          <div class="color-chip-info"><div class="color-chip-name">yellow.900</div><div class="color-chip-hex">#7A4600</div><div class="color-chip-token">.yellow.900</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#CC7700"></div>
+          <div class="color-chip-info"><div class="color-chip-name">yellow.600</div><div class="color-chip-hex">#CC7700</div><div class="color-chip-token">.yellow.600</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#FFAA00"></div>
+          <div class="color-chip-info"><div class="color-chip-name">yellow.400</div><div class="color-chip-hex">#FFAA00</div><div class="color-chip-token">.yellow.400</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#FFD980"></div>
+          <div class="color-chip-info"><div class="color-chip-name">yellow.200</div><div class="color-chip-hex">#FFD980</div><div class="color-chip-token">.yellow.200</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#FFF8E6"></div>
+          <div class="color-chip-info"><div class="color-chip-name">yellow.100</div><div class="color-chip-hex">#FFF8E6</div><div class="color-chip-token">.yellow.100</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Neutral / Gray family -->
+    <div class="color-family">
+      <div class="color-family-label">Neutral</div>
+      <div class="color-row">
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#1A1A2E"></div>
+          <div class="color-chip-info"><div class="color-chip-name">neutral.900</div><div class="color-chip-hex">#1A1A2E</div><div class="color-chip-token">.neutral.900</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#3D3D5C"></div>
+          <div class="color-chip-info"><div class="color-chip-name">neutral.700</div><div class="color-chip-hex">#3D3D5C</div><div class="color-chip-token">.neutral.700</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#6666AA"></div>
+          <div class="color-chip-info"><div class="color-chip-name">neutral.500</div><div class="color-chip-hex">#6666AA</div><div class="color-chip-token">.neutral.500</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#8888AA"></div>
+          <div class="color-chip-info"><div class="color-chip-name">neutral.400</div><div class="color-chip-hex">#8888AA</div><div class="color-chip-token">.neutral.400</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#B0B0CC"></div>
+          <div class="color-chip-info"><div class="color-chip-name">neutral.300</div><div class="color-chip-hex">#B0B0CC</div><div class="color-chip-token">.neutral.300</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#D8D8EE"></div>
+          <div class="color-chip-info"><div class="color-chip-name">neutral.200</div><div class="color-chip-hex">#D8D8EE</div><div class="color-chip-token">.neutral.200</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#F4F5F9"></div>
+          <div class="color-chip-info"><div class="color-chip-name">neutral.100</div><div class="color-chip-hex">#F4F5F9</div><div class="color-chip-token">.neutral.100</div></div>
+        </div>
+        <div class="color-chip">
+          <div class="color-chip-swatch" style="background:#FFFFFF;border-bottom:1px solid #eee"></div>
+          <div class="color-chip-info"><div class="color-chip-name">neutral.0</div><div class="color-chip-hex">#FFFFFF</div><div class="color-chip-token">.neutral.0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TYPOGRAPHY -->
+    <h3 id="prim-typo">typography</h3>
+    <div class="callout callout-info" style="margin-bottom:16px">
+      <span>Primitivos de tipografia armazenam apenas <strong>tamanhos (size)</strong> e o único peso primitivo: <strong>Regular 400</strong>. Os demais pesos (600, 700, 800…) são definidos como tokens semânticos na coleção Brand, que combina size + weight em roles com significado.</span>
+    </div>
+    <div class="type-scale">
+      <div class="type-row type-row-header">
+        <div><span style="font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-500)">Token</span></div>
+        <div><span style="font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-500)">Preview</span></div>
+        <div style="text-align:right"><span style="font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-500)">Tamanho</span></div>
+        <div style="text-align:right"><span style="font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-500)">Peso</span></div>
+      </div>
+      <div class="type-row"><div class="type-label">typography.size.80</div><div class="type-preview" style="font-size:32px;font-weight:400">Aa DS Essential</div><div class="type-size">80px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.72</div><div class="type-preview" style="font-size:30px;font-weight:400">Aa DS Essential</div><div class="type-size">72px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.64</div><div class="type-preview" style="font-size:28px;font-weight:400">Aa DS Essential</div><div class="type-size">64px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.56</div><div class="type-preview" style="font-size:26px;font-weight:400">Aa DS Essential</div><div class="type-size">56px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.48</div><div class="type-preview" style="font-size:24px;font-weight:400">Aa DS Essential</div><div class="type-size">48px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.40</div><div class="type-preview" style="font-size:22px;font-weight:400">Aa DS Essential</div><div class="type-size">40px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.36</div><div class="type-preview" style="font-size:20px;font-weight:400">Aa DS Essential</div><div class="type-size">36px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.32</div><div class="type-preview" style="font-size:19px;font-weight:400">Aa DS Essential</div><div class="type-size">32px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.28</div><div class="type-preview" style="font-size:18px;font-weight:400">Aa DS Essential</div><div class="type-size">28px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.24</div><div class="type-preview" style="font-size:17px;font-weight:400">Aa DS Essential</div><div class="type-size">24px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.22</div><div class="type-preview" style="font-size:16.5px;font-weight:400">Aa DS Essential</div><div class="type-size">22px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.20</div><div class="type-preview" style="font-size:16px;font-weight:400">Aa DS Essential</div><div class="type-size">20px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.18</div><div class="type-preview" style="font-size:15.5px;font-weight:400">Aa DS Essential</div><div class="type-size">18px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.16</div><div class="type-preview" style="font-size:15px;font-weight:400">Aa DS Essential</div><div class="type-size">16px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.14</div><div class="type-preview" style="font-size:14px;font-weight:400">Aa DS Essential</div><div class="type-size">14px</div><div class="type-weight">—</div></div>
+      <div class="type-row"><div class="type-label">typography.size.12</div><div class="type-preview" style="font-size:12px;font-weight:400">Aa DS Essential</div><div class="type-size">12px</div><div class="type-weight">—</div></div>
+      <div class="type-row" style="background:#FFFDF0">
+        <div class="type-label" style="color:var(--orange-500)">typography.weight.400</div>
+        <div class="type-preview" style="font-size:15px;font-weight:400">Regular — único peso primitivo</div>
+        <div class="type-size">—</div>
+        <div class="type-weight" style="color:var(--orange-500);font-weight:700">400</div>
+      </div>
+    </div>
+
+    <!-- NUMERIC VALUES -->
+    <h3 id="prim-numeric">numeric-values</h3>
+    <div class="numeric-grid">
+      <div class="num-card"><div class="num-bar" style="width:4px;height:0px;min-height:2px"></div><div class="num-value">0</div><div class="num-token">.0</div></div>
+      <div class="num-card"><div class="num-bar" style="width:4px;height:1px;min-height:2px"></div><div class="num-value">1</div><div class="num-token">.1</div></div>
+      <div class="num-card"><div class="num-bar" style="width:6px;height:2px"></div><div class="num-value">2</div><div class="num-token">.2</div></div>
+      <div class="num-card"><div class="num-bar" style="width:8px;height:3px"></div><div class="num-value">3</div><div class="num-token">.3</div></div>
+      <div class="num-card"><div class="num-bar" style="width:8px;height:4px"></div><div class="num-value">4</div><div class="num-token">.4</div></div>
+      <div class="num-card"><div class="num-bar" style="width:10px;height:6px"></div><div class="num-value">6</div><div class="num-token">.6</div></div>
+      <div class="num-card"><div class="num-bar" style="width:12px;height:8px"></div><div class="num-value">8</div><div class="num-token">.8</div></div>
+      <div class="num-card"><div class="num-bar" style="width:14px;height:12px"></div><div class="num-value">12</div><div class="num-token">.12</div></div>
+      <div class="num-card"><div class="num-bar" style="width:14px;height:14px"></div><div class="num-value">14</div><div class="num-token">.14</div></div>
+      <div class="num-card"><div class="num-bar" style="width:16px;height:16px"></div><div class="num-value">16</div><div class="num-token">.16</div></div>
+      <div class="num-card"><div class="num-bar" style="width:18px;height:18px"></div><div class="num-value">18</div><div class="num-token">.18</div></div>
+      <div class="num-card"><div class="num-bar" style="width:20px;height:20px"></div><div class="num-value">20</div><div class="num-token">.20</div></div>
+      <div class="num-card"><div class="num-bar" style="width:22px;height:22px"></div><div class="num-value">22</div><div class="num-token">.22</div></div>
+      <div class="num-card"><div class="num-bar" style="width:24px;height:24px"></div><div class="num-value">24</div><div class="num-token">.24</div></div>
+      <div class="num-card"><div class="num-bar" style="width:28px;height:28px"></div><div class="num-value">28</div><div class="num-token">.28</div></div>
+      <div class="num-card"><div class="num-bar" style="width:32px;height:32px"></div><div class="num-value">32</div><div class="num-token">.32</div></div>
+      <div class="num-card"><div class="num-bar" style="width:36px;height:36px"></div><div class="num-value">36</div><div class="num-token">.36</div></div>
+      <div class="num-card"><div class="num-bar" style="width:40px;height:40px"></div><div class="num-value">40</div><div class="num-token">.40</div></div>
+      <div class="num-card"><div class="num-bar" style="width:44px;height:44px"></div><div class="num-value">44</div><div class="num-token">.44</div></div>
+      <div class="num-card"><div class="num-bar" style="width:48px;height:48px"></div><div class="num-value">48</div><div class="num-token">.48</div></div>
+      <div class="num-card"><div class="num-bar" style="width:52px;height:52px"></div><div class="num-value">52</div><div class="num-token">.52</div></div>
+      <div class="num-card"><div class="num-bar" style="width:56px;height:56px"></div><div class="num-value">56</div><div class="num-token">.56</div></div>
+      <div class="num-card"><div class="num-bar" style="width:56px;height:64px"></div><div class="num-value">64</div><div class="num-token">.64</div></div>
+      <div class="num-card"><div class="num-bar" style="width:56px;height:72px"></div><div class="num-value">72</div><div class="num-token">.72</div></div>
+      <div class="num-card"><div class="num-bar" style="width:56px;height:80px"></div><div class="num-value">80</div><div class="num-token">.80</div></div>
+      <div class="num-card"><div class="num-bar" style="width:56px;height:4px;background:var(--orange-500)"></div><div class="num-value" style="color:var(--orange-500)">999</div><div class="num-token">.999</div></div>
+    </div>
+
+    <!-- BREAKPOINTS -->
+    <h3 id="prim-break">breakpoint</h3>
+    <div class="bp-track">
+      <div class="bp-segment bp-xs" style="left:0;width:9%">xs<br>320</div>
+      <div class="bp-segment bp-sm" style="left:9%;width:5.5%">sm<br>375</div>
+      <div class="bp-segment" style="left:14.5%;width:5%;background:#CCDCFF;color:var(--blue-700)">430</div>
+      <div class="bp-segment" style="left:19.5%;width:9%;background:#BBCFFF;color:var(--blue-700)">md<br>600</div>
+      <div class="bp-segment bp-md" style="left:28.5%;width:13%">lg<br>768</div>
+      <div class="bp-segment bp-lg" style="left:41.5%;width:18%">xl<br>1024</div>
+      <div class="bp-segment bp-2xl" style="left:59.5%;width:25%;border-right:2px solid white">2xl<br>1440</div>
+      <div class="bp-segment" style="left:84.5%;width:8%;background:#3B88FF;color:white;border-right:2px solid white">1600</div>
+      <div class="bp-segment" style="left:92.5%;right:0;background:#2266EE;color:white;border-right:none">1920</div>
+    </div>
+    <div class="token-table-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>Token</th><th>Valor</th><th>Dispositivo alvo</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">primitive.breakpoint.xs</td><td class="token-value">320px</td><td>Smartphone pequeno (iPhone SE)</td></tr>
+          <tr><td class="token-name">primitive.breakpoint.sm</td><td class="token-value">375px</td><td>Smartphone padrão (iPhone 14)</td></tr>
+          <tr><td class="token-name">primitive.breakpoint.md</td><td class="token-value">430px</td><td>Smartphone grande (iPhone 14 Plus)</td></tr>
+          <tr><td class="token-name">primitive.breakpoint.lg</td><td class="token-value">600px</td><td>Tablet pequeno / landscape mobile</td></tr>
+          <tr><td class="token-name">primitive.breakpoint.xl</td><td class="token-value">768px</td><td>Tablet (iPad mini/Air)</td></tr>
+          <tr><td class="token-name">primitive.breakpoint.2xl</td><td class="token-value">1024px</td><td>Tablet grande / laptop pequeno</td></tr>
+          <tr><td class="token-name">primitive.breakpoint.3xl</td><td class="token-value">1440px</td><td>Desktop padrão</td></tr>
+          <tr><td class="token-name">primitive.breakpoint.4xl</td><td class="token-value">1600px</td><td>Desktop largo</td></tr>
+          <tr><td class="token-name">primitive.breakpoint.5xl</td><td class="token-value">1920px</td><td>Monitor Full HD / TV</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ASPECT RATIO -->
+    <h3 id="prim-aspect">aspect-ratio</h3>
+    <div class="ratio-grid">
+      <div class="ratio-card">
+        <div class="ratio-box" style="width:72px;height:72px"></div>
+        <div class="ratio-name">1:1</div>
+        <div class="ratio-val">primitive.aspect-ratio.1-1</div>
+      </div>
+      <div class="ratio-card">
+        <div class="ratio-box" style="width:80px;height:60px"></div>
+        <div class="ratio-name">4:3</div>
+        <div class="ratio-val">primitive.aspect-ratio.4-3</div>
+      </div>
+      <div class="ratio-card">
+        <div class="ratio-box" style="width:60px;height:80px"></div>
+        <div class="ratio-name">3:4</div>
+        <div class="ratio-val">primitive.aspect-ratio.3-4</div>
+      </div>
+      <div class="ratio-card">
+        <div class="ratio-box" style="width:96px;height:54px"></div>
+        <div class="ratio-name">16:9</div>
+        <div class="ratio-val">primitive.aspect-ratio.16-9</div>
+      </div>
+      <div class="ratio-card">
+        <div class="ratio-box" style="width:54px;height:96px"></div>
+        <div class="ratio-name">9:16</div>
+        <div class="ratio-val">primitive.aspect-ratio.9-16</div>
+      </div>
+      <div class="ratio-card">
+        <div class="ratio-box" style="width:96px;height:32px"></div>
+        <div class="ratio-name">3:1</div>
+        <div class="ratio-val">primitive.aspect-ratio.3-1</div>
+      </div>
+      <div class="ratio-card">
+        <div class="ratio-box" style="width:32px;height:96px"></div>
+        <div class="ratio-name">1:3</div>
+        <div class="ratio-val">primitive.aspect-ratio.1-3</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ══════════════════════════════════
+       COLEÇÃO: BRAND
+  ══════════════════════════════════ -->
+  <section class="section" id="brand">
+    <span class="section-tag tag-brand"><span class="tag-dot"></span>Coleção 02</span>
+    <h2>Brand</h2>
+    <p class="lead">Mapeia os primitivos para a identidade da marca Porto Seguro. Os tokens de Brand são os primeiros com semântica — <em>primary</em>, <em>secondary</em>, <em>feedback</em>. Nenhum componente consome Brand diretamente; consomem via Theme ou Channel.</p>
+
+    <h3 id="brand-color">color</h3>
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Token</th><th>Swatch</th><th>Valor resolv.</th><th>Referência</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">brand.color.primary</td><td><span class="color-swatch" style="background:#0047CC"></span></td><td class="token-value">#0047CC</td><td class="token-ref">{primitive.color.blue.700}</td></tr>
+          <tr><td class="token-name">brand.color.primary.dark</td><td><span class="color-swatch" style="background:#003087"></span></td><td class="token-value">#003087</td><td class="token-ref">{primitive.color.blue.800}</td></tr>
+          <tr><td class="token-name">brand.color.primary.xdark</td><td><span class="color-swatch" style="background:#001A5C"></span></td><td class="token-value">#001A5C</td><td class="token-ref">{primitive.color.blue.900}</td></tr>
+          <tr><td class="token-name">brand.color.primary.light</td><td><span class="color-swatch" style="background:#B8D4FF"></span></td><td class="token-value">#B8D4FF</td><td class="token-ref">{primitive.color.blue.200}</td></tr>
+          <tr><td class="token-name">brand.color.primary.xlight</td><td><span class="color-swatch" style="background:#E8EFFF"></span></td><td class="token-value">#E8EFFF</td><td class="token-ref">{primitive.color.blue.100}</td></tr>
+          <tr><td class="token-name">brand.color.secondary</td><td><span class="color-swatch" style="background:#FF6B00"></span></td><td class="token-value">#FF6B00</td><td class="token-ref">{primitive.color.orange.500}</td></tr>
+          <tr><td class="token-name">brand.color.secondary.dark</td><td><span class="color-swatch" style="background:#CC5500"></span></td><td class="token-value">#CC5500</td><td class="token-ref">{primitive.color.orange.700}</td></tr>
+          <tr><td class="token-name">brand.color.secondary.light</td><td><span class="color-swatch" style="background:#FFD4A8"></span></td><td class="token-value">#FFD4A8</td><td class="token-ref">{primitive.color.orange.200}</td></tr>
+          <tr><td class="token-name">brand.color.secondary.xlight</td><td><span class="color-swatch" style="background:#FFF0E6"></span></td><td class="token-value">#FFF0E6</td><td class="token-ref">{primitive.color.orange.100}</td></tr>
+          <tr><td class="token-name">brand.color.feedback.error</td><td><span class="color-swatch" style="background:#CC2200"></span></td><td class="token-value">#CC2200</td><td class="token-ref">{primitive.color.red.600}</td></tr>
+          <tr><td class="token-name">brand.color.feedback.error.light</td><td><span class="color-swatch" style="background:#FFB5A8"></span></td><td class="token-value">#FFB5A8</td><td class="token-ref">{primitive.color.red.200}</td></tr>
+          <tr><td class="token-name">brand.color.feedback.error.xlight</td><td><span class="color-swatch" style="background:#FFEBE6"></span></td><td class="token-value">#FFEBE6</td><td class="token-ref">{primitive.color.red.100}</td></tr>
+          <tr><td class="token-name">brand.color.feedback.success</td><td><span class="color-swatch" style="background:#0A7A40"></span></td><td class="token-value">#0A7A40</td><td class="token-ref">{primitive.color.green.600}</td></tr>
+          <tr><td class="token-name">brand.color.feedback.success.light</td><td><span class="color-swatch" style="background:#8ADBA8"></span></td><td class="token-value">#8ADBA8</td><td class="token-ref">{primitive.color.green.200}</td></tr>
+          <tr><td class="token-name">brand.color.feedback.success.xlight</td><td><span class="color-swatch" style="background:#E6F9F0"></span></td><td class="token-value">#E6F9F0</td><td class="token-ref">{primitive.color.green.100}</td></tr>
+          <tr><td class="token-name">brand.color.feedback.warning</td><td><span class="color-swatch" style="background:#CC7700"></span></td><td class="token-value">#CC7700</td><td class="token-ref">{primitive.color.yellow.600}</td></tr>
+          <tr><td class="token-name">brand.color.feedback.warning.light</td><td><span class="color-swatch" style="background:#FFD980"></span></td><td class="token-value">#FFD980</td><td class="token-ref">{primitive.color.yellow.200}</td></tr>
+          <tr><td class="token-name">brand.color.feedback.warning.xlight</td><td><span class="color-swatch" style="background:#FFF8E6"></span></td><td class="token-value">#FFF8E6</td><td class="token-ref">{primitive.color.yellow.100}</td></tr>
+          <tr><td class="token-name">brand.color.neutral.900</td><td><span class="color-swatch" style="background:#1A1A2E"></span></td><td class="token-value">#1A1A2E</td><td class="token-ref">{primitive.color.neutral.900}</td></tr>
+          <tr><td class="token-name">brand.color.neutral.700</td><td><span class="color-swatch" style="background:#3D3D5C"></span></td><td class="token-value">#3D3D5C</td><td class="token-ref">{primitive.color.neutral.700}</td></tr>
+          <tr><td class="token-name">brand.color.neutral.500</td><td><span class="color-swatch" style="background:#6666AA"></span></td><td class="token-value">#6666AA</td><td class="token-ref">{primitive.color.neutral.500}</td></tr>
+          <tr><td class="token-name">brand.color.neutral.400</td><td><span class="color-swatch" style="background:#8888AA"></span></td><td class="token-value">#8888AA</td><td class="token-ref">{primitive.color.neutral.400}</td></tr>
+          <tr><td class="token-name">brand.color.neutral.300</td><td><span class="color-swatch" style="background:#B0B0CC"></span></td><td class="token-value">#B0B0CC</td><td class="token-ref">{primitive.color.neutral.300}</td></tr>
+          <tr><td class="token-name">brand.color.neutral.200</td><td><span class="color-swatch" style="background:#D8D8EE"></span></td><td class="token-value">#D8D8EE</td><td class="token-ref">{primitive.color.neutral.200}</td></tr>
+          <tr><td class="token-name">brand.color.neutral.100</td><td><span class="color-swatch" style="background:#F4F5F9"></span></td><td class="token-value">#F4F5F9</td><td class="token-ref">{primitive.color.neutral.100}</td></tr>
+          <tr><td class="token-name">brand.color.neutral.0</td><td><span class="color-swatch" style="background:#FFFFFF;border:1px solid #eee"></span></td><td class="token-value">#FFFFFF</td><td class="token-ref">{primitive.color.neutral.0}</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="brand-typo">typography</h3>
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Token</th><th>Preview</th><th>Valor</th><th>Referência</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">brand.typography.display.2xl</td><td><span style="font-size:20px;font-weight:800">Display 2XL</span></td><td class="token-value">80px / 800</td><td class="token-ref">{primitive.typography.size.80}</td></tr>
+          <tr><td class="token-name">brand.typography.display.xl</td><td><span style="font-size:19px;font-weight:800">Display XL</span></td><td class="token-value">72px / 800</td><td class="token-ref">{primitive.typography.size.72}</td></tr>
+          <tr><td class="token-name">brand.typography.display.lg</td><td><span style="font-size:18px;font-weight:800">Display LG</span></td><td class="token-value">64px / 800</td><td class="token-ref">{primitive.typography.size.64}</td></tr>
+          <tr><td class="token-name">brand.typography.display.md</td><td><span style="font-size:17px;font-weight:800">Display MD</span></td><td class="token-value">56px / 800</td><td class="token-ref">{primitive.typography.size.56}</td></tr>
+          <tr><td class="token-name">brand.typography.display.sm</td><td><span style="font-size:16px;font-weight:800">Display SM</span></td><td class="token-value">48px / 800</td><td class="token-ref">{primitive.typography.size.48}</td></tr>
+          <tr><td class="token-name">brand.typography.heading.xl</td><td><span style="font-size:19px;font-weight:700">Heading XL</span></td><td class="token-value">40px / 700</td><td class="token-ref">{primitive.typography.size.40}</td></tr>
+          <tr><td class="token-name">brand.typography.heading.lg</td><td><span style="font-size:18px;font-weight:700">Heading LG</span></td><td class="token-value">36px / 700</td><td class="token-ref">{primitive.typography.size.36}</td></tr>
+          <tr><td class="token-name">brand.typography.heading.md</td><td><span style="font-size:17px;font-weight:700">Heading MD</span></td><td class="token-value">32px / 700</td><td class="token-ref">{primitive.typography.size.32}</td></tr>
+          <tr><td class="token-name">brand.typography.heading.sm</td><td><span style="font-size:16px;font-weight:700">Heading SM</span></td><td class="token-value">28px / 700</td><td class="token-ref">{primitive.typography.size.28}</td></tr>
+          <tr><td class="token-name">brand.typography.heading.xs</td><td><span style="font-size:15.5px;font-weight:700">Heading XS</span></td><td class="token-value">24px / 700</td><td class="token-ref">{primitive.typography.size.24}</td></tr>
+          <tr><td class="token-name">brand.typography.title.lg</td><td><span style="font-size:15px;font-weight:600">Title LG</span></td><td class="token-value">22px / 600</td><td class="token-ref">{primitive.typography.size.22}</td></tr>
+          <tr><td class="token-name">brand.typography.title.md</td><td><span style="font-size:14.5px;font-weight:600">Title MD</span></td><td class="token-value">20px / 600</td><td class="token-ref">{primitive.typography.size.20}</td></tr>
+          <tr><td class="token-name">brand.typography.title.sm</td><td><span style="font-size:14px;font-weight:600">Title SM</span></td><td class="token-value">18px / 600</td><td class="token-ref">{primitive.typography.size.18}</td></tr>
+          <tr><td class="token-name">brand.typography.body.lg</td><td><span style="font-size:14px;font-weight:400">Body Large</span></td><td class="token-value">16px / 400</td><td class="token-ref">{primitive.typography.size.16}</td></tr>
+          <tr><td class="token-name">brand.typography.body.md</td><td><span style="font-size:13.5px;font-weight:400">Body Medium</span></td><td class="token-value">14px / 400</td><td class="token-ref">{primitive.typography.size.14}</td></tr>
+          <tr><td class="token-name">brand.typography.body.sm</td><td><span style="font-size:12.5px;font-weight:400">Body Small</span></td><td class="token-value">12px / 400</td><td class="token-ref">{primitive.typography.size.12}</td></tr>
+          <tr><td class="token-name">brand.typography.label.lg</td><td><span style="font-size:13.5px;font-weight:600">Label LG</span></td><td class="token-value">16px / 600</td><td class="token-ref">{primitive.typography.size.16}</td></tr>
+          <tr><td class="token-name">brand.typography.label.md</td><td><span style="font-size:13px;font-weight:600">Label MD</span></td><td class="token-value">14px / 600</td><td class="token-ref">{primitive.typography.size.14}</td></tr>
+          <tr><td class="token-name">brand.typography.label.sm</td><td><span style="font-size:12px;font-weight:600">Label SM</span></td><td class="token-value">12px / 600</td><td class="token-ref">{primitive.typography.size.12}</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="brand-numeric">numeric-values</h3>
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Token</th><th>Valor</th><th>Uso semântico</th><th>Referência</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">brand.numeric-values.spacing.2xs</td><td class="token-value">2</td><td>Separadores, micro gaps</td><td class="token-ref">{primitive.numeric-values.2}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.spacing.xs</td><td class="token-value">4</td><td>Micro espaçamentos internos</td><td class="token-ref">{primitive.numeric-values.4}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.spacing.sm</td><td class="token-value">8</td><td>Padding interno componentes pequenos</td><td class="token-ref">{primitive.numeric-values.8}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.spacing.md</td><td class="token-value">16</td><td>Padding padrão</td><td class="token-ref">{primitive.numeric-values.16}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.spacing.lg</td><td class="token-value">24</td><td>Espaçamento entre seções</td><td class="token-ref">{primitive.numeric-values.24}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.spacing.xl</td><td class="token-value">32</td><td>Espaçamento de layout</td><td class="token-ref">{primitive.numeric-values.32}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.spacing.2xl</td><td class="token-value">48</td><td>Seções maiores</td><td class="token-ref">{primitive.numeric-values.48}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.spacing.3xl</td><td class="token-value">64</td><td>Espaçamento de página</td><td class="token-ref">{primitive.numeric-values.64}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.radius.none</td><td class="token-value">0</td><td>Sem arredondamento</td><td class="token-ref">{primitive.numeric-values.0}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.radius.xs</td><td class="token-value">4</td><td>Raio mínimo — badges, tags</td><td class="token-ref">{primitive.numeric-values.4}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.radius.sm</td><td class="token-value">8</td><td>Botões, inputs</td><td class="token-ref">{primitive.numeric-values.8}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.radius.md</td><td class="token-value">12</td><td>Cards pequenos</td><td class="token-ref">{primitive.numeric-values.12}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.radius.lg</td><td class="token-value">16</td><td>Cards maiores, modais</td><td class="token-ref">{primitive.numeric-values.16}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.radius.xl</td><td class="token-value">24</td><td>Bottom sheets, drawers</td><td class="token-ref">{primitive.numeric-values.24}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.radius.pill</td><td class="token-value">999</td><td>Pílulas, chips, avatares</td><td class="token-ref">{primitive.numeric-values.999}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.border.sm</td><td class="token-value">1</td><td>Bordas padrão</td><td class="token-ref">{primitive.numeric-values.1}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.border.md</td><td class="token-value">2</td><td>Bordas de foco / destaque</td><td class="token-ref">{primitive.numeric-values.2}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.icon.sm</td><td class="token-value">16</td><td>Ícones inline</td><td class="token-ref">{primitive.numeric-values.16}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.icon.md</td><td class="token-value">20</td><td>Ícones de UI</td><td class="token-ref">{primitive.numeric-values.20}</td></tr>
+          <tr><td class="token-name">brand.numeric-values.icon.lg</td><td class="token-value">24</td><td>Ícones de ação</td><td class="token-ref">{primitive.numeric-values.24}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ══════════════════════════════════
+       COLEÇÃO: THEME
+  ══════════════════════════════════ -->
+  <section class="section" id="theme">
+    <span class="section-tag tag-theme"><span class="tag-dot"></span>Coleção 03</span>
+    <h2>Theme</h2>
+    <p class="lead">Define variações de contexto visual — light, dark, alto contraste. Os tokens de Theme expressam intenções de superfície, texto e borda. Trocar o tema não exige nenhuma mudança de componente.</p>
+
+    <h3 id="theme-light">light (padrão)</h3>
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Token</th><th>Swatch</th><th>Valor resolv.</th><th>Referência</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">theme.color.surface.default</td><td><span class="color-swatch" style="background:#FFFFFF;border:1px solid #eee"></span></td><td class="token-value">#FFFFFF</td><td class="token-ref">{brand.color.neutral.0}</td></tr>
+          <tr><td class="token-name">theme.color.surface.subtle</td><td><span class="color-swatch" style="background:#F4F5F9"></span></td><td class="token-value">#F4F5F9</td><td class="token-ref">{brand.color.neutral.100}</td></tr>
+          <tr><td class="token-name">theme.color.surface.raised</td><td><span class="color-swatch" style="background:#FFFFFF;border:1px solid #eee"></span></td><td class="token-value">#FFFFFF</td><td class="token-ref">{brand.color.neutral.0}</td></tr>
+          <tr><td class="token-name">theme.color.surface.brand</td><td><span class="color-swatch" style="background:#E8EFFF"></span></td><td class="token-value">#E8EFFF</td><td class="token-ref">{brand.color.primary.xlight}</td></tr>
+          <tr><td class="token-name">theme.color.text.primary</td><td><span class="color-swatch" style="background:#1A1A2E"></span></td><td class="token-value">#1A1A2E</td><td class="token-ref">{brand.color.neutral.900}</td></tr>
+          <tr><td class="token-name">theme.color.text.secondary</td><td><span class="color-swatch" style="background:#6666AA"></span></td><td class="token-value">#6666AA</td><td class="token-ref">{brand.color.neutral.500}</td></tr>
+          <tr><td class="token-name">theme.color.text.placeholder</td><td><span class="color-swatch" style="background:#B0B0CC"></span></td><td class="token-value">#B0B0CC</td><td class="token-ref">{brand.color.neutral.300}</td></tr>
+          <tr><td class="token-name">theme.color.text.brand</td><td><span class="color-swatch" style="background:#0047CC"></span></td><td class="token-value">#0047CC</td><td class="token-ref">{brand.color.primary}</td></tr>
+          <tr><td class="token-name">theme.color.text.inverse</td><td><span class="color-swatch" style="background:#FFFFFF;border:1px solid #eee"></span></td><td class="token-value">#FFFFFF</td><td class="token-ref">{brand.color.neutral.0}</td></tr>
+          <tr><td class="token-name">theme.color.border.default</td><td><span class="color-swatch" style="background:#D8D8EE"></span></td><td class="token-value">#D8D8EE</td><td class="token-ref">{brand.color.neutral.200}</td></tr>
+          <tr><td class="token-name">theme.color.border.strong</td><td><span class="color-swatch" style="background:#B0B0CC"></span></td><td class="token-value">#B0B0CC</td><td class="token-ref">{brand.color.neutral.300}</td></tr>
+          <tr><td class="token-name">theme.color.border.brand</td><td><span class="color-swatch" style="background:#0047CC"></span></td><td class="token-value">#0047CC</td><td class="token-ref">{brand.color.primary}</td></tr>
+          <tr><td class="token-name">theme.color.interactive.default</td><td><span class="color-swatch" style="background:#0047CC"></span></td><td class="token-value">#0047CC</td><td class="token-ref">{brand.color.primary}</td></tr>
+          <tr><td class="token-name">theme.color.interactive.hover</td><td><span class="color-swatch" style="background:#003087"></span></td><td class="token-value">#003087</td><td class="token-ref">{brand.color.primary.dark}</td></tr>
+          <tr><td class="token-name">theme.color.interactive.focus</td><td><span class="color-swatch" style="background:#5B9BFF"></span></td><td class="token-value">#5B9BFF</td><td class="token-ref">{primitive.color.blue.400}</td></tr>
+          <tr><td class="token-name">theme.color.interactive.disabled</td><td><span class="color-swatch" style="background:#D8D8EE"></span></td><td class="token-value">#D8D8EE</td><td class="token-ref">{brand.color.neutral.200}</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="theme-dark">dark</h3>
+    <div class="callout callout-tip">
+      <span>No dark mode, somente os tokens de <strong>superfície, texto e borda</strong> são sobrescritos. Os tokens de <strong>marca, feedback e interação</strong> são ajustados para contraste mínimo de 4.5:1 (WCAG AA).</span>
+    </div>
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Token</th><th>Swatch Light</th><th>Swatch Dark</th><th>Valor Dark</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">theme.color.surface.default</td><td><span class="color-swatch" style="background:#FFFFFF;border:1px solid #eee"></span> neutral.0</td><td><span class="color-swatch" style="background:#1A1A2E"></span></td><td class="token-value">#1A1A2E · neutral.900</td></tr>
+          <tr><td class="token-name">theme.color.surface.subtle</td><td><span class="color-swatch" style="background:#F4F5F9"></span> neutral.100</td><td><span class="color-swatch" style="background:#2A2A40"></span></td><td class="token-value">#2A2A40 · neutral.800</td></tr>
+          <tr><td class="token-name">theme.color.text.primary</td><td><span class="color-swatch" style="background:#1A1A2E"></span> neutral.900</td><td><span class="color-swatch" style="background:#F4F5F9"></span></td><td class="token-value">#F4F5F9 · neutral.100</td></tr>
+          <tr><td class="token-name">theme.color.text.secondary</td><td><span class="color-swatch" style="background:#6666AA"></span> neutral.500</td><td><span class="color-swatch" style="background:#AAAACC"></span></td><td class="token-value">#AAAACC · neutral.300</td></tr>
+          <tr><td class="token-name">theme.color.text.placeholder</td><td><span class="color-swatch" style="background:#B0B0CC"></span> neutral.300</td><td><span class="color-swatch" style="background:#6666AA"></span></td><td class="token-value">#6666AA · neutral.500</td></tr>
+          <tr><td class="token-name">theme.color.border.default</td><td><span class="color-swatch" style="background:#D8D8EE"></span> neutral.200</td><td><span class="color-swatch" style="background:#3D3D5C"></span></td><td class="token-value">#3D3D5C · neutral.700</td></tr>
+          <tr><td class="token-name">theme.color.interactive.default</td><td><span class="color-swatch" style="background:#0047CC"></span> primary</td><td><span class="color-swatch" style="background:#5B9BFF"></span></td><td class="token-value">#5B9BFF · blue.400</td></tr>
+          <tr><td class="token-name">theme.color.interactive.hover</td><td><span class="color-swatch" style="background:#003087"></span> primary.dark</td><td><span class="color-swatch" style="background:#1A6EFF"></span></td><td class="token-value">#1A6EFF · blue.600</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ══════════════════════════════════
+       COLEÇÃO: CHANNEL
+  ══════════════════════════════════ -->
+  <section class="section" id="channel">
+    <span class="section-tag tag-channel"><span class="tag-dot"></span>Coleção 04</span>
+    <h2>Channel</h2>
+    <p class="lead">Customizações por produto ou canal de distribuição. Cada channel herda tudo do Theme e sobrescreve somente o necessário — mantendo a consistência de marca e reduzindo a superfície de mudanças.</p>
+
+    <h3 id="channel-superapp">SuperApp</h3>
+    <div class="token-table-wrap">
+      <table>
+        <thead><tr><th>Token</th><th>Swatch</th><th>Valor resolv.</th><th>Referência / Nota</th></tr></thead>
+        <tbody>
+          <tr><td class="token-name">channel.color.accent</td><td><span class="color-swatch" style="background:#0047CC"></span></td><td class="token-value">#0047CC</td><td class="token-ref">{brand.color.primary}</td></tr>
+          <tr><td class="token-name">channel.color.accent.secondary</td><td><span class="color-swatch" style="background:#FF6B00"></span></td><td class="token-value">#FF6B00</td><td class="token-ref">{brand.color.secondary}</td></tr>
+          <tr><td class="token-name">channel.typography.brand.heading</td><td>—</td><td class="token-value">Segoe UI / 800</td><td class="token-ref">{brand.typography.heading.lg}</td></tr>
+          <tr><td class="token-name">channel.numeric-values.gap.md</td><td>—</td><td class="token-value">16px</td><td class="token-ref">{brand.numeric-values.spacing.md}</td></tr>
+          <tr><td class="token-name">channel.breakpoint.mobile-sm</td><td>—</td><td class="token-value">320px</td><td class="token-ref">{primitive.breakpoint.xs}</td></tr>
+          <tr><td class="token-name">channel.breakpoint.mobile</td><td>—</td><td class="token-value">375px</td><td class="token-ref">{primitive.breakpoint.sm}</td></tr>
+          <tr><td class="token-name">channel.breakpoint.mobile-lg</td><td>—</td><td class="token-value">430px</td><td class="token-ref">{primitive.breakpoint.md}</td></tr>
+          <tr><td class="token-name">channel.breakpoint.tablet-sm</td><td>—</td><td class="token-value">600px</td><td class="token-ref">{primitive.breakpoint.lg}</td></tr>
+          <tr><td class="token-name">channel.breakpoint.tablet</td><td>—</td><td class="token-value">768px</td><td class="token-ref">{primitive.breakpoint.xl}</td></tr>
+          <tr><td class="token-name">channel.breakpoint.desktop-sm</td><td>—</td><td class="token-value">1024px</td><td class="token-ref">{primitive.breakpoint.2xl}</td></tr>
+          <tr><td class="token-name">channel.breakpoint.desktop</td><td>—</td><td class="token-value">1440px</td><td class="token-ref">{primitive.breakpoint.3xl}</td></tr>
+          <tr><td class="token-name">channel.breakpoint.desktop-lg</td><td>—</td><td class="token-value">1600px</td><td class="token-ref">{primitive.breakpoint.4xl}</td></tr>
+          <tr><td class="token-name">channel.breakpoint.desktop-xl</td><td>—</td><td class="token-value">1920px</td><td class="token-ref">{primitive.breakpoint.5xl}</td></tr>
+          <tr><td class="token-name">channel.aspect-ratio.hero</td><td>—</td><td class="token-value">16/9</td><td>Banner hero da home</td></tr>
+          <tr><td class="token-name">channel.aspect-ratio.card</td><td>—</td><td class="token-value">4/3</td><td>Cards de produto</td></tr>
+          <tr><td class="token-name">channel.aspect-ratio.thumb</td><td>—</td><td class="token-value">1/1</td><td>Miniaturas e ícones</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-warn">
+      <span>Para adicionar um novo canal (ex: <em>Portal Web</em>), crie um novo arquivo <code>channel.portal.json</code> que referencia apenas os tokens que diferem do <strong>channel.superapp</strong>.</span>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ══════════════════════════════════
+       COLEÇÃO: PLATFORM
+  ══════════════════════════════════ -->
+  <section class="section" id="platform">
+    <span class="section-tag tag-platform"><span class="tag-dot"></span>Coleção 05</span>
+    <h2>Platform</h2>
+    <p class="lead">A coleção Platform não contém novos tokens — ela é o processo de transformação. O Style Dictionary lê os JSONs das coleções anteriores e gera os artefatos nativos de cada plataforma.</p>
+
+    <div class="platform-grid">
+
+      <!-- WEB -->
+      <div class="platform-card pc-web" id="plat-web">
+        <h3><span class="pc-icon">🌐</span> Web <span class="pc-badge">CSS Custom Properties</span></h3>
+        <div class="pc-sub">Variáveis CSS nativas. Suporte a dark mode via <code>[data-theme]</code> e temas via classe.</div>
+        <div class="code-tabs">
+          <span class="code-tab active" onclick="switchTab('web','css')">tokens.css</span>
+          <span class="code-tab" onclick="switchTab('web','use')">Uso</span>
+        </div>
+        <div class="code-block active" id="web-css">
+<pre><span class="cc">/* platform/web/tokens.css — gerado pelo Style Dictionary */</span>
+<span class="ck">:root</span> {
+  <span class="cc">/* brand · color */</span>
+  <span class="cp">--brand-color-primary</span>:               <span class="cv">#0047CC</span>;
+  <span class="cp">--brand-color-primary-dark</span>:          <span class="cv">#003087</span>;
+  <span class="cp">--brand-color-primary-xlight</span>:        <span class="cv">#E8EFFF</span>;
+  <span class="cp">--brand-color-secondary</span>:             <span class="cv">#FF6B00</span>;
+  <span class="cp">--brand-color-feedback-error</span>:        <span class="cv">#CC2200</span>;
+  <span class="cp">--brand-color-feedback-success</span>:      <span class="cv">#0A7A40</span>;
+  <span class="cp">--brand-color-feedback-warning</span>:      <span class="cv">#CC7700</span>;
+  <span class="cp">--brand-color-neutral-900</span>:           <span class="cv">#1A1A2E</span>;
+  <span class="cp">--brand-color-neutral-500</span>:           <span class="cv">#6666AA</span>;
+  <span class="cp">--brand-color-neutral-200</span>:           <span class="cv">#D8D8EE</span>;
+  <span class="cp">--brand-color-neutral-0</span>:             <span class="cv">#FFFFFF</span>;
+  <span class="cc">/* brand · typography */</span>
+  <span class="cp">--brand-typography-heading-md</span>:       <span class="cv">32px</span>;
+  <span class="cp">--brand-typography-body-lg</span>:          <span class="cv">16px</span>;
+  <span class="cp">--brand-typography-body-md</span>:          <span class="cv">14px</span>;
+  <span class="cp">--brand-typography-label-md</span>:         <span class="cv">14px</span>;
+  <span class="cc">/* brand · numeric-values */</span>
+  <span class="cp">--brand-numeric-spacing-xs</span>:          <span class="cv">4px</span>;
+  <span class="cp">--brand-numeric-spacing-sm</span>:          <span class="cv">8px</span>;
+  <span class="cp">--brand-numeric-spacing-md</span>:          <span class="cv">16px</span>;
+  <span class="cp">--brand-numeric-spacing-lg</span>:          <span class="cv">24px</span>;
+  <span class="cp">--brand-numeric-radius-sm</span>:           <span class="cv">8px</span>;
+  <span class="cp">--brand-numeric-radius-lg</span>:           <span class="cv">16px</span>;
+  <span class="cp">--brand-numeric-radius-pill</span>:         <span class="cv">999px</span>;
+  <span class="cc">/* theme — light (default) */</span>
+  <span class="cp">--theme-color-surface-default</span>:       <span class="cv">#FFFFFF</span>;
+  <span class="cp">--theme-color-surface-subtle</span>:        <span class="cv">#F4F5F9</span>;
+  <span class="cp">--theme-color-text-primary</span>:          <span class="cv">#1A1A2E</span>;
+  <span class="cp">--theme-color-text-secondary</span>:        <span class="cv">#6666AA</span>;
+  <span class="cp">--theme-color-text-placeholder</span>:      <span class="cv">#B0B0CC</span>;
+  <span class="cp">--theme-color-border-default</span>:        <span class="cv">#D8D8EE</span>;
+  <span class="cp">--theme-color-interactive-default</span>:   <span class="cv">#0047CC</span>;
+  <span class="cp">--theme-color-interactive-hover</span>:     <span class="cv">#003087</span>;
+  <span class="cp">--theme-color-interactive-focus</span>:     <span class="cv">#5B9BFF</span>;
+  <span class="cc">/* channel — superapp */</span>
+  <span class="cp">--channel-color-accent</span>:              <span class="cv">#0047CC</span>;
+  <span class="cp">--channel-breakpoint-mobile</span>:         <span class="cv">375px</span>;
+  <span class="cp">--channel-breakpoint-tablet</span>:         <span class="cv">768px</span>;
+  <span class="cp">--channel-breakpoint-desktop</span>:        <span class="cv">1440px</span>;
+  <span class="cp">--channel-aspect-ratio-hero</span>:         <span class="cv">16/9</span>;
+  <span class="cp">--channel-aspect-ratio-card</span>:         <span class="cv">4/3</span>;
+  <span class="cp">--channel-aspect-ratio-thumb</span>:        <span class="cv">1/1</span>;
+}
+[data-theme="dark"] {
+  <span class="cp">--theme-color-surface-default</span>:      <span class="cv">#1A1A2E</span>;
+  <span class="cp">--theme-color-surface-subtle</span>:       <span class="cv">#2A2A40</span>;
+  <span class="cp">--theme-color-text-primary</span>:         <span class="cv">#F4F5F9</span>;
+  <span class="cp">--theme-color-text-secondary</span>:       <span class="cv">#AAAACC</span>;
+  <span class="cp">--theme-color-text-placeholder</span>:     <span class="cv">#6666AA</span>;
+  <span class="cp">--theme-color-border-default</span>:       <span class="cv">#3D3D5C</span>;
+  <span class="cp">--theme-color-interactive-default</span>:  <span class="cv">#5B9BFF</span>;
+  <span class="cp">--theme-color-interactive-hover</span>:    <span class="cv">#1A6EFF</span>;
+}</pre>
+        </div>
+        <div class="code-block" id="web-use">
+<pre><span class="cc">/* Button.css */</span>
+.<span class="cp">btn-primary</span> {
+  background:    <span class="ck">var</span>(<span class="cp">--theme-color-interactive</span>);
+  color:         <span class="ck">var</span>(<span class="cp">--theme-color-text-inverse</span>);
+  border-radius: <span class="ck">var</span>(<span class="cp">--brand-numeric-radius-sm</span>);
+  padding:
+    <span class="ck">var</span>(<span class="cp">--brand-numeric-spacing-sm</span>)
+    <span class="ck">var</span>(<span class="cp">--brand-numeric-spacing-md</span>);
+  font-size: <span class="ck">var</span>(<span class="cp">--brand-typography-body-lg</span>);
+}
+.<span class="cp">btn-primary</span>:<span class="ck">hover</span> {
+  background: <span class="ck">var</span>(<span class="cp">--theme-color-interactive-hover</span>);
+}</pre>
+        </div>
+      </div>
+
+      <!-- REACT -->
+      <div class="platform-card pc-react" id="plat-react">
+        <h3><span class="pc-icon">⚛️</span> React <span class="pc-badge">TypeScript</span></h3>
+        <div class="pc-sub">Objeto <code>as const</code> com tipagem automática. Compatível com Styled Components, Emotion e CSS Modules.</div>
+        <div class="code-tabs">
+          <span class="code-tab active" onclick="switchTab('react','ts')">tokens.ts</span>
+          <span class="code-tab" onclick="switchTab('react','use')">Uso</span>
+        </div>
+        <div class="code-block active" id="react-ts">
+<pre><span class="cc">// platform/react/tokens.ts — gerado pelo Style Dictionary</span>
+<span class="ck">export const</span> <span class="cp">tokens</span> = {
+  brand: {
+    color: {
+      primary:      <span class="cs">"#0047CC"</span>,
+      primaryDark:  <span class="cs">"#003087"</span>,
+      primaryXLight:<span class="cs">"#E8EFFF"</span>,
+      secondary:    <span class="cs">"#FF6B00"</span>,
+      feedback: {
+        error:          <span class="cs">"#CC2200"</span>,
+        errorXLight:    <span class="cs">"#FFEBE6"</span>,
+        success:        <span class="cs">"#0A7A40"</span>,
+        successXLight:  <span class="cs">"#E6F9F0"</span>,
+        warning:        <span class="cs">"#CC7700"</span>,
+        warningXLight:  <span class="cs">"#FFF8E6"</span>,
+      },
+      neutral: {
+        900: <span class="cs">"#1A1A2E"</span>, 700: <span class="cs">"#3D3D5C"</span>,
+        500: <span class="cs">"#6666AA"</span>, 400: <span class="cs">"#8888AA"</span>,
+        300: <span class="cs">"#B0B0CC"</span>, 200: <span class="cs">"#D8D8EE"</span>,
+        100: <span class="cs">"#F4F5F9"</span>, 0:   <span class="cs">"#FFFFFF"</span>,
+      },
+    },
+    typography: {
+      display: { lg: <span class="cs">"64px"</span>, md: <span class="cs">"56px"</span>, sm: <span class="cs">"48px"</span> },
+      heading: { xl: <span class="cs">"40px"</span>, lg: <span class="cs">"36px"</span>, md: <span class="cs">"32px"</span>, sm: <span class="cs">"28px"</span>, xs: <span class="cs">"24px"</span> },
+      title:   { lg: <span class="cs">"22px"</span>, md: <span class="cs">"20px"</span>, sm: <span class="cs">"18px"</span> },
+      body:    { lg: <span class="cs">"16px"</span>, md: <span class="cs">"14px"</span>, sm: <span class="cs">"12px"</span> },
+      label:   { lg: <span class="cs">"16px"</span>, md: <span class="cs">"14px"</span>, sm: <span class="cs">"12px"</span> },
+    },
+    numericValues: {
+      spacing: { xs: <span class="cs">"4px"</span>, sm: <span class="cs">"8px"</span>, md: <span class="cs">"16px"</span>, lg: <span class="cs">"24px"</span>, xl: <span class="cs">"32px"</span>, "2xl": <span class="cs">"48px"</span> },
+      radius:  { none: <span class="cs">"0"</span>, xs: <span class="cs">"4px"</span>, sm: <span class="cs">"8px"</span>, md: <span class="cs">"12px"</span>, lg: <span class="cs">"16px"</span>, xl: <span class="cs">"24px"</span>, pill: <span class="cs">"999px"</span> },
+      icon:    { sm: <span class="cs">"16px"</span>, md: <span class="cs">"20px"</span>, lg: <span class="cs">"24px"</span> },
+    },
+  },
+  theme: {
+    color: {
+      surface:     { default: <span class="cs">"#FFFFFF"</span>, subtle: <span class="cs">"#F4F5F9"</span>, brand: <span class="cs">"#E8EFFF"</span> },
+      text:        { primary: <span class="cs">"#1A1A2E"</span>, secondary: <span class="cs">"#6666AA"</span>, placeholder: <span class="cs">"#B0B0CC"</span>, inverse: <span class="cs">"#FFFFFF"</span> },
+      border:      { default: <span class="cs">"#D8D8EE"</span>, strong: <span class="cs">"#B0B0CC"</span>, brand: <span class="cs">"#0047CC"</span> },
+      interactive: { default: <span class="cs">"#0047CC"</span>, hover: <span class="cs">"#003087"</span>, focus: <span class="cs">"#5B9BFF"</span>, disabled: <span class="cs">"#D8D8EE"</span> },
+    },
+  },
+  channel: {
+    color:      { accent: <span class="cs">"#0047CC"</span>, accentSecondary: <span class="cs">"#FF6B00"</span> },
+    breakpoint: { mobileSm: <span class="cs">"320px"</span>, mobile: <span class="cs">"375px"</span>, mobileLg: <span class="cs">"430px"</span>, tabletSm: <span class="cs">"600px"</span>, tablet: <span class="cs">"768px"</span>, desktopSm: <span class="cs">"1024px"</span>, desktop: <span class="cs">"1440px"</span>, desktopLg: <span class="cs">"1600px"</span>, desktopXl: <span class="cs">"1920px"</span> },
+    aspectRatio:{ "1-1": <span class="cs">"1/1"</span>, "4-3": <span class="cs">"4/3"</span>, "3-4": <span class="cs">"3/4"</span>, "16-9": <span class="cs">"16/9"</span>, "9-16": <span class="cs">"9/16"</span>, "3-1": <span class="cs">"3/1"</span>, "1-3": <span class="cs">"1/3"</span> },
+  },
+} <span class="ck">as const</span>
+
+<span class="ck">export type</span> Tokens = <span class="ck">typeof</span> tokens</pre>
+        </div>
+        <div class="code-block" id="react-use">
+<pre><span class="cc">// Button.styled.ts</span>
+<span class="ck">import</span> { tokens } <span class="ck">from</span> <span class="cs">"@ps/design-tokens"</span>
+<span class="ck">import</span> styled <span class="ck">from</span> <span class="cs">"styled-components"</span>
+
+<span class="ck">const</span> Button = styled.button<span class="cs">`
+  background:    ${tokens.theme.color.interactive.default};
+  color:         #fff;
+  border-radius: ${tokens.brand.numericValues.radius.sm};
+  padding:
+    ${tokens.brand.numericValues.spacing.sm}
+    ${tokens.brand.numericValues.spacing.md};
+  font-size:     ${tokens.brand.typography.body.lg};
+
+  &:hover {
+    background: ${tokens.theme.color.interactive.hover};
+  }
+`</span></pre>
+        </div>
+      </div>
+
+      <!-- iOS -->
+      <div class="platform-card pc-ios" id="plat-ios">
+        <h3><span class="pc-icon">🍎</span> iOS / Swift <span class="pc-badge">SwiftUI · UIKit</span></h3>
+        <div class="pc-sub">Enums tipados com <code>UIColor</code> e <code>CGFloat</code>. Uso idêntico em UIKit e SwiftUI.</div>
+        <div class="code-tabs">
+          <span class="code-tab active" onclick="switchTab('ios','swift')">Tokens.swift</span>
+          <span class="code-tab" onclick="switchTab('ios','use')">Uso SwiftUI</span>
+        </div>
+        <div class="code-block active" id="ios-swift">
+<pre><span class="cc">// platform/ios/Tokens.swift — gerado pelo Style Dictionary</span>
+<span class="ck">import</span> UIKit
+<span class="ck">import</span> SwiftUI
+
+<span class="ck">public enum</span> <span class="cp">Brand</span> {
+  <span class="ck">public enum</span> <span class="cp">Color</span> {
+    <span class="ck">public static let</span> primary      = UIColor(hex: <span class="cs">"#0047CC"</span>)
+    <span class="ck">public static let</span> primaryDark   = UIColor(hex: <span class="cs">"#003087"</span>)
+    <span class="ck">public static let</span> primaryXLight = UIColor(hex: <span class="cs">"#E8EFFF"</span>)
+    <span class="ck">public static let</span> secondary     = UIColor(hex: <span class="cs">"#FF6B00"</span>)
+    <span class="ck">public enum</span> <span class="cp">Feedback</span> {
+      <span class="ck">public static let</span> error   = UIColor(hex: <span class="cs">"#CC2200"</span>)
+      <span class="ck">public static let</span> success = UIColor(hex: <span class="cs">"#0A7A40"</span>)
+      <span class="ck">public static let</span> warning = UIColor(hex: <span class="cs">"#CC7700"</span>)
+    }
+    <span class="ck">public enum</span> <span class="cp">Neutral</span> {
+      <span class="ck">public static let</span> n900 = UIColor(hex: <span class="cs">"#1A1A2E"</span>)
+      <span class="ck">public static let</span> n500 = UIColor(hex: <span class="cs">"#6666AA"</span>)
+      <span class="ck">public static let</span> n200 = UIColor(hex: <span class="cs">"#D8D8EE"</span>)
+      <span class="ck">public static let</span> n0   = UIColor(hex: <span class="cs">"#FFFFFF"</span>)
+    }
+  }
+  <span class="ck">public enum</span> <span class="cp">Spacing</span> {
+    <span class="ck">public static let</span> xs: CGFloat  = <span class="cv">4</span>
+    <span class="ck">public static let</span> sm: CGFloat  = <span class="cv">8</span>
+    <span class="ck">public static let</span> md: CGFloat  = <span class="cv">16</span>
+    <span class="ck">public static let</span> lg: CGFloat  = <span class="cv">24</span>
+    <span class="ck">public static let</span> xl: CGFloat  = <span class="cv">32</span>
+    <span class="ck">public static let</span> xxl: CGFloat = <span class="cv">48</span>
+  }
+  <span class="ck">public enum</span> <span class="cp">Radius</span> {
+    <span class="ck">public static let</span> none: CGFloat = <span class="cv">0</span>
+    <span class="ck">public static let</span> xs: CGFloat   = <span class="cv">4</span>
+    <span class="ck">public static let</span> sm: CGFloat   = <span class="cv">8</span>
+    <span class="ck">public static let</span> md: CGFloat   = <span class="cv">12</span>
+    <span class="ck">public static let</span> lg: CGFloat   = <span class="cv">16</span>
+    <span class="ck">public static let</span> xl: CGFloat   = <span class="cv">24</span>
+    <span class="ck">public static let</span> pill: CGFloat = <span class="cv">999</span>
+  }
+  <span class="ck">public enum</span> <span class="cp">Typography</span> {
+    <span class="ck">public static let</span> headingMd = UIFont.systemFont(ofSize: <span class="cv">32</span>, weight: .bold)
+    <span class="ck">public static let</span> titleLg   = UIFont.systemFont(ofSize: <span class="cv">22</span>, weight: .semibold)
+    <span class="ck">public static let</span> bodyLg    = UIFont.systemFont(ofSize: <span class="cv">16</span>, weight: .regular)
+    <span class="ck">public static let</span> bodyMd    = UIFont.systemFont(ofSize: <span class="cv">14</span>, weight: .regular)
+    <span class="ck">public static let</span> labelMd   = UIFont.systemFont(ofSize: <span class="cv">14</span>, weight: .semibold)
+  }
+}
+
+<span class="ck">public enum</span> <span class="cp">Theme</span> {
+  <span class="ck">public static let</span> surfaceDefault = UIColor { trait <span class="ck">in</span>
+    trait.userInterfaceStyle == .dark
+      ? UIColor(hex: <span class="cs">"#1A1A2E"</span>) : UIColor(hex: <span class="cs">"#FFFFFF"</span>)
+  }
+  <span class="ck">public static let</span> textPrimary = UIColor { trait <span class="ck">in</span>
+    trait.userInterfaceStyle == .dark
+      ? UIColor(hex: <span class="cs">"#F4F5F9"</span>) : UIColor(hex: <span class="cs">"#1A1A2E"</span>)
+  }
+  <span class="ck">public static let</span> interactive = UIColor { trait <span class="ck">in</span>
+    trait.userInterfaceStyle == .dark
+      ? UIColor(hex: <span class="cs">"#5B9BFF"</span>) : UIColor(hex: <span class="cs">"#0047CC"</span>)
+  }
+}
+
+<span class="ck">public enum</span> <span class="cp">Channel</span> {
+  <span class="ck">public enum</span> <span class="cp">Breakpoint</span> {
+    <span class="ck">public static let</span> mobile:    CGFloat = <span class="cv">375</span>
+    <span class="ck">public static let</span> tablet:    CGFloat = <span class="cv">768</span>
+    <span class="ck">public static let</span> desktop:   CGFloat = <span class="cv">1024</span>
+  }
+  <span class="ck">public enum</span> <span class="cp">AspectRatio</span> {
+    <span class="ck">public static let</span> hero:  CGFloat = <span class="cv">16</span>/<span class="cv">9</span>
+    <span class="ck">public static let</span> card:  CGFloat = <span class="cv">4</span>/<span class="cv">3</span>
+    <span class="ck">public static let</span> thumb: CGFloat = <span class="cv">1</span>/<span class="cv">1</span>
+  }
+}</pre>
+        </div>
+        <div class="code-block" id="ios-use">
+<pre><span class="cc">// PSButton.swift</span>
+<span class="ck">struct</span> <span class="cp">PSButton</span>: View {
+  <span class="ck">let</span> label: String
+
+  <span class="ck">var</span> body: some View {
+    Text(label)
+      .font(Font(Brand.Typography.headingLg))
+      .padding(.horizontal, Brand.Spacing.md)
+      .padding(.vertical,   Brand.Spacing.sm)
+      .background(
+        Color(Brand.Color.primary))
+      .foregroundColor(.white)
+      .cornerRadius(Brand.Radius.sm)
+  }
+}</pre>
+        </div>
+      </div>
+
+      <!-- ANDROID -->
+      <div class="platform-card pc-android" id="plat-android">
+        <h3><span class="pc-icon">🤖</span> Android <span class="pc-badge">Compose · XML</span></h3>
+        <div class="pc-sub">Recursos XML para View system e objeto Kotlin para Jetpack Compose.</div>
+        <div class="code-tabs">
+          <span class="code-tab active" onclick="switchTab('and','xml')">tokens.xml</span>
+          <span class="code-tab" onclick="switchTab('and','kt')">Tokens.kt</span>
+          <span class="code-tab" onclick="switchTab('and','use')">Compose</span>
+        </div>
+        <div class="code-block active" id="and-xml">
+<pre><span class="cc">&lt;!-- res/values/tokens.xml --&gt;</span>
+<span class="ct">&lt;resources&gt;</span>
+  <span class="cc">&lt;!-- brand colors --&gt;</span>
+  <span class="ct">&lt;color</span> <span class="cp">name=</span><span class="cs">"brand_color_primary"</span><span class="ct">&gt;</span>
+    <span class="cv">#FF0047CC</span>
+  <span class="ct">&lt;/color&gt;</span>
+  <span class="ct">&lt;color</span> <span class="cp">name=</span><span class="cs">"brand_color_secondary"</span><span class="ct">&gt;</span>
+    <span class="cv">#FFFF6B00</span>
+  <span class="ct">&lt;/color&gt;</span>
+  <span class="ct">&lt;color</span> <span class="cp">name=</span><span class="cs">"brand_color_feedback_error"</span><span class="ct">&gt;</span>
+    <span class="cv">#FFCC2200</span>
+  <span class="ct">&lt;/color&gt;</span>
+  <span class="cc">&lt;!-- theme surface --&gt;</span>
+  <span class="ct">&lt;color</span> <span class="cp">name=</span><span class="cs">"theme_color_surface_default"</span><span class="ct">&gt;</span>
+    <span class="cv">#FFFFFFFF</span>
+  <span class="ct">&lt;/color&gt;</span>
+  <span class="cc">&lt;!-- dimensions --&gt;</span>
+  <span class="ct">&lt;dimen</span> <span class="cp">name=</span><span class="cs">"brand_spacing_sm"</span><span class="ct">&gt;</span><span class="cv">8dp</span><span class="ct">&lt;/dimen&gt;</span>
+  <span class="ct">&lt;dimen</span> <span class="cp">name=</span><span class="cs">"brand_spacing_md"</span><span class="ct">&gt;</span><span class="cv">16dp</span><span class="ct">&lt;/dimen&gt;</span>
+  <span class="ct">&lt;dimen</span> <span class="cp">name=</span><span class="cs">"brand_radius_sm"</span><span class="ct">&gt;</span><span class="cv">8dp</span><span class="ct">&lt;/dimen&gt;</span>
+  <span class="ct">&lt;dimen</span> <span class="cp">name=</span><span class="cs">"brand_radius_lg"</span><span class="ct">&gt;</span><span class="cv">16dp</span><span class="ct">&lt;/dimen&gt;</span>
+<span class="ct">&lt;/resources&gt;</span></pre>
+        </div>
+        <div class="code-block" id="and-kt">
+<pre><span class="cc">// platform/android/Tokens.kt — gerado pelo Style Dictionary</span>
+<span class="ck">object</span> <span class="cg">Brand</span> {
+  <span class="ck">object</span> Color {
+    <span class="ck">val</span> Primary      = Color(<span class="cv">0xFF0047CC</span>)
+    <span class="ck">val</span> PrimaryDark   = Color(<span class="cv">0xFF003087</span>)
+    <span class="ck">val</span> PrimaryXLight = Color(<span class="cv">0xFFE8EFFF</span>)
+    <span class="ck">val</span> Secondary     = Color(<span class="cv">0xFFFF6B00</span>)
+    <span class="ck">object</span> Feedback {
+      <span class="ck">val</span> Error   = Color(<span class="cv">0xFFCC2200</span>)
+      <span class="ck">val</span> Success = Color(<span class="cv">0xFF0A7A40</span>)
+      <span class="ck">val</span> Warning = Color(<span class="cv">0xFFCC7700</span>)
+    }
+    <span class="ck">object</span> Neutral {
+      <span class="ck">val</span> N900 = Color(<span class="cv">0xFF1A1A2E</span>)
+      <span class="ck">val</span> N500 = Color(<span class="cv">0xFF6666AA</span>)
+      <span class="ck">val</span> N200 = Color(<span class="cv">0xFFD8D8EE</span>)
+      <span class="ck">val</span> N0   = Color(<span class="cv">0xFFFFFFFF</span>)
+    }
+  }
+  <span class="ck">val</span> SpacingXs = <span class="cv">4</span>.dp;  <span class="ck">val</span> SpacingSm = <span class="cv">8</span>.dp
+  <span class="ck">val</span> SpacingMd = <span class="cv">16</span>.dp; <span class="ck">val</span> SpacingLg = <span class="cv">24</span>.dp
+  <span class="ck">val</span> SpacingXl = <span class="cv">32</span>.dp; <span class="ck">val</span> SpacingXxl = <span class="cv">48</span>.dp
+  <span class="ck">val</span> RadiusNone = <span class="cv">0</span>.dp;  <span class="ck">val</span> RadiusXs = <span class="cv">4</span>.dp
+  <span class="ck">val</span> RadiusSm  = <span class="cv">8</span>.dp;  <span class="ck">val</span> RadiusMd = <span class="cv">12</span>.dp
+  <span class="ck">val</span> RadiusLg  = <span class="cv">16</span>.dp; <span class="ck">val</span> RadiusXl = <span class="cv">24</span>.dp
+  <span class="ck">val</span> RadiusPill = <span class="cv">999</span>.dp
+}
+<span class="ck">object</span> <span class="cg">Theme</span> {
+  <span class="ck">val</span> SurfaceDefault    = Color(<span class="cv">0xFFFFFFFF</span>)
+  <span class="ck">val</span> SurfaceSubtle     = Color(<span class="cv">0xFFF4F5F9</span>)
+  <span class="ck">val</span> TextPrimary       = Color(<span class="cv">0xFF1A1A2E</span>)
+  <span class="ck">val</span> TextSecondary     = Color(<span class="cv">0xFF6666AA</span>)
+  <span class="ck">val</span> TextPlaceholder   = Color(<span class="cv">0xFFB0B0CC</span>)
+  <span class="ck">val</span> BorderDefault     = Color(<span class="cv">0xFFD8D8EE</span>)
+  <span class="ck">val</span> Interactive       = Color(<span class="cv">0xFF0047CC</span>)
+  <span class="ck">val</span> InteractiveHover  = Color(<span class="cv">0xFF003087</span>)
+  <span class="ck">val</span> InteractiveFocus  = Color(<span class="cv">0xFF5B9BFF</span>)
+  <span class="ck">val</span> InteractiveDisabled = Color(<span class="cv">0xFFD8D8EE</span>)
+}
+<span class="ck">object</span> <span class="cg">Channel</span> {
+  <span class="ck">object</span> Breakpoint {
+    <span class="ck">val</span> Mobile    = <span class="cv">375</span>.dp; <span class="ck">val</span> Tablet = <span class="cv">768</span>.dp
+    <span class="ck">val</span> Desktop   = <span class="cv">1024</span>.dp
+  }
+}</pre>
+        </div>
+        <div class="code-block" id="and-use">
+<pre><span class="cc">// PSButton.kt</span>
+@<span class="cp">Composable</span>
+<span class="ck">fun</span> <span class="cg">PSButton</span>(label: String, onClick: () -> Unit) {
+  Button(
+    onClick = onClick,
+    colors = ButtonDefaults.buttonColors(
+      containerColor = Brand.Color.Primary,
+      contentColor   = Color.White),
+    shape = RoundedCornerShape(Brand.RadiusSm),
+    contentPadding = PaddingValues(
+      horizontal = Brand.SpacingMd,
+      vertical   = Brand.SpacingSm)
+  ) { Text(label) }
+}</pre>
+        </div>
+      </div>
+
+      <!-- ANGULAR (full width) -->
+      <div class="platform-card pc-angular" id="plat-angular" style="grid-column:1/-1">
+        <h3><span class="pc-icon">🅰️</span> Angular <span class="pc-badge">SCSS + TokenService</span></h3>
+        <div class="pc-sub">SCSS via <code>@use</code> para build-time e <code>TokenService</code> para troca de tema em runtime via CSS custom properties.</div>
+        <div class="code-tabs">
+          <span class="code-tab active" onclick="switchTab('ang','scss')">_tokens.scss</span>
+          <span class="code-tab" onclick="switchTab('ang','use')">Uso no componente</span>
+          <span class="code-tab" onclick="switchTab('ang','svc')">TokenService</span>
+        </div>
+        <div class="code-block active" id="ang-scss">
+<pre><span class="cc">// platform/angular/_tokens.scss — gerado pelo Style Dictionary</span>
+
+<span class="cc">// ── Brand · color</span>
+<span class="cp">$brand-color-primary</span>:               <span class="cv">#0047CC</span>;
+<span class="cp">$brand-color-primary-dark</span>:          <span class="cv">#003087</span>;
+<span class="cp">$brand-color-primary-xdark</span>:         <span class="cv">#001A5C</span>;
+<span class="cp">$brand-color-primary-xlight</span>:        <span class="cv">#E8EFFF</span>;
+<span class="cp">$brand-color-secondary</span>:             <span class="cv">#FF6B00</span>;
+<span class="cp">$brand-color-secondary-dark</span>:        <span class="cv">#CC5500</span>;
+<span class="cp">$brand-color-secondary-xlight</span>:      <span class="cv">#FFF0E6</span>;
+<span class="cp">$brand-color-feedback-error</span>:        <span class="cv">#CC2200</span>;
+<span class="cp">$brand-color-feedback-error-xlight</span>: <span class="cv">#FFEBE6</span>;
+<span class="cp">$brand-color-feedback-success</span>:      <span class="cv">#0A7A40</span>;
+<span class="cp">$brand-color-feedback-warning</span>:      <span class="cv">#CC7700</span>;
+<span class="cp">$brand-color-neutral-900</span>:           <span class="cv">#1A1A2E</span>;
+<span class="cp">$brand-color-neutral-700</span>:           <span class="cv">#3D3D5C</span>;
+<span class="cp">$brand-color-neutral-500</span>:           <span class="cv">#6666AA</span>;
+<span class="cp">$brand-color-neutral-400</span>:           <span class="cv">#8888AA</span>;
+<span class="cp">$brand-color-neutral-300</span>:           <span class="cv">#B0B0CC</span>;
+<span class="cp">$brand-color-neutral-200</span>:           <span class="cv">#D8D8EE</span>;
+<span class="cp">$brand-color-neutral-100</span>:           <span class="cv">#F4F5F9</span>;
+<span class="cp">$brand-color-neutral-0</span>:             <span class="cv">#FFFFFF</span>;
+
+<span class="cc">// ── Brand · typography</span>
+<span class="cp">$brand-typography-heading-md</span>:       <span class="cv">32px</span>;
+<span class="cp">$brand-typography-title-lg</span>:         <span class="cv">22px</span>;
+<span class="cp">$brand-typography-body-lg</span>:          <span class="cv">16px</span>;
+<span class="cp">$brand-typography-body-md</span>:          <span class="cv">14px</span>;
+<span class="cp">$brand-typography-label-md</span>:         <span class="cv">14px</span>;
+<span class="cp">$brand-typography-label-sm</span>:         <span class="cv">12px</span>;
+
+<span class="cc">// ── Brand · numeric-values</span>
+<span class="cp">$brand-spacing-xs</span>:    <span class="cv">4px</span>;  <span class="cp">$brand-spacing-sm</span>:  <span class="cv">8px</span>;
+<span class="cp">$brand-spacing-md</span>:    <span class="cv">16px</span>; <span class="cp">$brand-spacing-lg</span>:  <span class="cv">24px</span>;
+<span class="cp">$brand-spacing-xl</span>:    <span class="cv">32px</span>; <span class="cp">$brand-spacing-2xl</span>: <span class="cv">48px</span>;
+<span class="cp">$brand-radius-none</span>:   <span class="cv">0</span>;    <span class="cp">$brand-radius-xs</span>:   <span class="cv">4px</span>;
+<span class="cp">$brand-radius-sm</span>:     <span class="cv">8px</span>;  <span class="cp">$brand-radius-md</span>:   <span class="cv">12px</span>;
+<span class="cp">$brand-radius-lg</span>:     <span class="cv">16px</span>; <span class="cp">$brand-radius-xl</span>:   <span class="cv">24px</span>;
+<span class="cp">$brand-radius-pill</span>:   <span class="cv">999px</span>;
+
+<span class="cc">// ── Theme (light default)</span>
+<span class="cp">$theme-color-surface-default</span>:       <span class="cv">#FFFFFF</span>;
+<span class="cp">$theme-color-surface-subtle</span>:        <span class="cv">#F4F5F9</span>;
+<span class="cp">$theme-color-text-primary</span>:          <span class="cv">#1A1A2E</span>;
+<span class="cp">$theme-color-text-secondary</span>:        <span class="cv">#6666AA</span>;
+<span class="cp">$theme-color-text-placeholder</span>:      <span class="cv">#B0B0CC</span>;
+<span class="cp">$theme-color-border-default</span>:        <span class="cv">#D8D8EE</span>;
+<span class="cp">$theme-color-interactive-default</span>:   <span class="cv">#0047CC</span>;
+<span class="cp">$theme-color-interactive-hover</span>:     <span class="cv">#003087</span>;
+<span class="cp">$theme-color-interactive-focus</span>:     <span class="cv">#5B9BFF</span>;
+<span class="cp">$theme-color-interactive-disabled</span>:  <span class="cv">#D8D8EE</span>;
+
+<span class="cc">// ── Channel — SuperApp</span>
+<span class="cp">$channel-color-accent</span>:              <span class="cv">#0047CC</span>;
+<span class="cp">$channel-breakpoint-mobile-sm</span>:      <span class="cv">320px</span>;
+<span class="cp">$channel-breakpoint-mobile</span>:         <span class="cv">375px</span>;
+<span class="cp">$channel-breakpoint-mobile-lg</span>:      <span class="cv">430px</span>;
+<span class="cp">$channel-breakpoint-tablet-sm</span>:      <span class="cv">600px</span>;
+<span class="cp">$channel-breakpoint-tablet</span>:         <span class="cv">768px</span>;
+<span class="cp">$channel-breakpoint-desktop-sm</span>:     <span class="cv">1024px</span>;
+<span class="cp">$channel-breakpoint-desktop</span>:        <span class="cv">1440px</span>;
+<span class="cp">$channel-breakpoint-desktop-lg</span>:     <span class="cv">1600px</span>;
+<span class="cp">$channel-breakpoint-desktop-xl</span>:     <span class="cv">1920px</span>;
+<span class="cp">$channel-aspect-ratio-1-1</span>:          <span class="cv">1/1</span>;
+<span class="cp">$channel-aspect-ratio-4-3</span>:          <span class="cv">4/3</span>;
+<span class="cp">$channel-aspect-ratio-3-4</span>:          <span class="cv">3/4</span>;
+<span class="cp">$channel-aspect-ratio-16-9</span>:         <span class="cv">16/9</span>;
+<span class="cp">$channel-aspect-ratio-9-16</span>:         <span class="cv">9/16</span>;
+<span class="cp">$channel-aspect-ratio-3-1</span>:          <span class="cv">3/1</span>;
+<span class="cp">$channel-aspect-ratio-1-3</span>:          <span class="cv">1/3</span>;</pre>
+        </div>
+        <div class="code-block" id="ang-use">
+<pre><span class="cc">// button.component.scss</span>
+<span class="ck">@use</span> <span class="cs">'@ps/design-tokens/angular'</span> <span class="ck">as</span> t;
+
+.<span class="cp">ps-button</span> {
+  background:    t.<span class="cp">$theme-color-interactive</span>;
+  color:         t.<span class="cp">$theme-color-surface-default</span>;
+  border-radius: t.<span class="cp">$brand-radius-sm</span>;
+  padding:       t.<span class="cp">$brand-spacing-sm</span> t.<span class="cp">$brand-spacing-md</span>;
+  font-size:     t.<span class="cp">$brand-typography-body-lg</span>;
+
+  &:<span class="ck">hover</span> {
+    background: t.<span class="cp">$theme-color-interactive-hover</span>;
+  }
+
+  &--secondary {
+    background:    t.<span class="cp">$brand-color-secondary</span>;
+    border-radius: t.<span class="cp">$brand-radius-lg</span>;
+  }
+}
+
+<span class="cc">/* breakpoint via channel token */</span>
+@<span class="ck">media</span> (max-width: t.<span class="cp">$channel-breakpoint-tablet</span>) {
+  .<span class="cp">ps-button</span> { width: 100%; }
+}</pre>
+        </div>
+        <div class="code-block" id="ang-svc">
+<pre><span class="cc">// token.service.ts — troca de tema em runtime</span>
+<span class="ck">import</span> { Injectable } <span class="ck">from</span> <span class="cs">'@angular/core'</span>
+
+<span class="ck">type</span> ThemeName = <span class="cs">'light'</span> | <span class="cs">'dark'</span>
+
+<span class="ck">const</span> THEMES: Record&lt;ThemeName, Record&lt;string, string&gt;&gt; = {
+  light: {
+    <span class="cs">'--theme-color-surface-default'</span>: <span class="cs">'#FFFFFF'</span>,
+    <span class="cs">'--theme-color-text-primary'</span>:    <span class="cs">'#1A1A2E'</span>,
+    <span class="cs">'--theme-color-interactive'</span>:     <span class="cs">'#0047CC'</span>,
+    <span class="cs">'--theme-color-border-default'</span>:  <span class="cs">'#D0D0E8'</span>,
+  },
+  dark: {
+    <span class="cs">'--theme-color-surface-default'</span>: <span class="cs">'#1A1A2E'</span>,
+    <span class="cs">'--theme-color-text-primary'</span>:    <span class="cs">'#F4F5F9'</span>,
+    <span class="cs">'--theme-color-interactive'</span>:     <span class="cs">'#5B9BFF'</span>,
+    <span class="cs">'--theme-color-border-default'</span>:  <span class="cs">'#3D3D5C'</span>,
+  },
+}
+
+<span class="ck">@Injectable</span>({ providedIn: <span class="cs">'root'</span> })
+<span class="ck">export class</span> <span class="cp">TokenService</span> {
+  <span class="ck">private</span> current: ThemeName = <span class="cs">'light'</span>
+
+  setTheme(theme: ThemeName): void {
+    <span class="ck">const</span> root = document.documentElement
+    Object.entries(THEMES[theme]).forEach(([k, v]) =>
+      root.style.setProperty(k, v))
+    this.current = theme
+  }
+
+  getTheme(): ThemeName { <span class="ck">return</span> this.current }
+}</pre>
+        </div>
+      </div>
+
+    </div><!-- /platform-grid -->
+  </section>
+
+</main>
+
+<script>
+  /* ── Tab switcher ── */
+  function switchTab(platform, tab) {
+    const prefix = { web:'web', react:'react', ios:'ios', and:'and', ang:'ang' }[platform]
+    document.querySelectorAll(`[id^="${prefix}-"]`).forEach(el => el.classList.remove('active'))
+    document.getElementById(`${prefix}-${tab}`).classList.add('active')
+
+    const card = document.getElementById(`plat-${
+      platform === 'and' ? 'android' : platform === 'ang' ? 'angular' : platform
+    }`)
+    card.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'))
+    event.target.classList.add('active')
+  }
+
+  /* ── Active nav link on scroll ── */
+  const sections = document.querySelectorAll('section[id], h3[id]')
+  const navLinks  = document.querySelectorAll('.nav-link, .nav-sub-link')
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'))
+        const link = document.querySelector(`.nav-link[href="#${e.target.id}"], .nav-sub-link[href="#${e.target.id}"]`)
+        if (link) link.classList.add('active')
+      }
+    })
+  }, { rootMargin: '-20% 0px -70% 0px' })
+
+  sections.forEach(s => observer.observe(s))
+</script>
+</body>
+</html>

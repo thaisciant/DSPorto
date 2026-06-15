@@ -1,0 +1,196 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 900" width="1280" height="900" font-family="Open Sans, sans-serif">
+
+  <!-- ─── Background ─── -->
+  <rect width="1280" height="900" fill="#ffffff"/>
+
+  <!-- ══════════════════════════════════════════
+       STATE CONTROLS BAR
+  ══════════════════════════════════════════ -->
+  <rect width="1280" height="40" fill="#1a1a2e"/>
+  <text x="24" y="25" font-size="11" fill="#aaaaaa" font-weight="600" letter-spacing="0.5">ESTADO DA UI:</text>
+  <!-- Buttons -->
+  <rect x="130" y="8" width="64" height="24" rx="4" fill="none" stroke="#444444"/>
+  <text x="162" y="24" font-size="11" fill="#cccccc" text-anchor="middle">loading</text>
+  <rect x="202" y="8" width="52" height="24" rx="4" fill="none" stroke="#444444"/>
+  <text x="228" y="24" font-size="11" fill="#cccccc" text-anchor="middle">empty</text>
+  <rect x="262" y="8" width="80" height="24" rx="4" fill="#0046c0" stroke="#0046c0"/>
+  <text x="302" y="24" font-size="11" fill="#ffffff" text-anchor="middle">populated</text>
+  <rect x="350" y="8" width="48" height="24" rx="4" fill="none" stroke="#444444"/>
+  <text x="374" y="24" font-size="11" fill="#cccccc" text-anchor="middle">error</text>
+  <rect x="406" y="8" width="104" height="24" rx="4" fill="none" stroke="#444444"/>
+  <text x="458" y="24" font-size="11" fill="#cccccc" text-anchor="middle">loading-search</text>
+
+  <!-- ══════════════════════════════════════════
+       GDO HEADER
+  ══════════════════════════════════════════ -->
+  <rect x="0" y="40" width="1280" height="96" fill="#ffffff"/>
+  <!-- Title -->
+  <text x="32" y="90" font-size="28" font-weight="700" fill="#1a1a1a">Gestão de oportunidades</text>
+  <!-- Tag -->
+  <rect x="32" y="100" width="162" height="24" rx="4" fill="#e8f0fe"/>
+  <text x="42" y="117" font-size="12" font-weight="600" fill="#0046c0">≡ Programa Multicanal</text>
+  <!-- Tutorial button -->
+  <circle cx="1162" cy="88" r="10" fill="none" stroke="#0046c0" stroke-width="2"/>
+  <text x="1162" y="93" font-size="12" font-weight="700" fill="#0046c0" text-anchor="middle">?</text>
+  <text x="1178" y="93" font-size="14" font-weight="600" fill="#0046c0">Tutorial</text>
+  <!-- Capacity box -->
+  <rect x="1218" y="64" width="48" height="48" rx="8" fill="none" stroke="#d0d0d0" stroke-width="1.5"/>
+  <text x="1242" y="84" font-size="11" fill="#666666" text-anchor="middle">Meu capacity</text>
+  <text x="1242" y="102" font-size="16" font-weight="700" fill="#1a1a1a" text-anchor="middle">0 de 0</text>
+  <!-- Header bottom border -->
+  <line x1="0" y1="136" x2="1280" y2="136" stroke="#f0f0f0" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════
+       TABS
+  ══════════════════════════════════════════ -->
+  <rect x="0" y="136" width="1280" height="56" fill="#ffffff"/>
+  <!-- Tab items -->
+  <!-- Oportunidades -->
+  <rect x="46" y="150" width="22" height="22" rx="11" fill="#0046c0"/>
+  <text x="57" y="165" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">16</text>
+  <text x="75" y="168" font-size="14" font-weight="500" fill="#666666">Oportunidades</text>
+  <!-- Campanhas -->
+  <rect x="196" y="150" width="30" height="22" rx="11" fill="#7b2d8b"/>
+  <text x="211" y="165" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">123</text>
+  <text x="234" y="168" font-size="14" font-weight="500" fill="#666666">Campanhas</text>
+  <!-- Boas-vindas (ACTIVE) -->
+  <text x="342" y="168" font-size="14" font-weight="700" fill="#1a1a1a">Boas-vindas</text>
+  <rect x="342" y="189" width="88" height="3" rx="1" fill="#0046c0"/>
+  <!-- Painel -->
+  <text x="470" y="168" font-size="14" font-weight="500" fill="#666666">Painel</text>
+  <!-- Agendamentos -->
+  <text x="546" y="168" font-size="14" font-weight="500" fill="#666666">Agendamentos</text>
+  <!-- Tabs bottom border -->
+  <line x1="0" y1="192" x2="1280" y2="192" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════════
+       CONTENT — Boas-vindas
+  ══════════════════════════════════════════ -->
+
+  <!-- Section title -->
+  <text x="32" y="232" font-size="18" font-weight="700" fill="#1a1a1a">Boas-vindas</text>
+  <!-- Subtitle -->
+  <text x="32" y="254" font-size="14" fill="#555555">
+    Conecte-se com seus clientes que fecharam negócio através de nossas plataformas digitais.
+  </text>
+  <text x="32" y="272" font-size="14" fill="#0046c0" font-weight="600" text-decoration="underline">Saiba mais</text>
+
+  <!-- ── FILTERS ROW ── -->
+  <!-- Search Input -->
+  <rect x="32" y="286" width="320" height="36" rx="18" fill="#ffffff" stroke="#b3b3b3"/>
+  <text x="52" y="309" font-size="14" fill="#999999">Buscar por Nome, CPF ou CNPJ</text>
+  <!-- Search icon -->
+  <circle cx="332" cy="304" r="6" fill="none" stroke="#0046c0" stroke-width="1.5"/>
+  <line x1="336" y1="309" x2="341" y2="314" stroke="#0046c0" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Products dropdown -->
+  <rect x="364" y="286" width="200" height="36" rx="18" fill="#ffffff" stroke="#b3b3b3"/>
+  <text x="380" y="309" font-size="13" fill="#666666">Produtos: Todos</text>
+  <!-- Arrow -->
+  <polygon points="545,300 553,300 549,308" fill="#0046c0"/>
+
+  <!-- Buscar button -->
+  <rect x="576" y="280" width="132" height="44" rx="22" fill="#0046c0"/>
+  <!-- Search icon white -->
+  <circle cx="599" cy="302" r="6" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="603" y1="307" x2="608" y2="312" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  <text x="616" y="307" font-size="16" font-weight="700" fill="#ffffff">Buscar</text>
+
+  <!-- Total label -->
+  <text x="32" y="352" font-size="13" fill="#666666" font-weight="500">Total de 5 oportunidades</text>
+
+  <!-- ══════════════════════════════════════════
+       DATA TABLE
+  ══════════════════════════════════════════ -->
+
+  <!-- Table Header -->
+  <rect x="32" y="366" width="1216" height="45" rx="4" fill="#4074d0"/>
+  <text x="56" y="394" font-size="14" font-weight="700" fill="#ffffff">Cliente</text>
+  <text x="376" y="394" font-size="14" font-weight="700" fill="#ffffff">Produtos</text>
+  <text x="616" y="394" font-size="14" font-weight="700" fill="#ffffff">Origem</text>
+  <text x="836" y="394" font-size="14" font-weight="700" fill="#ffffff">Contato</text>
+  <text x="1096" y="394" font-size="14" font-weight="700" fill="#ffffff">Ações</text>
+
+  <!-- ── ROW 1 ── -->
+  <rect x="32" y="419" width="1216" height="80" rx="4" fill="#ffffff" filter="url(#shadow)"/>
+  <text x="56" y="452" font-size="14" font-weight="600" fill="#1a1a1a">Ana Paula Ferreira</text>
+  <text x="56" y="470" font-size="12" fill="#888888">123.456.789-00</text>
+  <text x="376" y="462" font-size="14" fill="#1a1a1a">Auto</text>
+  <text x="616" y="462" font-size="14" fill="#1a1a1a">App Porto</text>
+  <text x="836" y="462" font-size="14" fill="#1a1a1a">(11) 98765-4321</text>
+  <!-- 3-dot menu -->
+  <circle cx="1113" cy="455" r="3" fill="#0046c0"/>
+  <circle cx="1113" cy="463" r="3" fill="#0046c0"/>
+  <circle cx="1113" cy="471" r="3" fill="#0046c0"/>
+
+  <!-- ── ROW 2 ── -->
+  <rect x="32" y="507" width="1216" height="80" rx="4" fill="#ffffff" filter="url(#shadow)"/>
+  <text x="56" y="540" font-size="14" font-weight="600" fill="#1a1a1a">Carlos Eduardo Souza</text>
+  <text x="56" y="558" font-size="12" fill="#888888">987.654.321-00</text>
+  <text x="376" y="550" font-size="14" fill="#1a1a1a">Residencial</text>
+  <text x="616" y="550" font-size="14" fill="#1a1a1a">Site Porto</text>
+  <text x="836" y="550" font-size="14" fill="#1a1a1a">(21) 91234-5678</text>
+  <circle cx="1113" cy="543" r="3" fill="#0046c0"/>
+  <circle cx="1113" cy="551" r="3" fill="#0046c0"/>
+  <circle cx="1113" cy="559" r="3" fill="#0046c0"/>
+
+  <!-- ── ROW 3 ── -->
+  <rect x="32" y="595" width="1216" height="80" rx="4" fill="#ffffff" filter="url(#shadow)"/>
+  <text x="56" y="628" font-size="14" font-weight="600" fill="#1a1a1a">Mariana Costa Lima</text>
+  <text x="56" y="646" font-size="12" fill="#888888">456.789.123-00</text>
+  <text x="376" y="638" font-size="14" fill="#1a1a1a">Vida · Auto</text>
+  <text x="616" y="638" font-size="14" fill="#1a1a1a">App Porto</text>
+  <text x="836" y="638" font-size="14" fill="#1a1a1a">(31) 99876-5432</text>
+  <circle cx="1113" cy="631" r="3" fill="#0046c0"/>
+  <circle cx="1113" cy="639" r="3" fill="#0046c0"/>
+  <circle cx="1113" cy="647" r="3" fill="#0046c0"/>
+
+  <!-- ── ROW 4 ── -->
+  <rect x="32" y="683" width="1216" height="80" rx="4" fill="#ffffff" filter="url(#shadow)"/>
+  <text x="56" y="716" font-size="14" font-weight="600" fill="#1a1a1a">Roberto Alves Mendes</text>
+  <text x="56" y="734" font-size="12" fill="#888888">321.654.987-00</text>
+  <text x="376" y="726" font-size="14" fill="#1a1a1a">Empresarial</text>
+  <text x="616" y="726" font-size="14" fill="#1a1a1a">Whatsapp</text>
+  <text x="836" y="726" font-size="14" fill="#1a1a1a">(41) 98765-1234</text>
+  <circle cx="1113" cy="719" r="3" fill="#0046c0"/>
+  <circle cx="1113" cy="727" r="3" fill="#0046c0"/>
+  <circle cx="1113" cy="735" r="3" fill="#0046c0"/>
+
+  <!-- ── ROW 5 ── -->
+  <rect x="32" y="771" width="1216" height="80" rx="4" fill="#ffffff" filter="url(#shadow)"/>
+  <text x="56" y="804" font-size="14" font-weight="600" fill="#1a1a1a">Fernanda Oliveira</text>
+  <text x="56" y="822" font-size="12" fill="#888888">654.321.098-00</text>
+  <text x="376" y="814" font-size="14" fill="#1a1a1a">Viagem</text>
+  <text x="616" y="814" font-size="14" fill="#1a1a1a">Site Porto</text>
+  <text x="836" y="814" font-size="14" fill="#1a1a1a">(51) 97654-3210</text>
+  <circle cx="1113" cy="807" r="3" fill="#0046c0"/>
+  <circle cx="1113" cy="815" r="3" fill="#0046c0"/>
+  <circle cx="1113" cy="823" r="3" fill="#0046c0"/>
+
+  <!-- ══════════════════════════════════════════
+       PAGINATION
+  ══════════════════════════════════════════ -->
+  <rect x="32" y="859" width="1216" height="36" rx="8" fill="#f7f7f7"/>
+  <!-- Arrows left -->
+  <text x="80" y="882" font-size="10" fill="#b3b3b3" text-anchor="middle">◀◀</text>
+  <text x="108" y="882" font-size="10" fill="#b3b3b3" text-anchor="middle">◀</text>
+  <!-- Divider -->
+  <line x1="128" y1="865" x2="128" y2="889" stroke="#e0e0e0"/>
+  <!-- Pages -->
+  <rect x="600" y="863" width="24" height="24" rx="12" fill="#e8f0fe"/>
+  <text x="612" y="880" font-size="12" font-weight="700" fill="#0046c0" text-anchor="middle">1</text>
+  <text x="646" y="880" font-size="12" fill="#1a1a1a" text-anchor="middle">2</text>
+  <!-- Divider -->
+  <line x1="680" y1="865" x2="680" y2="889" stroke="#e0e0e0"/>
+  <!-- Arrows right -->
+  <text x="700" y="882" font-size="10" fill="#b3b3b3" text-anchor="middle">▶</text>
+  <text x="728" y="882" font-size="10" fill="#b3b3b3" text-anchor="middle">▶▶</text>
+
+  <!-- ── Shadow filter ── -->
+  <defs>
+    <filter id="shadow" x="-2%" y="-5%" width="104%" height="120%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="rgba(0,0,0,0.09)"/>
+    </filter>
+  </defs>
+
+</svg>

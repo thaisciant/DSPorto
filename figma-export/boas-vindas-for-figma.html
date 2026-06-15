@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GDO — Aba Boas-vindas (Figma Export)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+    }
+
+    .screen {
+      width: 1280px;
+      min-height: 900px;
+      background: #ffffff;
+    }
+
+    /* ── State Controls Bar ─────────────────── */
+    .state-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: #1a1a2e;
+    }
+    .state-bar__label {
+      color: #aaaaaa;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-right: 4px;
+    }
+    .state-btn {
+      padding: 4px 12px;
+      border-radius: 4px;
+      border: 1px solid #444444;
+      background: transparent;
+      color: #cccccc;
+      font-size: 12px;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .state-btn--active {
+      background: #0046c0;
+      border-color: #0046c0;
+      color: #ffffff;
+    }
+
+    /* ── GDO Header ─────────────────────────── */
+    .gdo-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 24px 32px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      background: #ffffff;
+    }
+    .gdo-header__left {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .gdo-header__title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a1a1a;
+      line-height: 1.2;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .gdo-header__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: #e8f0fe;
+      color: #0046c0;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      width: fit-content;
+    }
+    .gdo-header__right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .gdo-header__tutorial {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #0046c0;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .gdo-header__tutorial-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #0046c0;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .gdo-header__capacity {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 16px;
+      border: 1.5px solid #d0d0d0;
+      border-radius: 8px;
+      min-width: 120px;
+    }
+    .gdo-header__capacity-label { font-size: 11px; color: #666666; }
+    .gdo-header__capacity-value { font-size: 16px; font-weight: 700; color: #1a1a1a; }
+
+    /* ── Tabs ───────────────────────────────── */
+    .gdo-tabs {
+      display: flex;
+      padding: 0 32px;
+      border-bottom: 1px solid #e0e0e0;
+      background: #ffffff;
+    }
+    .gdo-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666666;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .gdo-tab--active {
+      color: #1a1a1a;
+      font-weight: 700;
+      border-bottom-color: #0046c0;
+    }
+    .tab-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: 11px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .tab-badge--blue  { background: #0046c0; }
+    .tab-badge--purple { background: #7b2d8b; }
+
+    /* ── Content Area ───────────────────────── */
+    .gdo-content { padding: 32px; background: #ffffff; }
+
+    /* ── Boas-vindas Section ────────────────── */
+    .bv-header { display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; }
+    .bv-title { font-size: 18px; font-weight: 700; color: #1a1a1a; }
+    .bv-subtitle { font-size: 14px; color: #555555; line-height: 1.5; }
+    .bv-link { color: #0046c0; font-weight: 600; text-decoration: underline; }
+
+    /* ── Filters Row ────────────────────────── */
+    .filters {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Search Input */
+    .search-input {
+      display: flex;
+      align-items: center;
+      width: 320px;
+      height: 36px;
+      border: 1px solid #b3b3b3;
+      border-radius: 999px;
+      padding: 0 12px 0 16px;
+      background: #ffffff;
+      gap: 8px;
+    }
+    .search-input__text {
+      flex: 1;
+      font-size: 14px;
+      color: #999999;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .search-input__icon {
+      width: 18px;
+      height: 18px;
+      color: #0046c0;
+    }
+
+    /* Dropdown Filter */
+    .filter-dropdown {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 200px;
+      height: 36px;
+      border: 1px solid #b3b3b3;
+      border-radius: 999px;
+      padding: 0 16px;
+      background: #ffffff;
+      gap: 8px;
+    }
+    .filter-dropdown__label { font-size: 13px; color: #666666; font-family: 'Open Sans', sans-serif; }
+    .filter-dropdown__arrow {
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid #0046c0;
+    }
+
+    /* Button Buscar */
+    .btn-buscar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 44px;
+      padding: 0 20px;
+      background: #0046c0;
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Open Sans', sans-serif;
+      cursor: pointer;
+    }
+
+    /* ── Total label ───────────────────────── */
+    .bv-total { font-size: 13px; color: #666666; font-weight: 500; margin-bottom: 12px; }
+
+    /* ── Data Table ─────────────────────────── */
+    .data-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+
+    /* Table Header */
+    .data-table thead tr {
+      background: #4074d0;
+      border-radius: 4px;
+    }
+    .data-table thead th {
+      padding: 0 24px;
+      height: 45px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .data-table thead th:first-child { border-radius: 4px 0 0 4px; }
+    .data-table thead th:last-child  { border-radius: 0 4px 4px 0; }
+
+    /* Table Rows */
+    .data-table tbody tr {
+      background: #ffffff;
+      border-radius: 4px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.09);
+    }
+    .data-table tbody td {
+      padding: 0 24px;
+      height: 80px;
+      font-size: 14px;
+      color: #1a1a1a;
+      font-family: 'Open Sans', sans-serif;
+      vertical-align: middle;
+    }
+    .data-table tbody td:first-child { border-radius: 4px 0 0 4px; }
+    .data-table tbody td:last-child  { border-radius: 0 4px 4px 0; }
+
+    .cell-nome { font-weight: 600; font-size: 14px; color: #1a1a1a; }
+    .cell-cpf  { font-size: 12px; color: #888888; margin-top: 2px; }
+
+    /* Action Menu Button */
+    .action-menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+    .action-menu-dots {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .action-menu-dots span {
+      display: block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #0046c0;
+    }
+
+    /* ── Pagination ──────────────────────────── */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 12px 24px;
+      background: #f7f7f7;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+    .pagination-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      color: #b3b3b3;
+      font-size: 12px;
+    }
+    .pagination-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #1a1a1a;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 400;
+    }
+    .pagination-page--active {
+      background: #e8f0fe;
+      color: #0046c0;
+      font-weight: 700;
+    }
+    .pagination-divider {
+      width: 1px;
+      height: 24px;
+      background: #e0e0e0;
+      margin: 0 4px;
+    }
+
+    /* ── Saiba Mais Modal ────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: #ffffff;
+      border-radius: 12px;
+      width: 480px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+    .modal__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .modal__title  { font-size: 16px; font-weight: 700; color: #1a1a1a; }
+    .modal__close  { font-size: 16px; color: #666666; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border: none; background: none; cursor: pointer; }
+    .modal__body   { padding: 20px 24px; font-size: 14px; color: #444444; line-height: 1.6; }
+    .modal__notice {
+      margin-top: 20px;
+      padding: 12px;
+      background: #fff8e1;
+      border-left: 3px solid #f59e0b;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #92400e;
+    }
+    .modal__footer {
+      padding: 16px 24px 20px;
+      display: flex;
+      justify-content: flex-end;
+      border-top: 1px solid #f0f0f0;
+    }
+    .btn-entendi {
+      height: 44px;
+      padding: 0 24px;
+      background: #0046c0;
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Open Sans', sans-serif;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="screen">
+
+  <!-- State Controls Bar -->
+  <div class="state-bar">
+    <span class="state-bar__label">Estado da UI:</span>
+    <span class="state-btn">loading</span>
+    <span class="state-btn">empty</span>
+    <span class="state-btn state-btn--active">populated</span>
+    <span class="state-btn">error</span>
+    <span class="state-btn">loading-search</span>
+  </div>
+
+  <!-- Header -->
+  <header class="gdo-header">
+    <div class="gdo-header__left">
+      <h1 class="gdo-header__title">Gestão de oportunidades</h1>
+      <span class="gdo-header__tag">≡ Programa Multicanal</span>
+    </div>
+    <div class="gdo-header__right">
+      <div class="gdo-header__tutorial">
+        <span class="gdo-header__tutorial-icon">?</span>
+        Tutorial
+      </div>
+      <div class="gdo-header__capacity">
+        <span class="gdo-header__capacity-label">Meu capacity</span>
+        <span class="gdo-header__capacity-value">0 de 0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="gdo-tabs">
+    <div class="gdo-tab">
+      <span class="tab-badge tab-badge--blue">16</span>
+      Oportunidades
+    </div>
+    <div class="gdo-tab">
+      <span class="tab-badge tab-badge--purple">123</span>
+      Campanhas
+    </div>
+    <div class="gdo-tab gdo-tab--active">Boas-vindas</div>
+    <div class="gdo-tab">Painel</div>
+    <div class="gdo-tab">Agendamentos</div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="gdo-content">
+
+    <!-- Section Header -->
+    <div class="bv-header">
+      <h2 class="bv-title">Boas-vindas</h2>
+      <p class="bv-subtitle">
+        Conecte-se com seus clientes que fecharam negócio através de nossas plataformas digitais.
+        <span class="bv-link">Saiba mais</span>
+      </p>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <!-- Search Input -->
+      <div class="search-input">
+        <span class="search-input__text">Buscar por Nome, CPF ou CNPJ</span>
+        <svg class="search-input__icon" viewBox="0 0 24 24" fill="none" stroke="#0046c0" stroke-width="2">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
+
+      <!-- Products Dropdown -->
+      <div class="filter-dropdown">
+        <span class="filter-dropdown__label">Produtos: Todos</span>
+        <span class="filter-dropdown__arrow"></span>
+      </div>
+
+      <!-- Buscar Button -->
+      <button class="btn-buscar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Buscar
+      </button>
+    </div>
+
+    <!-- Total Label -->
+    <p class="bv-total">Total de 5 oportunidades</p>
+
+    <!-- Data Table -->
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width:25%">Cliente</th>
+          <th style="width:20%">Produtos</th>
+          <th style="width:20%">Origem</th>
+          <th style="width:25%">Contato</th>
+          <th style="width:10%">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="cell-nome">Ana Paula Ferreira</div>
+            <div class="cell-cpf">123.456.789-00</div>
+          </td>
+          <td>Auto</td>
+          <td>App Porto</td>
+          <td>(11) 98765-4321</td>
+          <td>
+            <div class="action-menu-btn">
+              <div class="action-menu-dots">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cell-nome">Carlos Eduardo Souza</div>
+            <div class="cell-cpf">987.654.321-00</div>
+          </td>
+          <td>Residencial</td>
+          <td>Site Porto</td>
+          <td>(21) 91234-5678</td>
+          <td>
+            <div class="action-menu-btn">
+              <div class="action-menu-dots">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cell-nome">Mariana Costa Lima</div>
+            <div class="cell-cpf">456.789.123-00</div>
+          </td>
+          <td>Vida · Auto</td>
+          <td>App Porto</td>
+          <td>(31) 99876-5432</td>
+          <td>
+            <div class="action-menu-btn">
+              <div class="action-menu-dots">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cell-nome">Roberto Alves Mendes</div>
+            <div class="cell-cpf">321.654.987-00</div>
+          </td>
+          <td>Empresarial</td>
+          <td>Whatsapp</td>
+          <td>(41) 98765-1234</td>
+          <td>
+            <div class="action-menu-btn">
+              <div class="action-menu-dots">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cell-nome">Fernanda Oliveira</div>
+            <div class="cell-cpf">654.321.098-00</div>
+          </td>
+          <td>Viagem</td>
+          <td>Site Porto</td>
+          <td>(51) 97654-3210</td>
+          <td>
+            <div class="action-menu-btn">
+              <div class="action-menu-dots">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <span class="pagination-arrow">◀◀</span>
+      <span class="pagination-arrow">◀</span>
+      <div class="pagination-divider"></div>
+      <span class="pagination-page pagination-page--active">1</span>
+      <span class="pagination-page">2</span>
+      <div class="pagination-divider"></div>
+      <span class="pagination-arrow">▶</span>
+      <span class="pagination-arrow">▶▶</span>
+    </div>
+
+  </main>
+
+  <!-- Modal: Saiba Mais (estado separado para exportação) -->
+  <!--
+  <div class="modal-overlay">
+    <div class="modal">
+      <div class="modal__header">
+        <h3 class="modal__title">Boas-vindas — O que é?</h3>
+        <button class="modal__close">✕</button>
+      </div>
+      <div class="modal__body">
+        <p>
+          A aba <strong>Boas-vindas</strong> reúne os clientes que fecharam negócio
+          através das plataformas digitais da Porto (App, Site, WhatsApp) e ainda
+          não foram contatados por um corretor Multicanal.
+        </p>
+        <p style="margin-top:16px">
+          Aqui você encontra oportunidades de relacionamento com esses clientes —
+          para oferecer novos produtos, tirar dúvidas e fortalecer o vínculo com a Porto.
+        </p>
+        <div class="modal__notice">
+          ⚠️ Conteúdo a confirmar com a PO. Este modal é uma proposta de comportamento
+          para o botão "Saiba mais".
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn-entendi">Entendi</button>
+      </div>
+    </div>
+  </div>
+  -->
+
+</div>
+</body>
+</html>
