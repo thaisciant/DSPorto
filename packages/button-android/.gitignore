@@ -1,0 +1,9 @@
+/build
+/.gradle
+/local.properties
+
+# IDE — arquivos locais, não compartilhados
+.idea/workspace.xml
+.idea/caches/
+.idea/migrations.xml
+.idea/deviceManager.xml
